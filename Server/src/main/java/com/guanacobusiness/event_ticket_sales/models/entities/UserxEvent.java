@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "userxevent")
-public class UserxEvent {
+public class UserXEvent {
     
     @Id
     @Column(name = "code")
@@ -29,9 +29,13 @@ public class UserxEvent {
     @JoinColumn(name = "event_code", nullable = false)
     private Event event;
 
-    public UserxEvent(Event event) {
-        super();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_code", nullable = false)
+    private User user;
+
+    public UserXEvent(Event event, User user) {
         this.event = event;
+        this.user = user;
     }
 
 }
