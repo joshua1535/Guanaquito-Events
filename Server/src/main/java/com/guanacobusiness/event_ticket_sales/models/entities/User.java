@@ -20,7 +20,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @Entity
-@ToString(exclude = "userXPermit")
+@ToString(exclude = {"userXPermit", "order", "ticket", "userXEvent"})
 @Table(name = "user", schema = "public")
 public class User {
     
@@ -41,6 +41,18 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     List<UserXPermit> userXPermit;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Order> order;
+
+    /*@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Ticket> ticket;*/
+
+    /*@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<UserXEvent> userXEvent;*/
 
     public User(String email, String password, String profilePicture) {
         super();
