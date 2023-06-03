@@ -22,6 +22,6 @@ public class SaveUserDTO {
     private String password;
 
     @NotEmpty(message = "Profile picture cannot be empty")
-    private byte[] profilePicture;
+    private String profilePicture;
 
 }
