@@ -1,0 +1,64 @@
+
+
+.generalContainer{
+}
+
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+.carouselContainer{
+    height: 750px;
+    width: 92%;
+    @apply 
+    mt-24
+    m-auto
+    object-center
+    overflow-hidden
+}
+
+
+.imgContainer {
+    height: 750px;
+    width: 92%;
+    @apply 
+    m-auto
+    relative
+    object-cover
+    object-center
+    
+}
+
+.imgBackgroundContainer {
+    height: 10%;
+    @apply absolute inset-x-0 bottom-0 grid w-full bg-black/75 
+}
+
+.imgCarouselFormat{
+    @apply 
+    w-full
+    m-auto
+}
+
+.buttonContainer{
+    @apply 
+    h-auto
+    w-7/12
+    m-auto
+    object-cover
+    object-center
+}
+
+.typographyFormat {
+    @apply mb-4 text-3xl md:text-4xl lg:text-5xl text-center text-white font-bold
+}
+
+.buttonCarousel{
+    height: 50px;
+    width: 200px;
+    @apply bg-transparent border-amber-400 border-2 outline-4 rounded-full text-amber-400 font-bold hover:bg-amber-400 hover:text-white text-sm
+}

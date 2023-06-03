@@ -1,8 +1,7 @@
-import logo from '../assets/logo.png';
-import googlelogo from '../assets/google.png';
 import './LoginForm.module.css';
 import classes from './LoginForm.module.css';
-import imgtemplate from '../assets/loginimg.png';
+import logo from '../../assets/logo.png';
+import imgtemplate from '../../assets/loginimg.png';
 
 
 const LoginForm = () => {

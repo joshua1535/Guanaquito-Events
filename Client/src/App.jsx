@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import './App.css'
-import LoginForm from './components/LoginForm.jsx'
-import imgtemplate from './assets/loginimg.png';
+import LoginForm from './pages/Login/LoginForm'
+import HomePage from './pages/HomePage/HomePage'
+
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-      <LoginForm />
+      <HomePage />
   )
 }
 
