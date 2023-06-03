@@ -20,7 +20,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @Entity
-@ToString(exclude = "userXPermit")
+@ToString(exclude = "userXPermits")
 @Table(name = "permit")
 public class Permit {
 
@@ -34,17 +34,17 @@ public class Permit {
     
     @OneToMany(mappedBy = "permit", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<UserXPermit> userXPermit;
+    List<UserXPermit> userXPermits;
 
     public Permit(String name) {
         super();
         this.name = name;
     }
 
-    public Permit(String name, List<UserXPermit> userXPermit) {
+    public Permit(String name, List<UserXPermit> userXPermits) {
         super();
         this.name = name;
-        this.userXPermit = userXPermit;
+        this.userXPermits = userXPermits;
     }
 
 }
