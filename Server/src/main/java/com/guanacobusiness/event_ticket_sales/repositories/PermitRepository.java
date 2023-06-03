@@ -9,6 +9,6 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
 
 public interface PermitRepository extends ListCrudRepository<Permit, UUID>{
 
-    List<Permit> findAll();
+    public List<Permit> findAll();
 
 }

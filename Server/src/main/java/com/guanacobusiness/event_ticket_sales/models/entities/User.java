@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -36,7 +37,8 @@ public class User {
     private String password;
 
     @Column(name="profile_picture")
-    private String profilePicture;
+    @Lob
+    private byte[] profilePicture;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -54,19 +56,27 @@ public class User {
     @JsonIgnore
     List<UserxEvent> userxEvent;
 
-    public User(String email, String password, String profilePicture) {
+    public User(String email, String password, byte[] profilePicture) {
         super();
         this.email = email;
         this.password = password;
         this.profilePicture = profilePicture;
     }
 
-    public User(String email, String password, String profilePicture, List<UserXPermit> userXPermit) {
+    public User(String email, String password, byte[] profilePicture, List<UserXPermit> userXPermit) {
         super();
         this.email = email;
         this.password = password;
         this.profilePicture = profilePicture;
         this.userXPermit = userXPermit;
+    }
+
+    public User(UUID code2, String email2, String newPassword, byte[] profilePicture2) {
+        super();
+        this.code = code2;
+        this.email = email2;
+        this.password = newPassword;
+        this.profilePicture = profilePicture2;
     }
 
 }
