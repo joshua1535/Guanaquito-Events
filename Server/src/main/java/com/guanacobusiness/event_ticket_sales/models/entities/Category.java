@@ -20,6 +20,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "category")
 public class Category {
+
     @Id
     @Column(name = "code")
     private String code;
@@ -36,5 +37,6 @@ public class Category {
         this.code = code;
         this.name = name;
     }
+
 }
 

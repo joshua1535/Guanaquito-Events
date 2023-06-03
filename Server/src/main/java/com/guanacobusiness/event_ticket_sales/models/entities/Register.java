@@ -43,4 +43,5 @@ public class Register {
         this.validationTime = validationTime;
         this.ticket = ticket;
     }
+
 }

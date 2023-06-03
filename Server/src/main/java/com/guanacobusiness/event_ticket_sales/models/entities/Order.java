@@ -35,13 +35,14 @@ public class Order {
     @JoinColumn(name = "user_buyer_code", nullable = false)
     private User userBuyer;
 
-    /*@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<Ticket> ticket; */ 
+    List<Ticket> ticket;
 
-    public Order(User userBuyer) {
+    public Order(User userBuyer, List<Ticket> ticket) {
         super();
         this.userBuyer = userBuyer;
-    }
+        this.ticket = ticket;
+    }  
 
 }
