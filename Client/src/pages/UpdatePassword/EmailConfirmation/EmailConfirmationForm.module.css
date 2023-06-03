@@ -1,0 +1,64 @@
+.generalContainer {
+    @apply columns-2 grid grid-cols-1 sm:grid-cols-2  
+}
+
+.inputsContainer {   
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    @apply p-6  text-center h-screen 
+}
+
+.logoImg {
+    @apply   mx-auto    
+}
+
+.logintitle
+{
+    font-size: xx-large;
+    color: #FFFFFF;
+    font-family: 'PoppinsBold';
+}
+
+.infotext
+{
+    font-size:1rem;
+    width: 80%;
+    color: #FFFFFF;
+    font-family: 'Poppins';
+    @apply 
+    mt-9 mb-4 mx-auto
+
+}
+
+.inputemailContainer {
+    @apply m-auto justify-center h-min w-min
+}
+
+.inputformat
+{
+    font-family: 'PoppinsLight';
+    @apply rounded p-2 w-80
+}
+
+.loginContainer {
+    @apply mx-auto mt-5 justify-center h-min w-min
+}
+
+
+.buttonlogin
+{
+    font-family: 'PoppinsLight';
+    color: #FFFFFF;
+    font-weight: lighter;
+    background-color: #F59E0B;
+    border-radius: 10px;
+    border: none;
+    width: 80%;
+    height:auto;
+    @apply mt-2 p-2 mb-5 w-80 hover:bg-orange-500 font-bold rounded
+}
+
+.imgtemplate{
+    @apply hidden sm:block sm:w-screen sm:h-screen
+}
