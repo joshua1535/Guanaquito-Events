@@ -21,29 +21,39 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @ToString(exclude = "userXPermit")
-@Table(name = "permit")
-public class Permit {
-
+@Table(name = "user", schema = "public")
+public class User {
+    
     @Id
     @Column(name = "code")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID code;
 
-    @Column(name = "name")
-    private String name;
-    
-    @OneToMany(mappedBy = "permit", fetch = FetchType.LAZY)
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name="profile_picture")
+    private String profilePicture;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     List<UserXPermit> userXPermit;
 
-    public Permit(String name) {
+    public User(String email, String password, String profilePicture) {
         super();
-        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.profilePicture = profilePicture;
     }
 
-    public Permit(String name, List<UserXPermit> userXPermit) {
+    public User(String email, String password, String profilePicture, List<UserXPermit> userXPermit) {
         super();
-        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.profilePicture = profilePicture;
         this.userXPermit = userXPermit;
     }
 
