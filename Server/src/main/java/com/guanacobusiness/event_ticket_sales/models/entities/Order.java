@@ -22,7 +22,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @Entity
-@ToString(exclude = {"ticket"})
+@ToString(exclude = {"tickets"})
 @Table(name = "order")
 public class Order {
 
@@ -37,12 +37,12 @@ public class Order {
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<Ticket> ticket;
+    List<Ticket> tickets;
 
-    public Order(User userBuyer, List<Ticket> ticket) {
+    public Order(User userBuyer, List<Ticket> tickets) {
         super();
         this.userBuyer = userBuyer;
-        this.ticket = ticket;
+        this.tickets = tickets;
     }  
 
 }

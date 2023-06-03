@@ -21,7 +21,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @Entity
-@ToString(exclude = {"userXPermit", "order", "ticket", "userxEvent"})
+@ToString(exclude = {"userXPermits", "orders", "tickets", "userXEvents"})
 @Table(name = "user", schema = "public")
 public class User {
     
@@ -38,40 +38,40 @@ public class User {
 
     @Column(name="profile_picture")
     @Lob
-    private byte[] profilePicture;
+    private String profilePicture;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<UserXPermit> userXPermit;
+    List<UserXPermit> userXPermits;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<Order> order;
+    List<Order> orders;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<Ticket> ticket;
+    List<Ticket> tickets;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<UserxEvent> userxEvent;
+    List<UserXEvent> userXEvents;
 
-    public User(String email, String password, byte[] profilePicture) {
+    public User(String email, String password, String profilePicture) {
         super();
         this.email = email;
         this.password = password;
         this.profilePicture = profilePicture;
     }
 
-    public User(String email, String password, byte[] profilePicture, List<UserXPermit> userXPermit) {
+    public User(String email, String password, String profilePicture, List<UserXPermit> userXPermits) {
         super();
         this.email = email;
         this.password = password;
         this.profilePicture = profilePicture;
-        this.userXPermit = userXPermit;
+        this.userXPermits = userXPermits;
     }
 
-    public User(UUID code2, String email2, String newPassword, byte[] profilePicture2) {
+    public User(UUID code2, String email2, String newPassword, String profilePicture2) {
         super();
         this.code = code2;
         this.email = email2;

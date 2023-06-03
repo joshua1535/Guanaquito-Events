@@ -12,6 +12,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -22,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "event")
-@ToString(exclude = {"userxEvents"})
+@ToString(exclude = {"userXEvents", "tiers"})
 public class Event {
 
     @Id
@@ -56,10 +58,18 @@ public class Event {
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<UserxEvent> userxEvents;
+    List<UserXEvent> userXEvents;
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Tier> tiers;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_code")
+    private Category category;
 
     public Event(String title, String involvedPeople, String image, Date date, java.sql.Time time, Integer duration,
-            String sponsors, Boolean active) {
+            String sponsors, Boolean active, Category category) {
         super();
         this.title = title;
         this.involvedPeople = involvedPeople;
@@ -69,5 +79,7 @@ public class Event {
         this.duration = duration;
         this.sponsors = sponsors;
         this.active = active;
+        this.category = category;
     }
+
 }
