@@ -1,0 +1,131 @@
+.generalContainer {
+    @apply columns-2
+}
+
+.inputsContainer {
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    @apply p-6 h-screen text-center 
+}
+
+.logoImg {
+    @apply mx-auto  mt-auto
+}
+
+.logintitle
+{
+    font-size: xx-large;
+    color: #FFFFFF;
+    font-family: 'PoppinsBold';
+
+}
+
+.logintitle2
+{
+    font-size:x-large;
+    color: #FFFFFF;
+    font-family: 'PoppinsBold';
+    @apply 
+    mt-9 mb-4 
+
+}
+
+.inputemailTitle{
+    @apply text  text-left  p-1 
+}
+
+.inputemailContainer {
+    @apply m-auto justify-center h-min w-min
+}
+
+.inputformat
+{
+    font-family: 'PoppinsLight';
+    @apply rounded p-2 w-80
+}
+
+.inputpasswordContainer {
+    @apply mx-auto mt-5 justify-center h-min w-min
+}
+
+.inputpasswordTitle{
+    @apply text  text-left  p-1 
+}
+
+.inputOptionsContainer {
+    @apply mt-2 flex justify-start
+}
+
+.rememberMeTitle {
+    @apply textsmall ms-1
+}
+
+.text 
+{
+    font-family: 'PoppinsLight';
+    color: #FFFFFF;
+
+}
+
+.textsmall 
+{
+    font-family: 'PoppinsLight';
+    color: #FFFFFF;
+    font-size: small;
+
+}
+
+.forgotpassword
+{
+    font-family: 'PoppinsLight';
+    color: #F59E0B;
+    font-size: small;
+    text-decoration: underline;
+    @apply ms-auto
+}
+
+
+.loginContainer {
+    @apply mx-auto mt-5 justify-center h-min w-min
+}
+
+
+.buttonlogin
+{
+    font-family: 'PoppinsExtraLight';
+    color: #FFFFFF;
+    font-weight: lighter;
+    background-color: #F59E0B;
+    border-radius: 10px;
+    border: none;
+    width: 80%;
+    height: 40px;
+    @apply mt-2 p-2 mb-5 w-80 hover:bg-orange-500 font-bold rounded
+}
+
+
+.buttonlogingoogle
+{
+    font-family: 'PoppinsLight';
+    color: #556987;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: none;
+    @apply justify-center px-4 py-2 w-80 border flex gap-2 rounded  hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150
+
+}
+
+.buttonlogingoogle:hover
+{
+    @apply border-slate-400 text-slate-900 shadow
+}
+
+.imgbuttonlogingoogle
+{
+    @apply w-5 h-5
+}
+
+.imgtemplate{
+    @apply w-screen h-screen
+}
