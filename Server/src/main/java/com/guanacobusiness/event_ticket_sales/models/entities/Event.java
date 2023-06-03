@@ -34,7 +34,7 @@ public class Event {
     private String title;
 
     @Column(name = "invloved_people")
-    private String involved_people;
+    private String involvedPeople;
 
     @Column(name = "event_image")
     private String image;
@@ -58,11 +58,11 @@ public class Event {
     @JsonIgnore
     List<UserxEvent> userxEvents;
 
-    public Event(String title, String involved_people, String image, Date date, java.sql.Time time, Integer duration,
+    public Event(String title, String involvedPeople, String image, Date date, java.sql.Time time, Integer duration,
             String sponsors, Boolean active) {
         super();
         this.title = title;
-        this.involved_people = involved_people;
+        this.involvedPeople = involvedPeople;
         this.image = image;
         this.date = date;
         this.time = time;
