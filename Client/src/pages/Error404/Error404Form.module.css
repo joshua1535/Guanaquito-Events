@@ -1,0 +1,123 @@
+.generalContainer {
+    @apply columns-2 grid grid-cols-1 sm:grid-cols-2  
+}
+
+.infoContainer {       
+    
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    @apply me-auto ms-auto  text-center h-screen w-screen
+
+}
+
+.infoContainer2
+{
+    display:flex;
+    @apply columns-2 grid grid-cols-1 sm:grid-cols-2
+
+}
+
+.logoContainer
+{
+    display:grid;
+    justify-content: center;
+    align-content: center;
+}
+
+.logoImg {
+    @apply   mx-auto    
+}
+
+.logintitle
+{
+    color: #FFFFFF;
+    font-family: 'PoppinsBold';
+    @apply sm:text-4xl text-2xl 
+}
+
+.infoContainer3
+{
+    margin-left: 1rem;
+    margin-top: 2rem;
+
+}
+
+.errortag
+{
+    align-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 0.7rem;    
+    background-color: #DCFCE7;
+    color: #14532D;
+    font-family: 'PoppinsBold';
+    @apply w-max rounded-lg sm:text-left sm:text-base
+}
+
+.infotext
+{
+    font-size: 2rem;
+    width: auto;
+    color: #FFFFFF;
+    font-family: 'PoppinsBold';
+    @apply 
+    mt-6 mx-auto sm:text-5xl 
+
+}
+
+.infotext2
+{
+    font-size: 1rem;
+    width: auto;
+    color: #8896AB;
+    font-family: 'PoppinsLight';
+
+    @apply sm:text-base sm:text-left text-center
+}
+
+
+
+.inputemailContainer {
+    @apply m-auto justify-center h-min w-min
+}
+
+.inputemailTitle{
+    @apply text  text-left  p-1 
+}
+
+.text 
+{
+    font-family: 'PoppinsLight';
+    color: #FFFFFF;
+    padding-top: 2rem;
+
+}
+
+
+.inputformat
+{
+    font-family: 'PoppinsLight';
+    @apply rounded p-2 w-80 
+}
+
+.loginContainer {
+    @apply mx-auto mt-5 justify-center h-min w-min
+}
+
+
+.buttonlogin
+{
+    font-family: 'PoppinsLight';
+    color: #FFFFFF;
+    font-weight: lighter;
+    background-color: #F59E0B;
+    border-radius: 10px;
+    border: none;    
+    height:auto;
+    @apply mt-2 p-2 mb-5 w-max sm:w-80 hover:bg-orange-500 font-bold rounded
+}
+
+.imgtemplate{
+    @apply hidden sm:block sm:w-screen sm:h-screen
+}
