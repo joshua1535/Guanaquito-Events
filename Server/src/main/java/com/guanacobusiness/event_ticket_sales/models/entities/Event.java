@@ -16,13 +16,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-//import lombok.ToString;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "event")
-//@ToString(exclude = {"",""})
+@ToString(exclude = {"userxEvents"})
 public class Event {
 
     @Id

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "ticket")
 public class Ticket {
-    
+
     @Id
     @Column(name = "code")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,16 +29,17 @@ public class Ticket {
     @JoinColumn(name = "order_code", nullable = false)
     private Order order;
 
-    /*@ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tier_code", nullable = false)
-    private Tier tier;*/
+    private Tier tier;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_owner_code", nullable = false)
     private User userOwner;
 
-    public Ticket(Order order, User userOwner) {
+    public Ticket(Order order, Tier tier, User userOwner) {
         this.order = order;
+        this.tier = tier;
         this.userOwner = userOwner;
     }
 
