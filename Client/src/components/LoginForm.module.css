@@ -3,6 +3,9 @@
 }
 
 .inputsContainer {
+    display:grid;
+    justify-content: center;
+    align-content: center;
     @apply p-6 h-screen text-center 
 }
 
