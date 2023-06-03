@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class User {
     private String password;
 
     @Column(name="profile_picture")
+    @Lob
     private String profilePicture;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -67,6 +69,14 @@ public class User {
         this.password = password;
         this.profilePicture = profilePicture;
         this.userXPermits = userXPermits;
+    }
+
+    public User(UUID code2, String email2, String newPassword, String profilePicture2) {
+        super();
+        this.code = code2;
+        this.email = email2;
+        this.password = newPassword;
+        this.profilePicture = profilePicture2;
     }
 
 }
