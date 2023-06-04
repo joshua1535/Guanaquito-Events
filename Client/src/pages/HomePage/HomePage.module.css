@@ -1,0 +1,208 @@
+.generalContainer{
+}
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+.carouselContainer{
+    @apply 
+    relative
+    object-center
+    PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 PC-1920*1080:mt-24
+    PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900 PC-1600*900:mt-16
+    PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768 PC-1366*768:mt-16
+    PC-1280*720:w-CarouselItemPC-1280*720 PC-1280*720:h-CarouselItemPC-1280*720 PC-1280*720:mt-16
+    PC-800*600:w-CarouselItemPC-800*600 PC-800*600:h-CarouselItemPC-800*600 PC-800*600:mt-14
+    PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480 PC-640*480:mt-12
+    Mobile-390*844:w-full Mobile-390*844:h-CarouselItemMobile-390*844 Mobile-390*844:mt-4
+
+}
+
+
+.imgContainer {
+    @apply 
+    m-auto
+    relative
+    object-cover
+    object-center
+    overflow-hidden
+    PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080
+    PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900
+    PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768
+    PC-1280*720:w-CarouselItemPC-1280*720 PC-1280*720:h-CarouselItemPC-1280*720
+    PC-800*600:w-CarouselItemPC-800*600 PC-800*600:h-CarouselItemPC-800*600
+    PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480
+    Mobile-390*844:w-full Mobile-390*844:h-CarouselItemMobile-390*844
+}
+
+.imgBackgroundContainer {
+    @apply absolute inset-x-0 bottom-0 grid w-full bg-black/75
+    PC-1920*1080:h-BackgroundContainerCarouselPC-1920*1080
+    PC-1600*900:h-BackgroundContainerCarouselPC-1600*900
+    PC-1366*768:h-BackgroundContainerCarouselPC-1366*768
+    PC-1280*720:h-BackgroundContainerCarouselPC-1280*720
+    PC-800*600:h-BackgroundContainerCarouselPC-800*600
+    PC-640*480:h-BackgroundContainerCarouselPC-640*480
+    Mobile-390*844:h-BackgroundContainerCarouselMobile-390*844
+    Mobile-280:h-BackgroundContainerCarouselMobile-280
+    
+}
+
+.imgCarouselFormat{
+    @apply 
+    m-auto
+    relative
+    overflow-hidden
+    PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080
+    PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900
+    PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768
+    PC-1280*720:w-CarouselItemPC-1280*720 PC-1280*720:h-CarouselItemPC-1280*720
+    PC-800*600:w-CarouselItemPC-800*600 PC-800*600:h-CarouselItemPC-800*600
+    PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480
+    Mobile-390*844:w-full Mobile-390*844:h-CarouselItemMobile-390*844
+    Mobile-280:w-full Mobile-280:h-CarouselItemMobile-280
+}
+
+.buttonContainer{
+    font-family: 'PoppinsLight';
+    @apply 
+    m-auto
+    absolute
+    inset-x-5
+    top-1/4
+    PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 
+    PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900
+    PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768
+    PC-1280*720:w-CarouselItemPC-1280*720 PC-1280*720:h-CarouselItemPC-1280*720
+    PC-800*600:w-CarouselItemPC-800*600 PC-800*600:h-CarouselItemPC-800*600
+    PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480
+    Mobile-390*844:w-CarouselItemMobile-390*844 Mobile-390*844:h-CarouselItemMobile-390*844
+    Mobile-280:w-CarouselItemMobile-280 Mobile-280:h-CarouselItemMobile-280
+
+}
+
+
+.buttonCarousel{
+    @apply bg-transparent border-amber-400 border-2 outline-4 rounded-full text-amber-400 hover:bg-amber-400 hover:text-white font-light
+    PC-1920*1080:h-ButtonCarouselPC-1920*1080 PC-1920*1080:w-ButtonCarouselPC-1920*1080
+    PC-1600*900:h-ButtonCarouselPC-1600*900 PC-1600*900:w-ButtonCarouselPC-1600*900
+    PC-1366*768:h-ButtonCarouselPC-1366*768 PC-1366*768:w-ButtonCarouselPC-1366*768
+    PC-1280*720:h-ButtonCarouselPC-1280*720 PC-1280*720:w-ButtonCarouselPC-1280*720
+    PC-800*600:h-ButtonCarouselPC-800*600 PC-800*600:w-ButtonCarouselPC-800*600
+    PC-640*480:h-ButtonCarouselPC-640*480 PC-640*480:w-ButtonCarouselPC-640*480
+    Mobile-390*844:h-ButtonCarouselMobile-390*844 Mobile-390*844:w-ButtonCarouselMobile-390*844 
+    Mobile-280:h-ButtonCarouselMobile-280 Mobile-280:w-ButtonCarouselMobile-280 Mobile-280:text-xs
+}
+
+.categoriesContainer {
+    font-family: 'PoppinsLight';
+    @apply flex justify-center p-4 uppercase text-yellow-800
+    PC-1920*1080:text-9xl
+    PC-1600*900:text-8xl
+    PC-1366*768:text-7xl
+    PC-1280*720:text-6xl
+    PC-800*600:text-5xl
+    PC-640*480:text-4xl
+    Mobile-390*844:text-3xl
+    Mobile-280:text-2xl
+}
+
+.eventsTitle {
+    font-family: 'PoppinsLight';
+    @apply flex justify-center p-4 uppercase text-white
+    PC-1920*1080:text-9xl
+    PC-1600*900:text-8xl
+    PC-1366*768:text-7xl
+    PC-1280*720:text-6xl
+    PC-800*600:text-5xl
+    PC-640*480:text-4xl
+    Mobile-390*844:text-3xl
+    Mobile-280:text-2xl
+    Mobile-390*844:hidden
+    Mobile-280:hidden
+}
+
+.eventsContainer {
+    @apply columns-2 flex m-auto p-6
+    Mobile-390*844:hidden
+    Mobile-280:hidden
+    
+}
+
+.leftColumn {
+    @apply w-1/2
+}	
+
+.categoryImage {
+    @apply w-full
+}	
+
+.viewMoreButton{
+    @apply bg-transparent border-amber-400 border-2 outline-4 rounded-full text-amber-400 hover:bg-amber-400 hover:text-white font-light mt-4
+    PC-1920*1080:h-ButtonViewMoreEventsPC-1920*1080 PC-1920*1080:w-ButtonViewMoreEventsPC-1920*1080
+    PC-1600*900:h-ButtonViewMoreEventsPC-1600*900 PC-1600*900:w-ButtonViewMoreEventsPC-1600*900
+    PC-1366*768:h-ButtonViewMoreEventsPC-1366*768 PC-1366*768:w-ButtonViewMoreEventsPC-1366*768
+    PC-1280*720:h-ButtonViewMoreEventsPC-1280*720 PC-1280*720:w-ButtonViewMoreEventsPC-1280*720
+    PC-800*600:h-ButtonViewMoreEventsPC-800*600 PC-800*600:w-ButtonViewMoreEventsPC-800*600
+    PC-640*480:h-ButtonViewMoreEventsPC-640*480 PC-640*480:w-ButtonViewMoreEventsPC-640*480
+    Mobile-390*844:h-ButtonViewMoreEventsMobile-390*844 Mobile-390*844:w-ButtonViewMoreEventsMobile-390*844
+    Mobile-280:h-ButtonViewMoreEventsMobile-280 Mobile-280:w-ButtonViewMoreEventsMobile-280
+}
+
+.rightColumn {
+    @apply w-1/2 grid grid-cols-3 gap-4 ml-6 
+}
+
+.smallCardContainer {
+    width: 150px;
+    height: 300px;
+}
+
+.smallCardImage{
+    @apply w-full object-cover shadow-md h-5/6
+
+}
+
+.cardContent {
+    @apply flex flex-col justify-center items-center
+}
+
+.eventTitle {
+    font-family: 'PoppinsLight';
+
+    @apply PC-1920*1080:text-xl
+    PC-1600*900:text-lg
+    PC-1366*768:text-lg
+    PC-1280*720:text-sm
+    PC-800*600:text-xs
+    PC-640*480:text-xs
+    Mobile-390*844:text-xs
+    Mobile-280:text-xs
+    Mobile-390*844:hidden
+    Mobile-280:hidden
+    
+}
+
+.eventPrice {
+    font-family: 'PoppinsLight';
+}
+
+.sliderMobileContainer {
+    @apply
+    PC-1920*1080:hidden
+    PC-1600*900:hidden
+    PC-1366*768:hidden
+    PC-1280*720:hidden
+    PC-800*600:hidden
+    PC-640*480:hidden
+    mx-auto w-full
+}
+
+.viewMoreButtonMobile {
+    font-family: 'PoppinsLight';
+    @apply bg-transparent border-amber-400 border-2 outline-4 rounded-full text-amber-400 hover:bg-amber-400 hover:text-white mt-4 ml-4 w-44 text-sm
+}
