@@ -1,6 +1,6 @@
+import logo from '../../assets/logo.png';
 import './LoginForm.module.css';
 import classes from './LoginForm.module.css';
-import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
 
 

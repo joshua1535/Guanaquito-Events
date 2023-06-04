@@ -112,8 +112,14 @@
     background-color: #FFFFFF;
     border-radius: 10px;
     border: none;
-    @apply justify-center px-4 py-2 w-80 border flex gap-2 rounded transition duration-150
 
+    @apply justify-center px-4 py-2 w-80 border flex gap-2 rounded  hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150
+
+}
+
+.buttonlogingoogle:hover
+{
+    @apply border-slate-400 text-slate-900 shadow
 }
 
 
@@ -123,5 +129,7 @@
 }
 
 .imgtemplate{
-    @apply w-screen h-screen
+
+    @apply w-screen h-screen 
 }
+
