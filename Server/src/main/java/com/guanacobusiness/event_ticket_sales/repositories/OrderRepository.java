@@ -12,6 +12,5 @@ public interface OrderRepository extends ListCrudRepository<Order, UUID>{
 
     Order findOneByOrderCode(UUID orderCode);
     List<Order> findOrdersByDateAddedBetween(Date date1, Date date2);
-    List<Order> findOrdersByUserBuyerCode(UUID userBuyerCode);
 
 }

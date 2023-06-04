@@ -12,7 +12,6 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Order;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.repositories.OrderRepository;
-import com.guanacobusiness.event_ticket_sales.repositories.TicketRepository;
 import com.guanacobusiness.event_ticket_sales.services.OrderService;
 
 import jakarta.transaction.Transactional;
@@ -22,9 +21,6 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     OrderRepository orderRepository;
-
-    @Autowired
-    TicketRepository ticketRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -42,7 +38,7 @@ public class OrderServiceImpl implements OrderService{
             return null;
         }
 
-        List<Ticket> tickets = ticketRepository.findAllByOrderCode(orderCode);
+        List<Ticket> tickets = order.getTickets();
 
         return tickets;
 
@@ -59,13 +55,6 @@ public class OrderServiceImpl implements OrderService{
 
         return orders;
 
-    }
-
-    @Override
-    public List<Order> findAllOrdersByUserBuyerCode(UUID userBuyerCode) {
-        List<Order> orders = orderRepository.findOrdersByUserBuyerCode(userBuyerCode);
-
-        return orders;
     }
 
 }
