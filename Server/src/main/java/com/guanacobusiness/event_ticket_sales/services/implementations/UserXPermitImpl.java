@@ -39,14 +39,31 @@ public class UserXPermitImpl implements UserXPermitService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void deleteByCode(UUID code) throws Exception {
+    public Boolean deleteByCode(UUID code) throws Exception {
+        UserXPermit permit = userXPermitRepository.findByCode(code);
+
+        if(permit == null) {
+            return false;
+        }
+
         userXPermitRepository.deleteOneByCode(code);
+
+        return true;
+
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void deleteByUserCodeAndPermitCode(UUID userCode, UUID permitCode) throws Exception {
+    public Boolean deleteByUserCodeAndPermitCode(UUID userCode, UUID permitCode) throws Exception {
+        UserXPermit permit = userXPermitRepository.findOneByUserCodeAndPermitCode(userCode, permitCode);
+
+        if(permit == null) {
+            return false;
+        }
+
         userXPermitRepository.deleteByUserCodeAndPermitCode(userCode, permitCode);
+
+        return true;
     }
 
     @Override
@@ -59,5 +76,10 @@ public class UserXPermitImpl implements UserXPermitService{
 
         return permits;
     }
-    
+
+    @Override
+    public List<UserXPermit> findAll() {
+        return userXPermitRepository.findAll();
+    }
+
 }
