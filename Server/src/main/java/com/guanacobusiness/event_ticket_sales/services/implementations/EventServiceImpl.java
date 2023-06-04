@@ -64,6 +64,7 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public boolean update(UpdateEventDTO info) throws Exception {
         Event eventFound = eventRepository.findById(UUID.fromString(info.getCode())).orElse(null);
 
@@ -74,22 +75,16 @@ public class EventServiceImpl implements EventService{
         Event updatedEvent = new Event();
 
         updatedEvent.setCode(eventFound.getCode());
-
-        if (info.getTitle() != null) {updatedEvent.setTitle(info.getTitle());} 
-        else {updatedEvent.setTitle(eventFound.getTitle());}
-        if (info.getInvolvedPeople() != null) {updatedEvent.setInvolvedPeople(info.getInvolvedPeople());} 
-        else {updatedEvent.setInvolvedPeople(eventFound.getInvolvedPeople());}
-        if (info.getImage() != null) {updatedEvent.setImage(info.getImage());} 
-        else {updatedEvent.setImage(eventFound.getImage());}
-        if (info.getDate() != null) {updatedEvent.setDate(info.getDate());} 
-        else {updatedEvent.setDate(eventFound.getDate());}
-        if (info.getTime() != null) {updatedEvent.setTime(info.getTime());} 
-        else {updatedEvent.setTime(eventFound.getTime());}
-        if (info.getDuration() != null) {updatedEvent.setDuration(info.getDuration());} 
-        else {updatedEvent.setDuration(eventFound.getDuration());}
-        if (info.getSponsors() != null) {updatedEvent.setSponsors(info.getSponsors());} 
-        else {updatedEvent.setSponsors(eventFound.getSponsors());}
+        updatedEvent.setTitle(info.getTitle() != null ? info.getTitle() : eventFound.getTitle());
+        updatedEvent.setInvolvedPeople(info.getInvolvedPeople() != null ? info.getInvolvedPeople() : eventFound.getInvolvedPeople());
+        updatedEvent.setImage(info.getImage() != null ? info.getImage() : eventFound.getImage());
+        updatedEvent.setDate(info.getDate() != null ? info.getDate() : eventFound.getDate());
+        updatedEvent.setTime(info.getTime() != null ? info.getTime() : eventFound.getTime());
+        updatedEvent.setDuration(info.getDuration() != null ? info.getDuration() : eventFound.getDuration());
+        updatedEvent.setSponsors(info.getSponsors() != null ? info.getSponsors() : eventFound.getSponsors());
         updatedEvent.setActive(eventFound.getActive());
+
+
         if (info.getCategoryCode() != null) {
             Category categoryFound = categoryService.findCategoryByCode(info.getCategoryCode());
             if (categoryFound == null) {
