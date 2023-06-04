@@ -14,5 +14,6 @@ public interface OrderService {
     void createOrder(User userBuyer, Date purchaseDate) throws Exception;
     List<Ticket> findTicketsByOrderCode(UUID orderCode);
     List<Order> findOrdersBetweenDates(DateRangeDTO dateRangeDTO);
+    List<Order> findAllOrdersByUserBuyerCode(UUID userBuyerCode);
 
 }
