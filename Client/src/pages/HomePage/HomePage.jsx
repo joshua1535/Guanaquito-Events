@@ -3,6 +3,7 @@ import classes from './HomePage.module.css';
 import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
 import React from "react";
+import { useEffect } from "react";
 import {
   Carousel,
   Navbar,
@@ -18,18 +19,185 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import {
-  CubeTransparentIcon,
-  UserCircleIcon,
-  CodeBracketSquareIcon,
-  Square3Stack3DIcon,
   ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
-  PowerIcon,
-  RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/outline";
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+const listEvents = [
+  {
+    title: "Mario",
+    description: "Descripcion del evento 1",
+    date: "01/01/2021",
+    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
+  },
+  {
+    title: "Pink Floyd",
+    description: "Descripcion del evento 2",
+    date: "02/02/2023",
+    img: "https://i0.wp.com/mixturapop.com/wp-content/uploads/2019/06/camacu%C3%A1.jpg?fit=700%2C390&ssl=1",
+  },
+  {
+    title: "Fas vs Dragon",
+    description: "Descripcion del evento 3",
+    date: "03/03/2021",
+    img: "https://futbolcentroamerica.com/__export/1667069866944/sites/futbolcentroamerica/img/2022/10/28/fas-dragon.jpg_242310155.jpg",
+  },
+  {
+    title: "Ballet Nacional",
+    description: "Descripcion del evento 4",
+    date: "04/01/2019",
+    img: "https://www.cultura.gob.sv/wp-content/uploads/2022/02/Ballet-naciola-105.png",
+  },
+];
+
+//obtener los 3 eventos mas recientes en base a la fecha, necesito sacar la imagen
+const getImg = (listEvents) => {
+  // Ordenar los eventos por fecha de forma descendente
+  const sortedEvents = [...listEvents].sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB - dateA;
+  });
+
+  // Obtener las imágenes de los 3 eventos más recientes
+  const recentImages = sortedEvents.slice(0, 3).map(event => event.img);
+  
+  return recentImages;
+};
+
+const movieEvents = [
+  {
+    title: "Mario",
+    description: "Descripcion del evento 1",
+    date: "01/01/2021",
+    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
+    precio: "10.00",
+  },
+  {
+    title: "Pink Floyd",
+    description: "Descripcion del evento 2",
+    date: "02/02/2022",
+    img: "https://i0.wp.com/mixturapop.com/wp-content/uploads/2019/06/camacu%C3%A1.jpg?fit=700%2C390&ssl=1",
+    precio: "10.00",
+  },
+  {
+    title: "Fas vs Dragon",
+    description: "Descripcion del evento 3",
+    date: "03/03/2021",
+    img: "https://futbolcentroamerica.com/__export/1667069866944/sites/futbolcentroamerica/img/2022/10/28/fas-dragon.jpg_242310155.jpg",
+    precio: "10.00",
+  },
+  {
+    title: "Ballet Nacional",
+    description: "Descripcion del evento 4",
+    date: "04/01/2019",
+    img: "https://www.cultura.gob.sv/wp-content/uploads/2022/02/Ballet-naciola-105.png",
+    precio: "10.00",
+  },
+  {
+    title: "Mario",
+    description: "Descripcion del evento 1",
+    date: "01/01/2021",
+    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
+    precio: "10.00",
+  },
+  {
+    title: "Mario",
+    description: "Descripcion del evento 1",
+    date: "01/01/2021",
+    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
+    precio: "10.00",
+  },
+  {
+    title: "Mario",
+    description: "Descripcion del evento 1",
+    date: "01/01/2021",
+    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
+    precio: "10.00",
+  },
+];
+
+const getMovieImg = (movieEvents) => {
+  // Ordenar los eventos por fecha de forma descendente
+  const sortedEvents = [...movieEvents].sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB - dateA;
+  });
+
+  // Obtener las imágenes de los 3 eventos más recientes
+  const recentImages = sortedEvents.slice(0, 3).map(event => event.img);
+
+  return recentImages;
+};
+
+
+const cardData = [
+  { id: 1, title: 'CINE', imageUrl: 'https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg' },
+  { id: 2, title: 'CONCIERTO', imageUrl: 'https://thumbs.dreamstime.com/b/muchedumbre-del-concierto-10447765.jpg' },
+  { id: 3, title: 'TEATRO', imageUrl: 'https://www.hoyesarte.com/wp-content/uploads/2009/08/teatro-2.jpg' },
+  { id: 4, title: 'DEPORTES', imageUrl: 'https://i.ytimg.com/vi/uGU1IztR5rg/maxresdefault.jpg' },
+  // Agrega más tarjetas si es necesario
+];
+
+const SliderCards = () => {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    centerMode: true, // Habilita el centro del modo
+    centerPadding: '25%', // Ajusta el espacio para mostrar una porción de la siguiente tarjeta (25% en este caso)
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          arrows: false,
+          swipe: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          arrows: false,
+          swipe: true,
+          centerPadding: '20%', // Ajusta el espacio en dispositivos móviles
+        },
+      },
+    ],
+  };
+
+  return (
+    <div className={[classes["sliderMobileContainer"]]}>
+
+      <Slider {...settings}>
+        {cardData.map((card) => (
+          <div key={card.id} className="p-4">
+            <div className="relative bg-white rounded shadow h-64 border-2 border-gray-300">
+              <img
+                src={card.imageUrl}
+                alt={card.title}
+                className="object-cover w-full h-full"
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
+                <h2 className="text-lg font-bold">{card.title}</h2>
+              </div>
+            </div>
+          </div>
+        ))}
+      </Slider>
+      <button className={classes["viewMoreButtonMobile"]}>Ver todos</button>
+    </div>
+  );
+};
+
+
 
 
 // profile menu component
@@ -107,24 +275,7 @@ function ProfileMenu() {
   );
 }
 
-// nav list menu
-const navListMenuItems = [
-  {
-    title: "@material-tailwind/html",
-    description:
-      "Learn how to use @material-tailwind/html, packed with rich components and widgets.",
-  },
-  {
-    title: "@material-tailwind/react",
-    description:
-      "Learn how to use @material-tailwind/react, packed with rich components for React.",
-  },
-  {
-    title: "Material Tailwind PRO",
-    description:
-      "A complete set of UI Elements for building faster websites in less time.",
-  },
-];
+
  
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -133,65 +284,9 @@ function NavListMenu() {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
+  }
  
-  const renderItems = navListMenuItems.map(({ title, description }) => (
-    <a href="#" key={title}>
-      <MenuItem>
-        <Typography variant="h6" color="blue-gray" className="mb-1">
-          {title}
-        </Typography>
-        <Typography variant="small" color="gray" className="font-normal">
-          {description}
-        </Typography>
-      </MenuItem>
-    </a>
-  ));
- 
-  return (
-    <React.Fragment>
-      <Menu open={isMenuOpen} handler={setIsMenuOpen}>
-        <MenuHandler>
-          <Typography as="a" href="#" variant="small" className="font-normal">
-            <MenuItem
-              {...triggers}
-              className="hidden items-center gap-2 text-white lg:flex lg:rounded-full"
-            >
-              <Square3Stack3DIcon className="h-[18px] w-[18px]" /> Pages{" "}
-              <ChevronDownIcon
-                strokeWidth={2}
-                className={`h-3 w-3 transition-transform ${
-                  isMenuOpen ? "rotate-180" : ""
-                }`}
-              />
-            </MenuItem>
-          </Typography>
-        </MenuHandler>
-        <MenuList
-          {...triggers}
-          className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid"
-        >
-          <Card
-            color="blue"
-            shadow={false}
-            variant="gradient"
-            className="col-span-3 grid h-full w-full place-items-center rounded-md"
-          >
-            <RocketLaunchIcon strokeWidth={1} className="h-28 w-28" />
-          </Card>
-          <ul className="col-span-4 flex w-full flex-col gap-1">
-            {renderItems}
-          </ul>
-        </MenuList>
-      </Menu>
-      <MenuItem className="flex items-center gap-2 text-blue-gray-900 lg:hidden">
-        <Square3Stack3DIcon className="h-[18px] w-[18px]" /> Pages{" "}
-      </MenuItem>
-      <ul className="ml-6 flex w-full flex-col gap-1 lg:hidden">
-        {renderItems}
-      </ul>
-    </React.Fragment>
-  );
-}
+  
  
 // nav list component
 const navListItems = [
@@ -225,9 +320,11 @@ function NavList() {
   );
 }
 
-export default function ComplexNavbar() {
+export default function HomePage() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+  const [recentEventImages, setRecentEventImages] = React.useState([]);
+  const [recentMovieImages, setRecentMovieImages] = React.useState([]);
  
   React.useEffect(() => {
     window.addEventListener(
@@ -236,6 +333,18 @@ export default function ComplexNavbar() {
     );
   }, []);
  
+  useEffect(() => {
+    // Obtener las imágenes de los 3 eventos más recientes
+    const recentImages = getImg(listEvents);
+    setRecentEventImages(recentImages);
+  }, []);
+
+  useEffect(() => {
+    // Obtener las imágenes de las 3 películas más recientes
+    const recentImages = getMovieImg(movieEvents);
+    setRecentMovieImages(recentImages);
+  }, []);
+  
   return (
     <div className={[classes["generalContainer"]]}>
       <header className={[classes["headerContainer"]]}>
@@ -245,7 +354,7 @@ export default function ComplexNavbar() {
         <Typography
           as="a"
           href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white text-2xl"
+          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
         >
           Guanaco Business
         </Typography>
@@ -268,158 +377,110 @@ export default function ComplexNavbar() {
       </MobileNav>
     </Navbar>
       </header>
-    <Carousel className={[classes["carouselContainer"]]}>
-        <div className={[classes["imgContainer"]]}>
-          <img
-            src="https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg"
-            alt="image 1"
-            className={[classes["imgCarouselFormat"]]} />
-          <div className={[classes["imgBackgroundContainer"]]}>
-            <div className={[classes["buttonContainer"]]}>
-              <div className="flex gap-2">
-                <button className={classes["buttonCarousel"]}>
-                  Comprar tickets
-                </button>
-              </div>
-            </div>
+      <Carousel className={classes["carouselContainer"]}>
+  {recentEventImages.map((image, index) => (
+    <div className={classes["imgContainer"]} key={index}>
+      <img src={image} alt={`image ${index + 1}`} className={classes["imgCarouselFormat"]} />
+      <div className={classes["imgBackgroundContainer"]}>
+        <div className={classes["buttonContainer"]}>
+          <div className="flex gap-2">
+            <button className={classes["buttonCarousel"]}>Tickets</button>
           </div>
         </div>
-        <div className={[classes["imgContainer"]]}>
-          <img
-            src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-            alt="image 2"
-            className={[classes["imgCarouselFormat"]]} />
-          <div className={[classes["imgBackgroundContainer"]]}>
-            <div className={[classes["buttonContainer"]]}>
-              <div className="flex gap-2">
-                <button className={classes["buttonCarousel"]}>
-                  Comprar tickets
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={[classes["imgContainer"]]}>
-          <img
-            src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-            alt="image 3"
-            className={[classes["imgCarouselFormat"]]} />
-          <div className={[classes["imgBackgroundContainer"]]}>
-            <div className={[classes["buttonContainer"]]}>
-              <div className="flex gap-2">
-                <button className={classes["buttonCarousel"]}>
-                  Comprar tickets
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Carousel>
-      <Carousel className={[classes["carouselContainer"]]}>
-        <div className={[classes["imgContainer"]]}>
-          <img
-            src="https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg"
-            alt="image 1"
-            className={[classes["imgCarouselFormat"]]} />
-          <div className={[classes["imgBackgroundContainer"]]}>
-            <div className={[classes["buttonContainer"]]}>
-              <div className="flex gap-2">
-                <button className={classes["buttonCarousel"]}>
-                  Comprar tickets
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={[classes["imgContainer"]]}>
-          <img
-            src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-            alt="image 2"
-            className={[classes["imgCarouselFormat"]]} />
-          <div className={[classes["imgBackgroundContainer"]]}>
-            <div className={[classes["buttonContainer"]]}>
-              <div className="flex gap-2">
-                <button className={classes["buttonCarousel"]}>
-                  Comprar tickets
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={[classes["imgContainer"]]}>
-          <img
-            src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-            alt="image 3"
-            className={[classes["imgCarouselFormat"]]} />
-          <div className={[classes["imgBackgroundContainer"]]}>
-            <div className={[classes["buttonContainer"]]}>
-              <div className="flex gap-2">
-                <button className={classes["buttonCarousel"]}>
-                  Comprar tickets
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Carousel>
       </div>
+    </div>
+  ))}
+</Carousel>
+      <div className={[classes["categoriesContainer"]]}>
+        <div className={[classes["categoriesTitle"]]}>
+          <h1>Categorías</h1></div>
+        </div>
+        <div className={[classes["eventsTitle"]]}>
+          <h1>Cine</h1></div>     
+          <div className={classes["eventsContainer"]}>
+        <div className={classes["leftColumn"]}>
+          {/* Imagen representativa */}
+          <img src="https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg"
+           alt="Cine" className={classes["categoryImage"]} />
+
+          {/* Botón "Ver más eventos de esta categoría" */}
+          <button className={classes["viewMoreButton"]}>Ver más</button>
+        </div>
+
+        <div className={classes["rightColumn"]}>
+          {/* Tarjetas de eventos más pequeñas */}
+          {movieEvents.slice(0, 6).map((event, index) => (
+          
+            <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+              <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
+              <div className={classes["cardContent"]}>
+                <h3 className={classes["eventTitle"]}>{event.title}</h3>
+                <p className={classes["eventTitle"]}> ${event.precio}</p>
+              </div>
+            </Card>
+
+          ))}
+        </div>
+</div>
+<div className={[classes["eventsTitle"]]}>
+          <h1>Cine</h1></div>     
+          <div className={classes["eventsContainer"]}>
+        <div className={classes["leftColumn"]}>
+          {/* Imagen representativa */}
+          <img src="https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg"
+           alt="Cine" className={classes["categoryImage"]} />
+
+          {/* Botón "Ver más eventos de esta categoría" */}
+          <button className={classes["viewMoreButton"]}>Ver más</button>
+        </div>
+
+        <div className={classes["rightColumn"]}>
+          {/* Tarjetas de eventos más pequeñas */}
+          {movieEvents.slice(0, 6).map((event, index) => (
+          
+            <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+              <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
+              <div className={classes["cardContent"]}>
+                <h3 className={classes["eventTitle"]}>{event.title}</h3>
+                <p className={classes["eventTitle"]}> ${event.precio}</p>
+              </div>
+            </Card>
+
+          ))}
+        </div>
+</div>
+<div className={[classes["eventsTitle"]]}>
+          <h1>Cine</h1></div>     
+          <div className={classes["eventsContainer"]}>
+        <div className={classes["leftColumn"]}>
+          {/* Imagen representativa */}
+          <img src="https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg"
+           alt="Cine" className={classes["categoryImage"]} />
+
+          {/* Botón "Ver más eventos de esta categoría" */}
+          <button className={classes["viewMoreButton"]}>Ver más</button>
+        </div>
+
+        <div className={classes["rightColumn"]}>
+          {/* Tarjetas de eventos más pequeñas */}
+          {movieEvents.slice(0, 6).map((event, index) => (
+          
+            <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+              <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
+              <div className={classes["cardContent"]}>
+                <h3 className={classes["eventTitle"]}>{event.title}</h3>
+                <p className={classes["eventTitle"]}> ${event.precio}</p>
+              </div>
+            </Card>
+
+          ))}
+        </div>
+
+</div>
+<SliderCards/>
+</div>
       );
+      
     }
 
-/* export default function HomePage() {
-  return (
 
-    <Carousel className={[classes["carouselContainer"]]}>
-   
-      <div className={[classes["imgContainer"]]}>
-        <img
-          src="https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg"
-          alt="image 1"
-          className={[classes["imgCarouselFormat"]]}
-        />
-        <div className={[classes["imgBackgroundContainer"]]}>
-          <div className={[classes["buttonContainer"]]}>
-            <div className="flex gap-2">
-            <button className={classes["buttonCarousel"]}>
-                Comprar tickets
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={[classes["imgContainer"]]}>
-        <img
-          src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-          alt="image 2"
-          className={[classes["imgCarouselFormat"]]}
-        />
-        <div className={[classes["imgBackgroundContainer"]]}>
-        <div className={[classes["buttonContainer"]]}>
-            <div className="flex gap-2">
-            <button className={classes["buttonCarousel"]}>
-                Comprar tickets
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={[classes["imgContainer"]]}>
-        <img
-          src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-          alt="image 3"
-          className={[classes["imgCarouselFormat"]]}
-        />
-        <div className={[classes["imgBackgroundContainer"]]}>
-        <div className={[classes["buttonContainer"]]}>
-            <div className="flex gap-2">
-            <button className={classes["buttonCarousel"]}>
-                Comprar tickets
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Carousel>
-  );
-}
- */
