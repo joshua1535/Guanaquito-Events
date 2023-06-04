@@ -33,7 +33,7 @@
 {
     color: #FFFFFF;
     font-family: 'PoppinsBold';
-    @apply sm:text-4xl text-2xl 
+    @apply sm:text-3xl text-2xl text-center mt-5
 }
 
 .infoContainer3
@@ -57,12 +57,12 @@
 
 .infotext
 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     width: auto;
     color: #FFFFFF;
     font-family: 'PoppinsBold';
     @apply 
-    mt-6 mx-auto sm:text-5xl 
+    mt-6 mx-auto sm:text-4xl 
 
 }
 
@@ -73,7 +73,7 @@
     color: #8896AB;
     font-family: 'PoppinsLight';
 
-    @apply sm:text-base sm:text-left text-center
+    @apply sm:text-base sm:text-center text-center
 }
 
 
