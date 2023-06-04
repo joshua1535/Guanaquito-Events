@@ -59,7 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public boolean deleteByCode(String code) throws Exception {
+    public boolean delete(String code) throws Exception {
         Category categoryFound = categoryRepository.findById(code).orElse(null);
         if (categoryFound == null) {
             return false;

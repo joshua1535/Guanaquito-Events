@@ -10,6 +10,6 @@ public interface CategoryService {
     Category findCategoryByCode(String id);
     boolean save(SaveCategoryDTO info) throws Exception;
     boolean update(SaveCategoryDTO info) throws Exception;
-    boolean deleteByCode(String code) throws Exception;
+    boolean delete(String code) throws Exception;
 
 }
