@@ -37,7 +37,6 @@ public class User {
     private String password;
 
     @Column(name="profile_picture")
-    @Lob
     private String profilePicture;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
