@@ -1,12 +1,12 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.CreateOrderDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.DateRangeDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Order;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
@@ -28,8 +28,8 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void createOrder(User userBuyer, Date purchaseDate) throws Exception {
-        Order order = new Order(userBuyer, purchaseDate);
+    public void createOrder(CreateOrderDTO info) throws Exception {
+        Order order = new Order(info.getUser(), info.getPurchaseDate());
 
         orderRepository.save(order);
     }
