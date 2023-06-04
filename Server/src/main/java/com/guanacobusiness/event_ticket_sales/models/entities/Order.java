@@ -1,5 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.models.entities;
 
+
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +37,9 @@ public class Order {
     @JoinColumn(name = "user_buyer_code", nullable = false)
     private User userBuyer;
 
+    @Column(name = "purchase_time", nullable = false)
+    private Date purchaseDate;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @JsonIgnore
     List<Ticket> tickets;
@@ -43,6 +48,12 @@ public class Order {
         super();
         this.userBuyer = userBuyer;
         this.tickets = tickets;
-    }  
+    }
+
+    public Order(User userBuyer, Date purchaseDate) {
+        super();
+        this.userBuyer = userBuyer;
+        this.purchaseDate = purchaseDate;
+    }
 
 }
