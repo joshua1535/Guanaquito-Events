@@ -21,7 +21,7 @@
     background-color: #333F51;
     color: #DD8E0A;
     @apply 
-    w-full 
+    w-full h-screen
     Mobile-390*844:text-xl PC-800*600:text-2xl PC-1600*900:text-2xl PC-1366*768:text-2.5xl PC-1920*1080:text-2.5xl 
     sm:w-1/4 md:w-1/4  lg:w-1/4  xl:w-1/4 2xl:w-1/4 hidden sm:inline-block
 }

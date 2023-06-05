@@ -298,7 +298,7 @@ const EventsPage = () => {
       </MobileNav>
       </Navbar>
     </header>
-      <div className="flex flex-col sm:flex-row h-screen bg-gray-200">
+      <div className="flex flex-col sm:flex-row h-screen bg-dark-blue">
         <div className={classes["optionsContainer"]}>
           <ul >
             {categories.map(category => (
@@ -312,7 +312,7 @@ const EventsPage = () => {
             ))}
           </ul>
         </div>
-        <div className="w-full bg-dark-blue sm:w-3/4 p-4">
+        <div className="w-full h-max bg-dark-blue sm:w-3/4 p-4">
           <div className="flex  p-0 flex-wrap sm:space-x-4 justify-center">
             {images1[selectedCategory].map((imgSrc, index)=> (
               <div className=" p-4 rounded-lg m-2 sm:m-0" key={index}>
