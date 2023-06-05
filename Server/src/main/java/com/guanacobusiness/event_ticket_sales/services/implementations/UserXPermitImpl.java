@@ -82,4 +82,15 @@ public class UserXPermitImpl implements UserXPermitService{
         return userXPermitRepository.findAll();
     }
 
+    @Override
+    public List<User> findUsersByPermitCode(UUID permitCode) {
+        List<User> users = userXPermitRepository.findUsersByPermitCode(permitCode);
+
+        if(users.isEmpty()) {
+            return null;
+        }
+
+        return users;
+    }
+
 }
