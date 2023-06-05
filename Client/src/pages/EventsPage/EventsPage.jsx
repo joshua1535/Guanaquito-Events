@@ -194,10 +194,13 @@ const EventsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
 
   const images1 = {
-    'Todos': ['https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png'],
+    'Todos': ['https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png'
+      ,'https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png','https://kirbyandtheforgottenland.nintendo.com/assets/images/home/header.jpg',
+      'https://i.postimg.cc/3RGLQb8v/imagen-2023-06-04-161025997.png','https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg',
+      'https://assets-prd.ignimgs.com/2022/09/14/zelda-tears-of-the-kingdom-button-2k-1663127818777.jpg'],
     'Cine': ['https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png'],
     'Conciertos': ['https://i.postimg.cc/3RGLQb8v/imagen-2023-06-04-161025997.png'],
-    'Obras de teatro': ['https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg'],
+    'Obras de teatro': ['https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png','https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg'],
     'Deportes': ['https://assets-prd.ignimgs.com/2022/09/14/zelda-tears-of-the-kingdom-button-2k-1663127818777.jpg'],
   };
 
@@ -309,10 +312,10 @@ const EventsPage = () => {
             ))}
           </ul>
         </div>
-        <div className="w-full h-screen bg-dark-blue sm:w-3/4 p-4">
-          <div className="flex flex-wrap sm:space-x-4 justify-center">
+        <div className="w-full bg-dark-blue sm:w-3/4 p-4">
+          <div className="flex  p-0 flex-wrap sm:space-x-4 justify-center">
             {images1[selectedCategory].map((imgSrc, index)=> (
-              <div className="p-4 rounded-lg m-2 sm:m-0" key={index}>
+              <div className=" p-4 rounded-lg m-2 sm:m-0" key={index}>
                 <img 
                 src={imgSrc} alt="Imagen de evento"
                 className=" w-40 h-56 object-cover mb-2 rounded"/>
