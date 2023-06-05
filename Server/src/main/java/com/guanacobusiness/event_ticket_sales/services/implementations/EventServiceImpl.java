@@ -1,5 +1,6 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,6 +39,11 @@ public class EventServiceImpl implements EventService{
         return eventList.stream()
         .filter(event -> event.getActive().equals(false))
         .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Event> findAllArchivedEvents(Date date) {
+        return eventRepository.findEventsByEventDateBefore(date);
     }
 
     @Override
@@ -123,6 +129,5 @@ public class EventServiceImpl implements EventService{
         eventFound.setActive(!eventFound.getActive());
         eventRepository.save(eventFound);
         return true;
-    }
-    
+    }  
 }

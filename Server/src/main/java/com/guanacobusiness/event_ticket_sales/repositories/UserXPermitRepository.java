@@ -15,6 +15,7 @@ public interface UserXPermitRepository extends ListCrudRepository<UserXPermit, U
     void deleteOneByCode(UUID code) throws Exception;
     void deleteByUserCodeAndPermitCode(UUID userCode, UUID permitCode) throws Exception;
     List<Permit> findPermitsByUserCode(UUID userCode);
+    List<User> findUsersByPermitCode(UUID permitCode);
     UserXPermit findOneByUserCodeAndPermitCode(UUID userCode, UUID permitCode);
     UserXPermit findByCode(UUID code);
 
