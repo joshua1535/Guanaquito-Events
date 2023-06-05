@@ -13,6 +13,7 @@ public interface TicketService {
     void save(SaveTicketDTO saveTicketDTO) throws Exception;
     Boolean changeOwnership(ChangeOwnershipDTO changeOwnershipDTO) throws Exception;
     List<Ticket> findAllTickets(UUID userOwnerCode);
+    Ticket findTicketByCode(UUID code);
     Boolean validateTicket(ValidateTicketDTO validateTicketDTO) throws Exception;
 
 }

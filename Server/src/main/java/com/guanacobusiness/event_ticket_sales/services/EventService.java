@@ -13,7 +13,7 @@ public interface EventService {
     List<Event>findAllEvents();
     List<Event>findAllInactiveEvents();
     List<Event>findAllArchivedEvents(Date date);
-    Event findEventByCode(UUID id);
+    Event findEventByCode(UUID code);
     void save(SaveEventDTO info, Category category) throws Exception;
     boolean update(UpdateEventDTO info) throws Exception;
     boolean delete(UUID code) throws Exception;

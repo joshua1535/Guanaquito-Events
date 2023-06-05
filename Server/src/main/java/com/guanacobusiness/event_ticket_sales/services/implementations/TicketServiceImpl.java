@@ -59,4 +59,9 @@ public class TicketServiceImpl implements TicketService{
         throw new UnsupportedOperationException("Unimplemented method 'validateTicket'");
     }
 
+    @Override
+    public Ticket findTicketByCode(UUID code) {
+        return ticketRepository.findById(code).orElse(null);
+    }
+
 }
