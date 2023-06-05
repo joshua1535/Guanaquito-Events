@@ -418,7 +418,6 @@ export default function HomePage() {
                 <p className={classes["eventTitle"]}> ${event.precio}</p>
               </div>
             </Card>
-
           ))}
         </div>
 </div>
@@ -472,7 +471,7 @@ export default function HomePage() {
                 <p className={classes["eventTitle"]}> ${event.precio}</p>
               </div>
             </Card>
-
+        
           ))}
         </div>
 
