@@ -5,6 +5,7 @@ import EmailConfirmationForm from './pages/UpdatePassword/EmailConfirmation/Emai
 import UpdatePasswordForm from './pages/UpdatePassword/UpdatePassword/UpdatePasswordForm'
 import HomePage from './pages/HomePage/HomePage'
 import EventsPage from './pages/EventsPage/EventsPage'
+import BuyTicketPage from './pages/BuyTicketPage/BuyTicketPage'
 
 
 
@@ -12,7 +13,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-      <EventsPage />
+      <BuyTicketPage />
   )
 }
 

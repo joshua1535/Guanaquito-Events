@@ -1,0 +1,41 @@
+.generalContainer {
+    @apply columns-2 
+}
+
+.headerContainer{
+    @apply sticky w-screen top-0 z-10 hidden PC-1920*1080:inline-block PC-1600*900:inline-block PC-1366*768:inline-block PC-800*600:inline-block Mobile-390*844:hidden  
+}
+
+.headerTypography{    
+    @apply relative mx-auto flex items-center text-white
+}
+
+.buttonBuy
+{
+    font-family: 'PoppinsBold';
+    @apply w-full h-12  py-1 rounded 
+}
+
+
+
+
+.optionsContainer {
+    display: flex;   
+    font-family: 'PoppinsLight';
+    align-content: center;
+    justify-content: center;
+    background-color: #333F51;
+    color: #DD8E0A;
+    @apply 
+    w-full h-screen
+    Mobile-390*844:text-xl PC-800*600:text-2xl PC-1600*900:text-2xl PC-1366*768:text-2.5xl PC-1920*1080:text-2.5xl 
+    sm:w-1/4 md:w-1/4  lg:w-1/4  xl:w-1/4 2xl:w-1/4 hidden sm:inline-block
+}
+
+
+.categories
+{      
+    
+    @apply flex sm:grid h-max 
+}
+
