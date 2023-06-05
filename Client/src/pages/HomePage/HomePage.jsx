@@ -284,7 +284,7 @@ function NavListMenu() {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
-  }
+}
  
   
  
@@ -348,8 +348,8 @@ export default function HomePage() {
   return (
     <div className={[classes["generalContainer"]]}>
       <header className={[classes["headerContainer"]]}>
-      <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
-      <div className={[classes["headerTypography"]]}>
+        <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
+        <div className={[classes["headerTypography"]]}>
         <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
         <Typography
           as="a"
@@ -375,8 +375,8 @@ export default function HomePage() {
       <MobileNav open={isNavOpen} className="overflow-scroll">
         <NavList />
       </MobileNav>
-    </Navbar>
-      </header>
+      </Navbar>
+    </header>
       <Carousel className={classes["carouselContainer"]}>
   {recentEventImages.map((image, index) => (
     <div className={classes["imgContainer"]} key={index}>
