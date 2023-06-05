@@ -10,6 +10,8 @@ module.exports = withMT({
         "dark-blue": "#0F131F",
         "Orange": "#DD8E0A",
         "darkless-blue" : "#333F51", 
+        "yellowCapas" : "#F59E0B",
+        "blueCapas": "#2C3544",
     },
     width: {
       "1/7": "14.2857143%",
@@ -176,7 +178,10 @@ module.exports = withMT({
     "3xl" : "3rem",
   },
   backgroundImage: {
-    'background-image': "url('src/assets/backgroundWave.png')",
+    'background-image': "url('https://cdn.pixabay.com/photo/2015/11/22/19/04/crowd-1056764_640.jpg')",
+  },
+  backgroundSize: {
+    '50%': "50%",
   },
   fontFamily: {
     'sans': ['Roboto', 'sans-serif'],
