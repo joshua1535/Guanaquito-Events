@@ -16,5 +16,6 @@ public interface UserXPermitService {
     Boolean deleteByCode(UUID code) throws Exception;
     Boolean deleteByUserCodeAndPermitCode(UUID userCode, UUID permitCode) throws Exception;
     List<Permit> findPermitsByUserCode(UUID userCode);
+    List<User> findUsersByPermitCode(UUID permitCode);
 
 }

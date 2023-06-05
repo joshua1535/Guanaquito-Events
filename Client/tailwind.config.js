@@ -8,6 +8,8 @@ module.exports = withMT({
         "light-blue": "#9cdbff",
         "teal": "#2ce4e7",
         "dark-blue": "#0F131F",
+        "Orange": "#DD8E0A",
+        "darkless-blue" : "#333F51", 
     },
     width: {
       "1/7": "14.2857143%",
@@ -164,6 +166,7 @@ module.exports = withMT({
     "ButtonCarouselPC-640*480": "10px",
     "ButtonCarouselMobile-390*844": "10px",
     "ButtonCarouselMobile-280":"8px",
+    "2.5xl" : "2.1rem",
     "9xl" : "10rem",
     "8xl" : "9rem",
     "7xl" : "8rem",
