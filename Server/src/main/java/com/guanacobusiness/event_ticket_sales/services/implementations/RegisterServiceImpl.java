@@ -46,7 +46,7 @@ public class RegisterServiceImpl implements RegisterService {
 
         Register validatedRegister = registers.stream().filter(register -> (register.getValidationTime() != null)).findFirst().orElse(null);
 
-        //Si encuentra un registro validado no se puede actualizar el codigo de transaccion
+        //Si encuentra un registro validado no se puede crear un registro nuevo
         if(validatedRegister != null) {
             return false;
         }
