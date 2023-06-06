@@ -6,6 +6,7 @@ import UpdatePasswordForm from './pages/UpdatePassword/UpdatePassword/UpdatePass
 import HomePage from './pages/HomePage/HomePage'
 import EventsPage from './pages/EventsPage/EventsPage'
 import MyOrders from './pages/My Orders/MyOrders'
+import CreateEvent from './pages/Create Event/CreateEvent'
 
 
 
@@ -13,7 +14,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-      <MyOrders />
+      <CreateEvent />
   )
 }
 
