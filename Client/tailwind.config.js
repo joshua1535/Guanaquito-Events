@@ -178,7 +178,7 @@ module.exports = withMT({
     "3xl" : "3rem",
   },
   backgroundImage: {
-    'background-image': "url('https://cdn.pixabay.com/photo/2015/11/22/19/04/crowd-1056764_640.jpg')",
+    'background-image': "url('https://i.ibb.co/3ypw4PD/background.jpg')",
   },
   backgroundSize: {
     '50%': "50%",
