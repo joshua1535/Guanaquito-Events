@@ -1,0 +1,98 @@
+.generalContainer{
+}
+
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+.titleContainer{
+    @apply flex flex-row justify-center w-full h-full m-auto px-10
+}
+
+.title1 {
+    @apply font-bold text-center text-white font-text
+
+    PC-1920*1080:text-6xl PC-1920*1080:mt-14
+    PC-1600*900:text-5xl PC-1600*900:mt-14
+    PC-1366*768:text-4xl PC-1366*768:mt-14
+    PC-1280*720:text-4xl PC-1280*720:mt-14
+    PC-800*600:text-3xl PC-800*600:mt-14
+    PC-640*480:text-2xl PC-640*480:mt-12
+    Mobile-390*844:text-2xl Mobile-390*844:mt-4
+    Mobile-280:text-xl
+}
+
+.title2 {
+    @apply font-bold text-center text-orange-500 font-text ml-2
+
+    PC-1920*1080:text-6xl PC-1920*1080:mt-14
+    PC-1600*900:text-5xl PC-1600*900:mt-14
+    PC-1366*768:text-4xl PC-1366*768:mt-14
+    PC-1280*720:text-4xl PC-1280*720:mt-14
+    PC-800*600:text-3xl PC-800*600:mt-14
+    PC-640*480:text-2xl PC-640*480:mt-12
+    Mobile-390*844:text-2xl Mobile-390*844:mt-4
+    Mobile-280:text-xl
+}
+
+.formContainer {
+    @apply flex items-center justify-center h-auto m-auto w-2/3 my-10 gap-4
+    Mobile-280:w-60 
+}
+
+.form {
+    width: 1800px;
+
+    @apply p-8 rounded-lg bg-dark-blue border-dashed border-2 border-yellowCapas
+    Mobile-390*844:w-fit Mobile-390*844:p-4
+    Mobile-280:w-60 Mobile-280:p-4
+}
+
+.titleInputs {
+    @apply font-bold text-xl text-center font-text text-yellowCapas mb-10
+}
+
+
+.buttonchangeView{
+    @apply flex flex-row justify-center w-2/3 h-full m-auto px-10 my-2 
+    PC-640*480:w-full PC-640*480:px-0 
+    Mobile-390*844:w-full Mobile-390*844:m-0 Mobile-390*844:px-0
+    Mobile-280:w-full Mobile-280:m-0 Mobile-280:px-0
+    
+
+}
+
+.buttonChange {
+    @apply flex flex-row justify-center w-2/3 h-full m-auto px-10 my-2
+    Mobile-390*844:w-full Mobile-390*844:m-0 Mobile-390*844:px-0
+    Mobile-280:w-full Mobile-280:m-0 Mobile-280:px-0
+}
+
+.buttonContainer {
+    @apply flex flex-row justify-center h-full m-auto px-10 my-4 w-2/3
+    Mobile-390*844:w-1/3
+    Mobile-280:w-1/3
+}
+
+.tierContainer {
+    @apply flex justify-center 
+}
+
+.formTierContainer {
+    @apply grid grid-cols-4 items-center justify-center h-auto my-10 gap-8
+    PC-1366*768:grid-cols-3
+    PC-1280*720:grid-cols-3
+    PC-800*600:grid-cols-2
+    PC-640*480:grid-cols-2
+    Mobile-390*844:grid-cols-1
+    Mobile-280:grid-cols-1
+}
+
+.formTier {
+    @apply p-8 rounded-lg bg-dark-blue border-dashed border-2 border-yellowCapas w-fit 
+    Mobile-280:w-60 Mobile-280:p-4
+}

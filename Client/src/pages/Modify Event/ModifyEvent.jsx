@@ -1,5 +1,5 @@
-import './CreateEvent.module.css';
-import classes from './CreateEvent.module.css';
+import './ModifyEvent.module.css';
+import classes from './ModifyEvent.module.css';
 import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
 import React from "react";
@@ -8,7 +8,7 @@ import { useState } from "react";
 import {
     Carousel,
     Navbar,
-    MobileNav,
+    Collapse,
     Typography,
     Button,
     Menu,
@@ -27,7 +27,6 @@ import {
     ChevronDownIcon,
     Bars2Icon,
   } from "@heroicons/react/24/outline";
-
 
   const categoryOptions = [
     "Cine",
@@ -55,6 +54,8 @@ const profileMenuItems = [
       label: "Sign Out",
     },
   ];
+
+
    
   function ProfileMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -155,7 +156,7 @@ const profileMenuItems = [
     );
   }
 
-export default function CreateEvent() {
+export default function ModifyEvent() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const [duration, setDuration] = useState("");
@@ -165,6 +166,30 @@ export default function CreateEvent() {
     const [sponsors, setSponsors] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [modifyTier, setModifyTier] = useState(false);
+    const [AddTiers, setAddTiers] = useState(false);
+
+
+    const [locations, setLocations] = useState([
+      { name: "Localidad 1", price: 100 },
+      { name: "Localidad 2", price: 200 },
+      { name: "Localidad 3", price: 300 },
+      { name: "Localidad 4", price: 100 },
+      { name: "Localidad 5", price: 200 },
+      { name: "Localidad 6", price: 300 },
+      { name: "Localidad 7", price: 100 },
+      { name: "Localidad 8", price: 200 },
+      { name: "Localidad 9", price: 300 },
+    ]);
+
+
+    const handleButtonClick = () => {
+      setModifyTier(true);
+    };
+
+    const handleButtonClick2 = () => {
+      setModifyTier(false);
+    };
 
     const handleAddSponsor = () => {
         // Agregar el sponsor al array de sponsors
@@ -225,7 +250,37 @@ export default function CreateEvent() {
         setSelectedCategory(e.target.value);
         };
     
-    
+    const handleUpdateLocation = (index, key, value) => {
+      // Actualizar el valor de la propiedad del objeto
+      setLocations((prevLocations) =>
+        prevLocations.map((location, i) => {
+          if (i === index) {
+            return {
+              ...location,
+              [key]: value,
+            };
+          }
+          return location;
+        })
+      );
+    };
+
+    const handleAddLocationButtonClick = () => {
+      setAddTiers(true);
+    };
+
+    const handleAddLocationButtonClick2 = () => {
+      setAddTiers(false);
+    };
+
+    const handleAddLocation = () => {
+      // Agregar una nueva localidad al array de localidades
+      setLocations((prevLocations) => [
+        ...prevLocations,
+        { name: "", price: "" },
+      ]);
+    };
+
 
     React.useEffect(() => {
         window.addEventListener(
@@ -266,16 +321,102 @@ export default function CreateEvent() {
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
-      </MobileNav>
+      </Collapse>
     </Navbar>
       </header>
-        <div className={[classes["bodyContainer"]]}>
-            <div className={[classes["titleContainer"]]}>
-                <h1 className={[classes["title1"]]}>Crear</h1>
-                <h1 className={[classes["title2"]]}>evento</h1>
+      <div className={[classes["buttonchangeView"]]}>
+      <button
+      onClick={handleButtonClick2} 
+      className={`PC-1920*1080:w-full PC-1920*1080:h-12 PC-1920*1080:text-2xl  PC-1920*1080:py-1 rounded 
+      PC-1600*900:w-full PC-1600*900:h-12 PC-1600*900:text-2xl  PC-1600*900:py-1
+      PC-1366*768:w-full PC-1366*768:h-12 PC-1366*768:text-xl  PC-1366*768:py-1
+      PC-1280*720:w-full PC-1280*720:h-12 PC-1280*720:text-xl  PC-1280*720:py-1
+      PC-1024*768:w-full PC-1024*768:h-12 PC-1024*768:text-lg  PC-1024*768:py-1
+      PC-800*600:w-full PC-800*600:h-12 PC-800*600:text-base  PC-800*600:py-1
+      PC-640*480:w-full PC-640*480:h-12 PC-640*480:text-base  PC-640*480:py-1
+      Mobile-390*844:w-full Mobile-390*844:h-12 Mobile-390*844:text-sm  Mobile-390*844:py-1
+      Mobile-280:w-full Mobile-280:h-12 Mobile-280:text-sm  Mobile-280:py-1
+      ${modifyTier === false ? 'bg-Orange text-blue-900' : 'bg-dark-blue text-white hover:bg-orange-600'}`}
+      style={{ fontFamily: "Poppins" }}
+      >MODIFICAR EVENTO</button>
+      <button 
+      onClick={handleButtonClick}
+      className={`PC-1920*1080:w-full PC-1920*1080:h-12 PC-1920*1080:text-2xl  PC-1920*1080:py-1 rounded
+      PC-1600*900:w-full PC-1600*900:h-12 PC-1600*900:text-2xl  PC-1600*900:py-1
+      PC-1366*768:w-full PC-1366*768:h-12 PC-1366*768:text-xl  PC-1366*768:py-1
+      PC-1280*720:w-full PC-1280*720:h-12 PC-1280*720:text-xl  PC-1280*720:py-1
+      PC-1024*768:w-full PC-1024*768:h-12 PC-1024*768:text-lg  PC-1024*768:py-1
+      PC-800*600:w-full PC-800*600:h-12 PC-800*600:text-base  PC-800*600:py-1
+      PC-640*480:w-full PC-640*480:h-12 PC-640*480:text-base  PC-640*480:py-1
+      Mobile-390*844:w-full Mobile-390*844:h-12 Mobile-390*844:text-sm  Mobile-390*844:py-1
+      Mobile-280:w-full Mobile-280:h-12 Mobile-280:text-sm  Mobile-280:py-1
+      ${modifyTier === true ? 'bg-Orange text-blue-900 ' : 'bg-dark-blue text-white hover:bg-orange-600'}
+        text-blue-900 `}
+      style={{ fontFamily: "Poppins" }}
+        >MODIFICAR LOCALIDADES</button>
+      </div>
+    {modifyTier ? (
+      <div className={classes["modifytierContainer"]}>
+        <div className={classes["buttonContainer"]}>
+       <Button
+         className="bg-yellowCapas Mobile-280:text-xs"
+         onClick={handleAddLocationButtonClick}
+       >
+         Agregar localidad
+       </Button>
+     </div>
+     <div className={classes["tierContainer"]}>
+      <div className={classes["formTierContainer"]}>
+          {locations.map((location, index) => (
+            <div key={index} className={classes["formTier"]}>
+              <form className="space-y-6">
+                <div className="space-y-2">
+                  <label
+                    htmlFor={`locationName${index}`}
+                    className={classes["titleInputs"]}
+                  >
+                    Nombre de la localidad:
+                  </label>
+                  <Input
+                    id={`locationName${index}`}
+                    type="text"
+                    color="white"
+                    placeholder="Ingrese el nombre de la localidad"
+                    defaultValue={location.name}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor={`locationPrice${index}`}
+                    className={classes["titleInputs"]}
+                  >
+                    Precio
+                  </label>
+                  <Input
+                    id={`locationPrice${index}`}
+                    type="number"
+                    color="white"
+                    placeholder="Precio de la localidad"
+                    defaultValue={location.price}
+                  />
+                </div>
+                <div className="flex space-x-4 justify-end Mobile-280:justify-center">
+                  <Button className="bg-yellowCapas Mobile-280:text-ButtonCarouselMobile-390*844"
+                  onClick={() => handleUpdateLocation(index)}
+                  >
+                    Actualizar
+                  </Button>
+                </div>
+              </form>
             </div>
+          ))}
+        </div>
+        </div>   
+        </div>
+    ) : (
+      <div className={[classes["bodyContainer"]]}>
             <div className={[classes["formContainer"]]}>
       <div className={[classes["form"]]}>
         <form className="space-y-6">
@@ -454,14 +595,17 @@ export default function CreateEvent() {
               Cancelar
             </Button>
             <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
-              Continuar
+              Guardar
             </Button>
           </div>
         </form>
       </div>
     </div>
-        </div>
-        </div>
+    </div> 
+    )}
+    </div>   
     )
 }
+
+
 
