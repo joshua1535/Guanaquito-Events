@@ -162,5 +162,21 @@ public class RegisterServiceImpl implements RegisterService {
         registerRepository.deleteByTicketCodeAndTransactionCode(ticketCode, transacCode);
         return true;
     }
+
+    @Override
+    public Boolean isEnabled(UUID ticketCode) {
+    
+        Register registers = registerRepository.findRegistersByTransferenceTimeIsNull()
+            .stream()
+            .filter(register -> (register.getTicket().getCode().equals(ticketCode)))
+            .findAny()
+            .orElse(null);
+
+        if(registers == null){
+            return false;
+        }
+
+        return true;
+    }
     
 }

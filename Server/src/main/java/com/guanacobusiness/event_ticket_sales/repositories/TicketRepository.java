@@ -8,4 +8,6 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
 
 public interface TicketRepository extends ListCrudRepository<Ticket, UUID>{
     
+    Ticket findByTransferenceCode(String transferenceCode);
+
 }
