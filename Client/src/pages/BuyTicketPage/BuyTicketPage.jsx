@@ -234,7 +234,7 @@ const profileMenuItems = [
                         <button 
                         onClick={handleButtonClick}
                         className={`
-                        PC-1280*720:text-xl PC-800*600:text-sm  PC-800*600:w-1/2
+                        PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
                         PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
                         sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${showDetails === true ? 'bg-Orange text-blue-900 ' : 'bg-dark-blue text-white hover:bg-orange-600'}
                           text-blue-900 `}
@@ -278,6 +278,7 @@ const profileMenuItems = [
                       ) : (  
                         <>             
                     <div className=" 
+                    PC-1280*720:ml-3 PC-1280*720:mt-3
                     PC-800*600:ml-3 PC-800*600:mt-2  
                     PC-640*480:ml-1 PC-640*480:mt-2
                     flex items-center w-fit text-Orange ml-14 mt-7" style={{ fontFamily: "Poppins" }}>
@@ -300,6 +301,7 @@ const profileMenuItems = [
                         </div>
                         </div>
                         <div className="
+                        PC-1280*720:ml-3 PC-1280*720:mt-3
                         PC-800*600:ml-3 PC-800*600:mt-4
                          PC-640*480:ml-1 flex items-center w-fit text-Orange ml-14 mt-5" style={{ fontFamily: "Poppins" }}>
                         <div>
@@ -320,10 +322,12 @@ const profileMenuItems = [
                     {/* Botones de Volver y Pagar */}                    
                     <div className={[classes["botbuttonsContainer"]]}>
                         <button className=" 
+                        PC-1280*720:w-32 C-1280*720:h-12                        
                         PC-800*600:w-24 PC-800*600:h-10
                         PC-640*480:w-20 PC-640*480:h-7
                          mr-2 h-14 w-44 bg-dark-blue rounded-full text-white hover:bg-gray-900 ">Volver</button>
                         <button className=" 
+                        PC-1280*720:w-32 C-1280*720:h-12 
                         PC-800*600:w-24 PC-800*600:h-10 
                         PC-640*480:w-20 PC-640*480:h-7 
                          bg-Orange   h-14 w-44 rounded-full text-white hover:bg-orange-600">Pagar</button>
