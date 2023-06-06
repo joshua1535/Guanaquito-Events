@@ -35,6 +35,19 @@ public class PermitController {
     @Autowired
     PermitService permitService;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllPermitsByUser(){
+
+        List<Permit> permits = permitService.findAllPermits();
+
+        if(permits.isEmpty()) {
+            return new ResponseEntity<>("No permits found", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(permits, HttpStatus.OK);
+
+    }
+
     @GetMapping("/all/{code}")
     public ResponseEntity<?> getAllPermitsByUser(@PathVariable(name = "code") String code){
 
@@ -45,6 +58,10 @@ public class PermitController {
         }
 
         List<Permit> permits = userXPermitService.findPermitsByUserCode(uuid);
+
+        if(permits.isEmpty()) {
+            return new ResponseEntity<>("No permits found", HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(permits, HttpStatus.OK);
 
@@ -65,7 +82,13 @@ public class PermitController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
-        Permit permit = permitService.findPermitByCode(info.getPermitCode());
+        UUID permitCode = UUID.fromString(info.getPermitCode());
+
+        if(permitCode == null) {
+            return new ResponseEntity<>("Invalid Permit code", HttpStatus.BAD_REQUEST);
+        }
+
+        Permit permit = permitService.findPermitByCode(permitCode);
 
         if(permit == null) {
             return new ResponseEntity<>("Permit not found", HttpStatus.NOT_FOUND);
@@ -96,7 +119,13 @@ public class PermitController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
-        Permit permit = permitService.findPermitByCode(info.getPermitCode());
+        UUID permitCode = UUID.fromString(info.getPermitCode());
+
+        if(permitCode == null) {
+            return new ResponseEntity<>("Invalid Permit code", HttpStatus.BAD_REQUEST);
+        }
+
+        Permit permit = permitService.findPermitByCode(permitCode);
 
         if(permit == null) {
             return new ResponseEntity<>("Permit not found", HttpStatus.NOT_FOUND);
