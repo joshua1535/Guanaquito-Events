@@ -139,11 +139,31 @@ const profileMenuItems = [
     );
   }
   
+  const eventDetails = {
+    title: 'ColdPlay Tour',
+    date: '2023-06-04',
+    time: '20:15',
+    participants: ['Mi Primo', 'Mi tio', 'Ronaldinho'],
+    sponsors: ['Nayb Bukele', 'Elon Musk', 'Bill Gates  '],
+    category: 'Conciertos',
+    price: '$100',
+  };
+
 
   const BuyTicket = () => {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const [activeButton, setActiveButton] = useState(1);
+
+    const [showDetails, setShowDetails] = useState(false);
+
+    const handleButtonClick = () => {
+      setShowDetails(true);
+    };
+
+    const handleButtonClick2 = () => {
+      setShowDetails(false);
+    };
   
     React.useEffect(() => {
       window.addEventListener(
@@ -186,69 +206,165 @@ const profileMenuItems = [
 
       </Navbar>
     </header>
-        <div className="flex flex-col items-center justify-center mt-6">
+        <div className={[classes["generalContainer"]]}>
             <div className="flex w-3/4 h-3/4 shadow-md overflow-hidden">
                 <img 
-                    className="w-80 h-full object-cover" 
+                    className={[classes["imgContainer"]]}
                     src="https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png" 
                     alt="Event"
                 />
-                <div className="flex-grow ml-4 bg-cover "
+                <div 
+                    className={[classes["infoContainer"]]}
                     style={{ backgroundImage: 'url(https://i.postimg.cc/d3MywV5s/imagen-2023-06-05-090157807.png)' }} 
                     >
                     {/* Zona superior con dos columnas de botones */}
 
                     
-                    <div className=" flex columns-2 h-max w-full me-0 ">
+                    <div
+                     className={[classes["topbuttonsContainer"]]}
+                     >
                         <button
-                        onClick={() => setActiveButton(1)} 
-                        className={` buttonBuy w-full h-12 text-2xl  py-1  rounded ${activeButton === 1 ? 'bg-Orange text-blue-900' : 'bg-dark-blue text-white hover:bg-orange-600'}`}
+                        onClick={handleButtonClick2} 
+                        className={`
+                        PC-800*600:text-base PC-1280*720:text-xl PC-800*600:w-1/2
+                        PC-640*480:text-xs PC-640*480:w-1/2  
+                        sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${showDetails === false ? 'bg-Orange text-blue-900' : 'bg-dark-blue text-white hover:bg-orange-600'}`}
                         style={{ fontFamily: "Poppins" }}
                         >COMPRAR</button>
                         <button 
-                        onClick={() => setActiveButton(2)}
-                        className={`w-full h-12 text-2xl  py-1   rounded ${activeButton === 2 ? 'bg-Orange text-blue-900 ' : 'bg-dark-blue text-white hover:bg-orange-600'}
+                        onClick={handleButtonClick}
+                        className={`
+                        PC-1280*720:text-xl PC-800*600:text-sm  PC-800*600:w-1/2
+                        PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
+                        sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${showDetails === true ? 'bg-Orange text-blue-900 ' : 'bg-dark-blue text-white hover:bg-orange-600'}
                           text-blue-900 `}
                         style={{ fontFamily: "Poppins" }}
                           >DETALLES DEL EVENTO</button>
                     </div>
 
-                    <div className="flex items-center w-max text-Orange ml-14 mt-7" style={{ fontFamily: "Poppins" }}>
-                        <div>
-                            <h2>Ticket Zona Lateral</h2>
-                            <p>Precio: <span className="text-white">$50</span></p>
+                    {showDetails ? (
+      // Si showDetails es true, mostramos la información del evento
+                        <div className="">
+                          <h1
+                          className={[classes["titleH1"]]}
+                          >{eventDetails.title}
+                          </h1>
+
+                          <p className={[classes["pData"]]}>
+                              <span
+                              className={[classes["titleSpan"]]}
+                              >Fecha: </span> 
+                              <span 
+                              className={[classes["contentSpan"]]}
+                              >{eventDetails.date}</span>
+                          </p>
+                          <p className={[classes["pData"]]}>
+                              <span className={[classes["titleSpan"]]}>Hora: </span> 
+                              <span className={[classes["contentSpan"]]}>{eventDetails.time}</span>
+                          </p>
+                          <p className={[classes["pData"]]}>
+                              <span className={[classes["titleSpan"]]}>Participantes: </span> 
+                              <span className={[classes["contentSpan"]]}>{eventDetails.participants.join(', ')}</span>
+                          </p>
+                          <p className={[classes["pData"]]}>
+                              <span className={[classes["titleSpan"]]}>Patrocinadores: </span> 
+                              <span className={[classes["contentSpan"]]}>{eventDetails.sponsors.join(', ')}</span>
+                          </p>
+                          <p className={[classes["pData"]]}>
+                              <span className={[classes["titleSpan"]]}>Categoría: </span> 
+                              <span className={[classes["contentSpan"]]}>{eventDetails.category}</span>
+                          </p>
                         </div>
-                        <div className="ml-3">
-                            <select className="rounded border mr-2">
+                      ) : (  
+                        <>             
+                    <div className=" 
+                    PC-800*600:ml-3 PC-800*600:mt-2  
+                    PC-640*480:ml-1 PC-640*480:mt-2
+                    flex items-center w-fit text-Orange ml-14 mt-7" style={{ fontFamily: "Poppins" }}>
+                        <div>
+                            <h2 
+                              className={[classes["ticketText"]]}
+                             >Ticket Zona Lateral</h2>
+                            <p className={[classes["ticketPrice2"]]}>Precio: <span className={[classes["ticketPrice"]]}>
+                                {eventDetails.price}
+                              </span>
+                            </p>
+                        </div>
+                        <div className="PC-640*480:ml-1 ml-3">
+                            <select className={[classes["dropboxContainer"]]} >
                             {[...Array(11)].map((_, i) => 
                                 <option key={i} value={i}>{i}</option>
                             )}
                             </select>
-                            <p>restantes: 10</p>
+                            <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
                         </div>
                         </div>
-                        <div className="flex items-center w-max text-Orange ml-14 mt-5" style={{ fontFamily: "Poppins" }}>
+                        <div className="
+                        PC-800*600:ml-3 PC-800*600:mt-4
+                         PC-640*480:ml-1 flex items-center w-fit text-Orange ml-14 mt-5" style={{ fontFamily: "Poppins" }}>
                         <div>
-                            <h2>Ticket VIP</h2>
-                            <p>Precio: <span className="text-white">$100</span></p>
+                            <h2 className={[classes["ticketText"]]}>Ticket VIP</h2>
+                            <p className={[classes["ticketPrice2"]]} >Precio: <span className={[classes["ticketPrice"]]}>$100</span></p>
                         </div>
                         <div className="ml-3">
-                            <select className="rounded border mr-2">
+                            <select className={[classes["dropboxContainer"]]}>
                             {[...Array(11)].map((_, i) => 
                                 <option key={i} value={i}>{i}</option>
                             )}
                             </select>
-                            <p>restantes: 10</p>
+                            <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
                         </div>
                     </div>
-
-
-                    {/* Botones de Volver y Pagar */}
-                    <div className="flex justify-end">
-                        <button className="mr-2 bg-yellow-500 rounded-lg text-blue-900 hover:bg-yellow-600 active:bg-yellow-700">Volver</button>
-                        <button className="bg-yellow-500 rounded-lg text-blue-900 hover:bg-yellow-600 active:bg-yellow-700">Pagar</button>
+                    </>
+    )}
+                    {/* Botones de Volver y Pagar */}                    
+                    <div className={[classes["botbuttonsContainer"]]}>
+                        <button className=" 
+                        PC-800*600:w-24 PC-800*600:h-10
+                        PC-640*480:w-20 PC-640*480:h-7
+                         mr-2 h-14 w-44 bg-dark-blue rounded-full text-white hover:bg-gray-900 ">Volver</button>
+                        <button className=" 
+                        PC-800*600:w-24 PC-800*600:h-10 
+                        PC-640*480:w-20 PC-640*480:h-7 
+                         bg-Orange   h-14 w-44 rounded-full text-white hover:bg-orange-600">Pagar</button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div className="sm:hidden flex flex-col items-center h-72 w-full bg-cover"
+             style={{ backgroundImage: `url(https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png)` }}
+        >
+            <img 
+                className=" w-3/5 object-cover mt-6 mb-6" 
+                src='https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png'
+                alt="Event"
+            />
+
+            <h1 className="text-white  text-center text-2.5xl"
+                style={{ fontFamily: "PoppinsSemiBold" }}
+            >
+                {eventDetails.title}
+            </h1>
+
+            <div className="flex flex-col items-center  text-white p-4 rounded">
+                <p className='text-xl'>
+                    <span className="font-light"  style={{ fontFamily: "PoppinsLight" }}>Fecha: </span>
+                    <span className="font-bold" style={{ fontFamily: "PoppinsLight" }}>{eventDetails.date}</span>
+                </p>
+                <p className='text-xl'>
+                    <span className="font-light" style={{ fontFamily: "PoppinsLight" }}>Hora: </span> 
+                    <span className="font-bold" style={{ fontFamily: "PoppinsLight" }}>{eventDetails.time}</span>
+                </p>
+                <p className='flex pt-2 text-3xl font-bold'>
+                    <span className=" text-2xl font-light mr-2" style={{ fontFamily: "PoppinsLight" }}>Precio: </span> 
+                    <span className="text-3xl text-Orange" style={{ fontFamily: "PoppinsBold" }}>{eventDetails.price}</span>
+                </p>
+
+                <button className="bg-Orange h-14 w-full  rounded-full text-white text-xl"
+                    style={{ fontFamily: "Poppins" }}
+            >
+                Comprar Tickets
+            </button>
             </div>
         </div>
         </>
