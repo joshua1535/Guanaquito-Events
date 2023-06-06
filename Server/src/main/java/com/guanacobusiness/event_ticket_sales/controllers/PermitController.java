@@ -36,7 +36,7 @@ public class PermitController {
     PermitService permitService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllPermitsByUser(){
+    public ResponseEntity<?> getAllPermits(){
 
         List<Permit> permits = permitService.findAllPermits();
 
@@ -48,7 +48,7 @@ public class PermitController {
 
     }
 
-    @GetMapping("/all/{code}")
+    @GetMapping("/all/user/{code}")
     public ResponseEntity<?> getAllPermitsByUser(@PathVariable(name = "code") String code){
 
         UUID uuid = UUID.fromString(code);
