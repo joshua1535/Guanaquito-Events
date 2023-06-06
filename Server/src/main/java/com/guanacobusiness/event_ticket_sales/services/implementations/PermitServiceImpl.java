@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,11 @@ public class PermitServiceImpl implements PermitService{
     @Override
     public List<Permit> findAllPermits() {
         return permitRepository.findAll();
+    }
+
+    @Override
+    public Permit findPermitByCode(UUID code) {
+        return permitRepository.findByCode(code);
     }
 
 }
