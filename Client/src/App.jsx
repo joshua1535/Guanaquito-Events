@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage/HomePage'
 import EventsPage from './pages/EventsPage/EventsPage'
 import MyOrders from './pages/My Orders/MyOrders'
 import CreateEvent from './pages/Create Event/CreateEvent'
+import AddTiers from './pages/Add Tiers/AddTiers'
 
 
 
@@ -14,7 +15,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-      <CreateEvent />
+      <AddTiers />
   )
 }
 
