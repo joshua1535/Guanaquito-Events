@@ -9,6 +9,7 @@ import MyOrders from './pages/My Orders/MyOrders'
 import CreateEvent from './pages/Create Event/CreateEvent'
 import AddTiers from './pages/Add Tiers/AddTiers'
 import ModifyEvent from './pages/Modify Event/ModifyEvent'
+import QRPage from './pages/QRPage/QR'
 
 
 
@@ -16,7 +17,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-      <ModifyEvent />
+      <QRPage />
   )
 }
 
