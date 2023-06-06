@@ -242,10 +242,10 @@ const profileMenuItems = [
             />
           </div>
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
-            <Button ripple="light" className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+            <Button className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
               Cancelar
             </Button>
-            <Button ripple="light" className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'
+            <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'
             onClick={handleSaveClick}
             >
               Guardar
@@ -264,10 +264,10 @@ const profileMenuItems = [
           ¿Deseas seguir agregando más localidades?
         </Dialog.Body>
         <Dialog.Footer className='font-text'>
-          <Button ripple="light" onClick={handlePopupClose} className='bg-black'>
+          <Button onClick={handlePopupClose} className='bg-black'>
             No
           </Button>
-          <Button ripple="light" onClick={handlePopupClose} className='bg-yellowCapas ml-auto'>
+          <Button onClick={handlePopupClose} className='bg-yellowCapas ml-auto'>
             Sí
           </Button>
         </Dialog.Footer>

@@ -18,6 +18,7 @@ import {
     Card,
     IconButton,
     Chip,
+    Collapse,
   } from "@material-tailwind/react";
   import {
     ChevronDownIcon,
@@ -360,9 +361,9 @@ export default function MyTickets(){
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
-      </MobileNav>
+      </Collapse>
     </Navbar>
       </header>
         <div className={[classes["bodyContainer"]]}>
