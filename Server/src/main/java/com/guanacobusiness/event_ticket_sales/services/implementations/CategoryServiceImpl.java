@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public boolean update(SaveCategoryDTO info) throws Exception{
-        Category categoryFound = categoryRepository.findById(info.getCode()).orElse(null);
+        Category categoryFound = categoryRepository.findByName(info.getName());
 
         if (categoryFound == null) {
             return false;
