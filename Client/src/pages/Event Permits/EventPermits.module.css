@@ -1,0 +1,154 @@
+.generalContainer{
+}
+
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+.bodyContainer {
+    @apply grid grid-cols-2
+    PC-1920*1080:grid-cols-2
+    PC-1600*900:grid-cols-2
+    PC-1366*768:grid-cols-2
+    PC-1280*720:grid-cols-2
+    PC-800*600:grid-cols-1
+    PC-640*480:grid-cols-1
+    Mobile-390*844:grid-cols-1
+    Mobile-280:grid-cols-1
+}	
+
+.infoEventContainer {
+    @apply h-auto w-fit ml-4 font-text
+    PC-800*600:flex PC-800*600:flex-col PC-800*600:justify-center PC-800*600:m-auto PC-800*600:items-center
+    PC-640*480:flex PC-640*480:flex-col PC-640*480:justify-center PC-640*480:m-auto PC-640*480:items-center
+    Mobile-390*844:flex Mobile-390*844:flex-col Mobile-390*844:justify-center Mobile-390*844:m-auto Mobile-390*844:items-center
+    Mobile-280:flex Mobile-280:flex-col Mobile-280:justify-center Mobile-280:m-auto Mobile-280:items-center
+}
+
+.textContainer {
+    @apply flex flex-col justify-start h-auto m-auto font-text
+    
+}
+
+
+.titleContainer{
+    @apply flex flex-row justify-start my-2
+}
+
+.eventTitle {
+    @apply font-text text-white
+    PC-1920*1080:text-5xl
+    PC-1600*900:text-5xl 
+    PC-1366*768:text-4xl
+    PC-1280*720:text-3xl
+    PC-800*600:text-3xl
+    PC-640*480:text-xl
+    Mobile-390*844:text-lg
+    Mobile-280:text-base
+}
+
+
+.title1 {
+    @apply text-center text-white font-text
+
+    PC-1920*1080:text-3xl
+    PC-1600*900:text-3xl 
+    PC-1366*768:text-3xl
+    PC-1280*720:text-2xl
+    PC-800*600:text-xl
+    PC-640*480:text-base
+    Mobile-390*844:text-sm
+    Mobile-280:text-xs
+}
+
+.title2 {
+    @apply text-center text-orange-500 font-text ml-2
+
+    PC-1920*1080:text-3xl
+    PC-1600*900:text-3xl 
+    PC-1366*768:text-3xl
+    PC-1280*720:text-2xl
+    PC-800*600:text-xl
+    PC-640*480:text-base
+    Mobile-390*844:text-sm
+    Mobile-280:text-xs
+}
+
+
+.imgContainer {
+    @apply flex flex-col items-center my-10 gap-4 font-text
+    
+}
+
+
+.imgEvent {
+    @apply h-2/3 w-2/3 rounded-md object-cover shadow-md
+    PC-1920*1080:h-CardGeneralImgPC-1920*1080 PC-1920*1080:w-CardGeneralImgPC-1920*1080
+    PC-1600*900:h-CardGeneralImgPC-1600*900 PC-1600*900:w-CardGeneralImgPC-1600*900
+    PC-1366*768:h-CardGeneralImgPC-1366*768 PC-1366*768:w-CardGeneralImgPC-1366*768
+    PC-1280*720:h-CardGeneralImgPC-1280*720 PC-1280*720:w-CardGeneralImgPC-1280*720
+    PC-800*600:h-CardGeneralImgPC-800*600 PC-800*600:w-CardGeneralImgPC-800*600
+    PC-640*480:h-CardGeneralImgPC-640*480 PC-640*480:w-CardGeneralImgPC-640*480
+    Mobile-390*844:h-CardGeneralImgMobile-390*844 Mobile-390*844:w-CardGeneralImgMobile-390*844
+    Mobile-280:h-CardGeneralImgMobile-280 Mobile-280:w-CardGeneralImgMobile-280
+}
+
+.buttonContainer {
+    @apply flex flex-row justify-start h-auto gap-4 font-text text-white
+    PC-800*600:flex-col
+    PC-640*480:flex-col
+    Mobile-390*844:flex-col
+    Mobile-280:flex-col
+}
+
+.buttonmodifyContainer {
+    @apply flex flex-row justify-start h-auto w-fit my-10 gap-4 p-4 font-text rounded-md bg-yellowCapas
+    PC-800*600:my-0
+    PC-640*480:my-0
+    Mobile-390*844:my-0
+    Mobile-280:my-0
+}
+
+.modifyEventButton {
+    @apply 
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl
+    PC-1366*768:text-xl
+    PC-1280*720:text-lg
+    PC-800*600:text-base
+    PC-640*480:text-base
+    Mobile-390*844:text-sm
+    Mobile-280:text-xs
+}
+
+.buttonmodifyStaffContainer {
+    @apply flex flex-row justify-start h-auto w-fit p-4 my-10 gap-4 font-text rounded-md bg-blue-500
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl
+    PC-1366*768:text-xl
+    PC-1280*720:text-lg
+    PC-800*600:text-base
+    PC-640*480:text-base
+    Mobile-390*844:text-sm
+    Mobile-280:text-xs
+    PC-800*600:my-0
+    PC-640*480:my-0
+    Mobile-390*844:my-0
+    Mobile-280:my-0
+}
+
+.buttonDisableContainer {
+    @apply flex flex-row justify-start h-auto w-fit gap-4 p-4 font-text text-white bg-red-500 rounded-md my-4 
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl
+    PC-1366*768:text-xl
+    PC-1280*720:text-lg
+    PC-800*600:text-base PC-800*600:my-4 PC-800*600:w-fit
+    PC-640*480:text-base PC-640*480:w-full
+    Mobile-390*844:text-sm Mobile-390*844:w-full
+    Mobile-280:text-xs Mobile-280:w-full
+}
