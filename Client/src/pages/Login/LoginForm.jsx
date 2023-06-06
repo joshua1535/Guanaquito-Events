@@ -41,7 +41,7 @@ const LoginForm = () => {
 
             <div className={classes["imgContainer"]} >
             <img className={classes["imgtemplate"]} src={imgtemplate} /></div>
-             </div>
+            </div>
         
 
     )
