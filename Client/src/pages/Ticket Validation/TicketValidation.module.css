@@ -3,7 +3,7 @@
 }
 
 .headerContainer{
-    @apply sticky w-full top-0 z-10
+    @apply sticky w-full top-0 z-10 bg-white
     PC-1920*1080:inline-block 
     PC-1600*900:inline-block 
     PC-1366*768:inline-block
@@ -21,10 +21,10 @@
 .qrContainer
 {
     @apply hidden sm:inline-block w-3/4 sm:w-1/2 lg:w-1/4
-    PC-1920*1080:w-1/3  PC-1920*1080:my-7
-    PC-1600*900:w-1/3 PC-1600*900:my-7
-    PC-1366*768:w-1/3  PC-1366*768:my-7 
-    PC-1280*720:w-1/4 PC-1280*720:my-7
+    PC-1920*1080:w-1/3  PC-1920*1080:my-16
+    PC-1600*900:w-1/3 PC-1600*900:my-12
+    PC-1366*768:w-1/3  PC-1366*768:my-12 
+    PC-1280*720:w-1/4 PC-1280*720:my-12
     PC-800*600:w-48 PC-800*600:my-5
     PC-640*480:w-32 PC-640*480:my-5    
     

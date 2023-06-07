@@ -180,8 +180,7 @@ const profileMenuItems = [
         <Typography
           as="a"
           href="#"
-          className="mr-4 text-xl hidden sm:inline-block  cursor-pointer py-1.5 font-medium text-white"
-          style={{ fontFamily: "PoppinsLight" } }
+          className="mr-4 hidden sm:inline-block  cursor-pointer py-1.5 font-medium text-white"
         >
           Guanaco Business
         </Typography>
