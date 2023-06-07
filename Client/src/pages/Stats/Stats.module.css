@@ -1,0 +1,9 @@
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+

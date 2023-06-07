@@ -15,6 +15,7 @@ import TransferTicket from './pages/Transfer Ticket/TransferTicket';
 import ModifyStaff from './pages/Modify Staff/ModifyStaff';
 import TicketValidationPage from './pages/Ticket Validation/TicketValidation';
 import Error404Form from './pages/Error404/Error404Form';
+import StatsPage from './pages/Stats/Stats';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/transferticket" element={<TransferTicket />} />
           <Route path="/modifystaff" element={<ModifyStaff />} />
           <Route path="/ticketvalidation" element={<TicketValidationPage />} />
+          <Route path="/stats" element={<StatsPage />} />
           <Route path="*" element={<Error404Form />} />
         </Routes>
       </Router>
