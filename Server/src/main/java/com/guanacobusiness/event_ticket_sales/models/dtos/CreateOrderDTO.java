@@ -2,8 +2,6 @@ package com.guanacobusiness.event_ticket_sales.models.dtos;
 
 import java.util.Date;
 
-import com.guanacobusiness.event_ticket_sales.models.entities.User;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
