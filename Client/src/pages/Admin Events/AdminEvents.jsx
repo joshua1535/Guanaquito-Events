@@ -38,6 +38,8 @@ const profileMenuItems = [
   },
 ];
 
+
+ 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
@@ -80,7 +82,6 @@ function ProfileMenu() {
             >
               <Typography
                 as="span"
-                variant="lg"
                 className="font-normal"
                 color={isLastItem ? "red" : "inherit"}
               >
@@ -94,6 +95,8 @@ function ProfileMenu() {
   );
 }
 
+
+ 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
  
@@ -101,21 +104,19 @@ function NavListMenu() {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
-}
-
+  }
+ 
+  
+ 
 // nav list component
 const navListItems = [
   {
     label: "Eventos",
-    
   },
   {
     label: "Mis tickets",
-   
   },
-  
 ];
-
  
 function NavList() {
   return (
@@ -126,7 +127,6 @@ function NavList() {
           key={label}
           as="a"
           href="#"
-          variant="lg"
           color="white"
           className="font-normal"
         >
@@ -177,8 +177,7 @@ const AdminEvents = () => {
         <Typography
           as="a"
           href="#"
-          className="mr-4 text-xl   cursor-pointer py-1.5 font-medium text-white"
-          style={{ fontFamily: "PoppinsLight" } }
+          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
         >
           Guanaco Business
         </Typography>
