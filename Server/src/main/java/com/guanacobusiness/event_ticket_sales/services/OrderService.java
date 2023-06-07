@@ -11,7 +11,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.User;
 
 public interface OrderService {
 
-    Boolean createOrder(CreateOrderDTO createOrderDTO, User user) throws Exception;
+    void createOrder(CreateOrderDTO createOrderDTO, User user) throws Exception;
     List<Ticket> findTicketsByOrderCode(UUID orderCode);
     List<Order> findOrdersBetweenDates(DateRangeDTO dateRangeDTO);
     List<Order> findAllOrdersByUserBuyerCode(UUID userBuyerCode);

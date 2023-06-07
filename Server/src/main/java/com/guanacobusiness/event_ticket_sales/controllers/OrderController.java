@@ -49,16 +49,18 @@ public class OrderController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
-        Boolean saved = orderService.createOrder(info, user);
-
-        if(!saved){
-            return new ResponseEntity<>("Order not saved", HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+        
+            orderService.createOrder(info, user);
+            return new ResponseEntity<>("Order saved!",HttpStatus.OK);
+        
+        } catch (Exception e) {
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>("Order saved!",HttpStatus.OK);
     }
 
-    @GetMapping("/all/{code}")
+    @GetMapping("/user/{code}")
     public ResponseEntity<?> findAllOrdersByUserBuyerCode(@PathVariable(name = "code") String code) {
     
         UUID uuid = UUID.fromString(code);
