@@ -11,6 +11,7 @@ import AddTiers from './pages/Add Tiers/AddTiers'
 import ModifyEvent from './pages/Modify Event/ModifyEvent'
 import QRPage from './pages/QRPage/QR'
 import TransferTicket from './pages/Transfer Ticket/TransferTicket'
+import ModifyStaff from './pages/Modify Staff/ModifyStaff'
 
 
 
@@ -18,7 +19,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-      <TransferTicket />
+      <ModifyStaff />
   )
 }
 

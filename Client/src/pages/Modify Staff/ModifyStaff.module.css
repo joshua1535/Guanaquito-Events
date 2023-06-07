@@ -1,0 +1,103 @@
+.generalContainer{
+}
+
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+.bodyContainer {
+    @apply grid grid-cols-2
+    PC-1920*1080:grid-cols-2
+    PC-1600*900:grid-cols-2
+    PC-1366*768:grid-cols-2
+    PC-1280*720:grid-cols-2
+    PC-800*600:grid-cols-1
+    PC-640*480:grid-cols-1
+    Mobile-390*844:grid-cols-1
+    Mobile-280:grid-cols-1
+    
+}	
+
+
+.imgContainer {
+    @apply flex flex-col items-center my-10 gap-4 font-text
+    
+}
+
+
+.imgEvent {
+    @apply h-2/3 w-2/3 rounded-md object-cover shadow-md
+    PC-1920*1080:h-CardGeneralImgPC-1920*1080 PC-1920*1080:w-CardGeneralImgPC-1920*1080
+    PC-1600*900:h-CardGeneralImgPC-1600*900 PC-1600*900:w-CardGeneralImgPC-1600*900
+    PC-1366*768:h-CardGeneralImgPC-1366*768 PC-1366*768:w-CardGeneralImgPC-1366*768
+    PC-1280*720:h-CardGeneralImgPC-1280*720 PC-1280*720:w-CardGeneralImgPC-1280*720
+    PC-800*600:h-CardGeneralImgPC-800*600 PC-800*600:w-CardGeneralImgPC-800*600
+    PC-640*480:h-CardGeneralImgPC-640*480 PC-640*480:w-CardGeneralImgPC-640*480
+    Mobile-390*844:h-CardGeneralImgMobile-390*844 Mobile-390*844:w-CardGeneralImgMobile-390*844
+    Mobile-280:h-CardGeneralImgMobile-280 Mobile-280:w-CardGeneralImgMobile-280
+}
+
+
+.staffContainer {
+    @apply flex flex-col justify-start h-auto  gap-4 font-text 
+    PC-1920*1080:w-2/3 PC-1920*1080:mx-auto
+    PC-1600*900:w-2/3 PC-1600*900:mx-auto
+    PC-1366*768:w-2/3 PC-1366*768:mx-auto
+    PC-1280*720:w-2/3 PC-1280*720:mx-auto
+    PC-800*600:w-2/3 PC-800*600:mx-auto
+    PC-640*480:w-2/3 PC-640*480:mx-auto
+    Mobile-390*844:w-full Mobile-390*844:mx-auto
+    Mobile-280:w-2/3 Mobile-280:mx-auto
+}
+
+.staffAddContainer {
+    @apply flex flex-row justify-start h-auto w-2/3 gap-4 font-text my-8
+    PC-1920*1080:w-2/3 PC-1920*1080:mx-auto
+    PC-1600*900:w-2/3 PC-1600*900:mx-auto
+    PC-1366*768:w-2/3 PC-1366*768:mx-auto
+    PC-1280*720:w-fit PC-1280*720:mx-auto
+    PC-800*600:w-fit PC-800*600:mx-auto
+    PC-640*480:w-fit PC-640*480:mx-auto
+    Mobile-390*844:w-fit Mobile-390*844:mx-auto
+    Mobile-280:w-48 Mobile-280:mx-auto Mobile-280:flex-col
+}
+
+.usersInEventContainer {
+    @apply grid grid-cols-2 gap-4 font-text overflow-y-auto h-screen w-5/6 text-white
+    PC-1920*1080:w-fit PC-1920*1080:mx-auto
+    PC-1600*900:w-5/6 PC-1600*900:mx-auto
+    PC-1366*768:w-full PC-1366*768:mx-auto
+    PC-1280*720:w-full PC-1280*720:mx-auto
+    PC-800*600:w-5/6 PC-800*600:mx-auto
+    PC-640*480:w-5/6 PC-640*480:mx-auto
+    Mobile-390*844:w-5/6 Mobile-390*844:mx-auto
+    Mobile-280:w-full Mobile-280:mx-auto Mobile-280:grid-cols-1
+}
+
+.userInEvent {
+    @apply flex flex-col h-auto font-text my-2 text-xs text-center
+    PC-1920*1080:w-full PC-1920*1080:mx-auto 
+    PC-1600*900:w-full PC-1600*900:mx-auto
+    PC-1366*768:w-full PC-1366*768:mx-auto
+    PC-1280*720:w-full PC-1280*720:mx-auto
+    PC-800*600:w-1/2 PC-800*600:mx-auto
+    PC-640*480:w-1/2 PC-640*480:mx-auto
+    Mobile-390*844:w-1/2 Mobile-390*844:mx-auto
+    Mobile-280:w-1/2 Mobile-280:mx-auto
+}
+
+.emailContainer {
+    @apply flex flex-col justify-start h-auto w-2/3 gap-4 font-text my-8 break-words
+    PC-1920*1080:w-2/3 PC-1920*1080:mx-auto
+    PC-1600*900:w-2/3 PC-1600*900:mx-auto
+    PC-1366*768:w-2/3 PC-1366*768:mx-auto
+    PC-1280*720:w-2/3 PC-1280*720:mx-auto
+    PC-800*600:w-2/3 PC-800*600:mx-auto
+    PC-640*480:w-2/3 PC-640*480:mx-auto
+    Mobile-390*844:w-full Mobile-390*844:mx-auto
+    Mobile-280:w-2/3 Mobile-280:mx-auto
+}
