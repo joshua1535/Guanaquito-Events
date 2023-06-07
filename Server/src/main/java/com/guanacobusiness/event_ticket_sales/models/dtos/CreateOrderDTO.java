@@ -14,8 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateOrderDTO {
 
+    @org.hibernate.validator.constraints.UUID(message = "User code must be a valid UUID")
     @NotBlank(message = "The User code is required")
-    private User user;
+    private String userCode;
 
     @NotBlank(message = "The Purchase Date is required")
     private Date purchaseDate;
