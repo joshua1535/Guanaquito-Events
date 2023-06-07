@@ -12,6 +12,7 @@ import ModifyEvent from './pages/Modify Event/ModifyEvent'
 import QRPage from './pages/QRPage/QR'
 import TransferTicket from './pages/Transfer Ticket/TransferTicket'
 import ModifyStaff from './pages/Modify Staff/ModifyStaff'
+import TicketValidationPage from './pages/Ticket Validation/TicketValidation'
 
 
 
@@ -19,7 +20,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-      <ModifyStaff />
+      <TicketValidationPage />
   )
 }
 
