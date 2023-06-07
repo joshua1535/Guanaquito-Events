@@ -3,7 +3,6 @@ package com.guanacobusiness.event_ticket_sales.models.dtos;
 //import java.time.LocalTime;
 import java.util.Date;
 
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -41,6 +40,5 @@ public class SaveEventDTO {
     private String sponsors;
 
     @NotEmpty(message = "Category is required")
-    @UUID(message = "Category code is not valid")
     private String categoryCode;
 }

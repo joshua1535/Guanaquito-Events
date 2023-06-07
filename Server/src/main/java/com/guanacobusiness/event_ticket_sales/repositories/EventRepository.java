@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.repositories;
 
-import java.util.Date;
+import java.time.LocalDate;
+//import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,5 +11,5 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 
 public interface EventRepository extends ListCrudRepository<Event, UUID>{
 
-    List<Event> findEventsByEventDateBefore(Date date);
+    List<Event> findEventsByEventDateBefore(LocalDate date);
 }
