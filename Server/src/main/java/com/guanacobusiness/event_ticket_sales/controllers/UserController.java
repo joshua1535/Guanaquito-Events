@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
+import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
 import jakarta.validation.Valid;
 
@@ -26,6 +29,9 @@ public class UserController {
     
     @Autowired
     UserService userService;
+
+    @Autowired
+    private StringToUUID stringToUUID;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers(){
@@ -71,5 +77,22 @@ public class UserController {
     
     }
 
+    @GetMapping("/all/{code}")
+    public ResponseEntity<?> getAllUsersByPermit(@PathVariable(name = "code") String code){
+
+        UUID uuid = stringToUUID.convert(code);
+
+        if (uuid == null) {
+            return new ResponseEntity<>("Invalid Code",HttpStatus.BAD_REQUEST);
+        }
+
+        List<User> users = userService.findByPermit(uuid);
+
+        if(users.isEmpty() || users == null){
+            return new ResponseEntity<>("No Users Found", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
 
 }
