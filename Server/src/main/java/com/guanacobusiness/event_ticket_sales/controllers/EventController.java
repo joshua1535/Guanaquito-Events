@@ -50,6 +50,11 @@ public class EventController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllEvents() {
         List<Event> events = eventService.findAllEvents();
+
+        if(events == null || events.isEmpty()){
+            return new ResponseEntity<>("No Events Found", HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(events,HttpStatus.OK);
     }
     
@@ -172,7 +177,7 @@ public class EventController {
         }
     }
 
-    @PatchMapping("/")
+    @PatchMapping("/update")
     public ResponseEntity<?> updateEvent(@RequestBody UpdateEventDTO info) {
         try {
             boolean updated = eventService.update(info);

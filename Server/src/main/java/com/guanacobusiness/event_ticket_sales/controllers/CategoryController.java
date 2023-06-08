@@ -58,7 +58,7 @@ public class CategoryController {
     }
 
 
-    @PatchMapping("/")
+    @PatchMapping("/update")
     public ResponseEntity<?> updateCategory(@RequestBody SaveCategoryDTO info) {
         try {
             Category categoryFound = categoryService.findCategoryByCode(info.getCode());
