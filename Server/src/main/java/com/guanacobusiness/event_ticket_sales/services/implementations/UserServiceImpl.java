@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.AuthRequestDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveUserDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
@@ -95,6 +96,20 @@ public class UserServiceImpl implements UserService{
         }
 
         return usersFound;
+
+    public boolean login(AuthRequestDTO info) {
+        
+        User user = userRepository.findByEmail(info.getIdentifier());
+
+        if(user == null){
+            return false;
+        }
+
+        if(!user.getPassword().equals(info.getPassword())){
+            return false;
+        }
+
+        return true;
     }
 
 }

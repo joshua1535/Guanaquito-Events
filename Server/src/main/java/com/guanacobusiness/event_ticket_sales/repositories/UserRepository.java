@@ -13,5 +13,6 @@ public interface UserRepository extends ListCrudRepository<User, UUID>{
     public User findByCode(UUID code);
     public List<User> findByUsernameContainingIgnoreCase(String username);
     public List<User> findByPermitCode(UUID permitCode);
+    public User findByEmail(String email);
 
 }
