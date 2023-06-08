@@ -11,8 +11,10 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 
 public interface EventService {
     List<Event>findAllEvents();
+    List<Event> findAllActiveEvents();
     List<Event>findAllInactiveEvents();
-    List<Event>findAllArchivedEvents(Date date);
+    List<Event>findAllCurrentEvents();
+    List<Event>findAllArchivedEvents();
     Event findEventByCode(UUID code);
     void save(SaveEventDTO info, Category category) throws Exception;
     boolean update(UpdateEventDTO info) throws Exception;

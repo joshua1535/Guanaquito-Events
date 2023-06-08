@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StringToUUID {
-    public static UUID convert(String uuid) {
+    public UUID convert(String uuid) {
         try {
             return UUID.fromString(uuid);
         } catch (IllegalArgumentException e) {

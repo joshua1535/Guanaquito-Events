@@ -1,6 +1,8 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
+import java.time.LocalDate;
 import java.util.Date;
+//import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,6 +35,15 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    public List<Event> findAllActiveEvents() {
+        List<Event> eventList = eventRepository.findAll();
+        
+        return eventList.stream()
+        .filter(event -> event.getActive().equals(true))
+        .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Event> findAllInactiveEvents() {
         List<Event> eventList = eventRepository.findAll();
         
@@ -42,8 +53,26 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public List<Event> findAllArchivedEvents(Date date) {
-        return eventRepository.findEventsByEventDateBefore(date);
+    public List<Event> findAllCurrentEvents() {
+        LocalDate currentDate = LocalDate.now();
+        Date date = java.sql.Date.valueOf(currentDate);
+
+        List<Event> eventList = eventRepository.findAll();
+
+        return eventList.stream()
+        .filter(event -> (event.getDate().equals(date) || event.getDate().after(date)))
+        .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Event> findAllArchivedEvents() {
+        LocalDate currentDate = LocalDate.now();
+        Date date = java.sql.Date.valueOf(currentDate);
+
+        List<Event> eventList = eventRepository.findAll();
+
+        return eventList.stream().filter(event -> event.getDate().before(date)).collect(Collectors.toList());
+        //return eventRepository.findEventsByEventDateBefore(currentDate);
     }
 
     @Override
