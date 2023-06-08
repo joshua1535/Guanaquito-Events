@@ -1,6 +1,5 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
-import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeOwnershipDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.ValidateTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Order;
+import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
 import com.guanacobusiness.event_ticket_sales.models.entities.Tier;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
@@ -21,6 +20,8 @@ import com.guanacobusiness.event_ticket_sales.repositories.UserRepository;
 import com.guanacobusiness.event_ticket_sales.services.RegisterService;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
 import com.guanacobusiness.event_ticket_sales.services.TierService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class TicketServiceImpl implements TicketService{
@@ -38,9 +39,9 @@ public class TicketServiceImpl implements TicketService{
     TierService tierService;
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean save(SaveTicketDTO saveTicketDTO) throws Exception {
-        Ticket ticket = new Ticket(saveTicketDTO.getOrder(), saveTicketDTO.getTier(), saveTicketDTO.getUserOwner());
-
+        
         User foundUser = userRepository.findByCode(saveTicketDTO.getUserOwner().getCode());
 
         if(foundUser == null) {
@@ -62,20 +63,35 @@ public class TicketServiceImpl implements TicketService{
             return false;
         }
 
+        Ticket ticket = new Ticket(foundOrder, foundTier, foundUser);
+
         ticketRepository.save(ticket);
         return true;
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean changeOwnership(ChangeOwnershipDTO changeOwnershipDTO) throws Exception {
     
-        Ticket ticket = ticketRepository.findByTransferenceCode(changeOwnershipDTO.getTransferCode());
+        UUID uuid = UUID.fromString(changeOwnershipDTO.getNewUserOwnerCode());
+
+        if(uuid == null) {
+            return false;
+        }
+
+        Register register = registerService.findByTransferenceCode(changeOwnershipDTO.getTransferCode());
+
+        if(register == null) {
+            return false;
+        }
+
+        Ticket ticket = register.getTicket();
 
         if(ticket == null) {
             return false;
         }
 
-        User newOwner = userRepository.findByCode(changeOwnershipDTO.getNewUserOwnerCode());
+        User newOwner = userRepository.findByCode(uuid);
 
         if(newOwner == null) {
             return false;
@@ -96,7 +112,7 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public List<FormatedTicketDTO> findAllTickets(UUID userOwnerCode) {
+    public List<Ticket> findAllTickets(UUID userOwnerCode) {
     
         User user = userRepository.findByCode(userOwnerCode);
 
@@ -106,34 +122,35 @@ public class TicketServiceImpl implements TicketService{
 
         List<Ticket> tickets = user.getTickets();
 
-        List<FormatedTicketDTO> formatedTickets =
-            tickets.stream()
-                .map(ticket -> new FormatedTicketDTO(
-                    registerService.isEnabled(ticket.getCode()) ? true : false,
-                    "Event Picture",
-                    new Date(),
-                    new Time(0),
-                    "Title Event",
-                    ticket.getTier().getName()
-                ))
-                .toList();
-
-        return formatedTickets;
+        return tickets;
     
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean validateTicket(ValidateTicketDTO validateTicketDTO) throws Exception {
-        
-        Ticket ticket = ticketRepository.findByTransferenceCode(validateTicketDTO.getValidationCode());
+
+        UUID uuid = UUID.fromString(validateTicketDTO.getUserOwnerCode());
+
+        if(uuid == null) {
+            return false;
+        }
+
+        Register register = registerService.findByTransferenceCode(validateTicketDTO.getValidationCode());
+
+        if(register == null) {
+            return false;
+        }
+
+        Ticket ticket = register.getTicket();
 
         if(ticket == null) {
             return false;
         }
 
-        User foundUser = userRepository.findByCode(validateTicketDTO.getUserOwnerCode());
+        User Owner = userRepository.findByCode(uuid);
 
-        if(foundUser == null) {
+        if(Owner == null) {
             return false;
         }
 

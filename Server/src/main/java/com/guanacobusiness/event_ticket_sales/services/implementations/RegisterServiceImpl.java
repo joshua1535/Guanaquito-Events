@@ -178,5 +178,18 @@ public class RegisterServiceImpl implements RegisterService {
 
         return true;
     }
+
+    @Override
+    public Register findByTransferenceCode(String transacCode) {
+    
+        Register foundRegister = registerRepository.FindRegisterByTransactionCode(transacCode);
+
+        if(foundRegister == null) {
+            return null;
+        }
+
+        return foundRegister;
+
+    }
     
 }

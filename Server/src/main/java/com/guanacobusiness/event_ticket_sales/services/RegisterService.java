@@ -18,5 +18,6 @@ public interface RegisterService {
     Boolean updateTransferenceTime(Date transferenceTime, UUID ticketCode) throws Exception;
     boolean delete(UUID ticketCode, String transacCode) throws Exception;
     Boolean isEnabled(UUID ticketCode);
+    Register findByTransferenceCode(String transacCode);
 
 }

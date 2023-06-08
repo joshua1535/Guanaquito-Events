@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,9 +22,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeOwnershipDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.ValidateTicketDTO;
+import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
+import com.guanacobusiness.event_ticket_sales.services.TicketMapper;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
 
 import jakarta.validation.Valid;
@@ -36,30 +38,41 @@ public class TicketController {
     @Autowired
     TicketService ticketService;
 
+    @Autowired
+    TicketMapper ticketMapper;
+
     @PostMapping("/")
     public ResponseEntity<?> postTicket(@Valid @RequestBody SaveTicketDTO info) throws Exception {
     
-        Boolean response = ticketService.save(info);
+        try {
+            Boolean response = ticketService.save(info);
 
-        if(!response) {
-            return new ResponseEntity<>("Ticket buy failed!", HttpStatus.BAD_REQUEST);
+            if(!response) {
+                return new ResponseEntity<>("Ticket buy failed!", HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>("Ticket buyed successfully!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Ticket buy failed!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return new ResponseEntity<>("Ticket buyed successfully!", HttpStatus.OK);
     
     }
 
-    @PostMapping("/transfer")
-    public ResponseEntity<?> postChangeOwnership(@Valid @RequestBody ChangeOwnershipDTO info) throws Exception {
+    @PatchMapping("/transfer")
+    public ResponseEntity<?> patchChangeOwnership(@Valid @RequestBody ChangeOwnershipDTO info) throws Exception {
 
-        Boolean ticketTransfered = ticketService.changeOwnership(info);
+        try {
+            Boolean ticketTransfered = ticketService.changeOwnership(info);
 
-        if(!ticketTransfered) {
-            return new ResponseEntity<>("Ticket transfer failed!", HttpStatus.BAD_REQUEST);
-            
+            if(!ticketTransfered) {
+                return new ResponseEntity<>("Ticket transfer failed!", HttpStatus.BAD_REQUEST);
+                
+            }
+
+            return new ResponseEntity<>("Ticket transfered successfully!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Ticket buy failed!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return new ResponseEntity<>("Ticket transfered successfully!", HttpStatus.OK);
 
     }
 
@@ -86,13 +99,13 @@ public class TicketController {
             return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
         }
 
-        List<FormatedTicketDTO> tickets = ticketService.findAllTickets(uuid);
+        List<Ticket> tickets = ticketService.findAllTickets(uuid);
         
         if(tickets.isEmpty()) {
             return new ResponseEntity<>("No tickets found!", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(tickets, HttpStatus.OK);
+        return new ResponseEntity<>(ticketMapper.toCustomTicketDTO(tickets), HttpStatus.OK);
     
     }
 
