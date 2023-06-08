@@ -1,0 +1,122 @@
+.generalContainer{
+}
+
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+.bodyContainer {
+    @apply grid grid-cols-1
+    
+}	
+
+.userContainer {
+    @apply flex flex-row justify-center
+    PC-1920*1080:w-fit PC-1920*1080:mx-auto
+    PC-1600*900:w-5/6 PC-1600*900:mx-auto
+    PC-1366*768:w-full PC-1366*768:mx-auto
+    PC-1280*720:w-full PC-1280*720:mx-auto
+    PC-800*600:w-full PC-800*600:mx-auto
+    PC-640*480:w-full PC-640*480:mx-auto PC-640*480:grid-cols-3
+    Mobile-390*844:w-5/6 Mobile-390*844:mx-auto Mobile-390*844:grid-cols-2
+    Mobile-280:w-full Mobile-280:mx-auto Mobile-280:grid-cols-1
+}
+
+.user{
+    @apply flex flex-col h-auto  font-text  text-xs text-center my-8
+    PC-1920*1080:w-1/3 PC-1920*1080:mx-auto 
+    PC-1600*900:w-1/4 PC-1600*900:mx-auto
+    PC-1366*768:w-1/4 PC-1366*768:mx-auto
+    PC-1280*720:w-1/4 PC-1280*720:mx-auto
+    PC-800*600:w-1/3 PC-800*600:mx-auto
+    PC-640*480:w-1/3 PC-640*480:mx-auto
+    Mobile-390*844:w-1/2 Mobile-390*844:mx-auto
+    Mobile-280:w-1/2 Mobile-280:mx-auto
+}
+
+.emailContainer {
+    @apply flex flex-col justify-start h-auto  gap-4 font-text my-8 break-words text-white
+    PC-1920*1080:w-full PC-1920*1080:mx-auto
+    PC-1600*900:w-full PC-1600*900:mx-auto
+    PC-1366*768:w-full PC-1366*768:mx-auto
+    PC-1280*720:w-full PC-1280*720:mx-auto
+    PC-800*600:w-full PC-800*600:mx-auto
+    PC-640*480:w-full PC-640*480:mx-auto
+    Mobile-390*844:w-full Mobile-390*844:mx-auto
+    Mobile-280:w-full Mobile-280:mx-auto
+}
+
+.editPermitsButton {
+    @apply bg-yellowCapas outline-none border-none rounded-lg font-bold text-xs py-2 px-4 text-black w-auto
+
+}
+
+.listPermitsContainer {
+    @apply flex flex-col gap-4 font-text text-white
+
+}
+
+.listPermits {
+    @apply flex flex-col justify-center h-auto  gap-4 font-text break-words text-white 
+}
+
+.permitListContainer {
+    @apply flex flex-col gap-4 font-text text-white justify-center items-center h-full
+
+}
+
+.permit {
+    @apply flex flex-col gap-4 font-text my-8 text-white justify-center items-center 
+}
+
+.checkboxContainer {
+    @apply flex flex-row gap-4 font-text my-8 text-white justify-center items-center
+    PC-1920*1080:w-PermitContainerPC-1920*1080
+    PC-1600*900:w-PermitContainerPC-1600*900
+    PC-1366*768:w-PermitContainerPC-1366*768
+    PC-1280*720:w-PermitContainerPC-1280*720
+    PC-800*600:w-PermitContainerPC-800*600
+    PC-640*480:w-PermitContainerPC-640*480
+    Mobile-390*844:w-PermitContainerMobile-390*844
+    Mobile-280:w-PermitContainerMobile-280
+}
+
+.checkboxContainer2{
+    @apply flex flex-row gap-4 font-text my-0 text-white justify-center items-center 
+    PC-1920*1080:w-PermitContainerPC-1920*1080
+    PC-1600*900:w-PermitContainerPC-1600*900
+    PC-1366*768:w-PermitContainerPC-1366*768
+    PC-1280*720:w-PermitContainerPC-1280*720
+    PC-800*600:w-PermitContainerPC-800*600
+    PC-640*480:w-PermitContainerPC-640*480
+    Mobile-390*844:w-PermitContainerMobile-390*844
+    Mobile-280:w-PermitContainerMobile-280
+}
+
+.checkboxContainer3{
+    @apply flex flex-row gap-4 font-text my-6 text-white justify-center items-center
+    PC-1920*1080:w-PermitContainerPC-1920*1080
+    PC-1600*900:w-PermitContainerPC-1600*900
+    PC-1366*768:w-PermitContainerPC-1366*768
+    PC-1280*720:w-PermitContainerPC-1280*720
+    PC-800*600:w-PermitContainerPC-800*600
+    PC-640*480:w-PermitContainerPC-640*480
+    Mobile-390*844:w-PermitContainerMobile-390*844
+    Mobile-280:w-PermitContainerMobile-280
+}
+
+.buttonsContainer {
+    @apply flex flex-row gap-4 font-text my-8 text-white justify-center items-center
+}
+
+.buttonContainer {
+    @apply flex flex-row font-text text-white justify-center items-center mx-5
+}
+
+.disablebuttonContainer {
+    @apply flex flex-row font-text text-white justify-center items-center
+}
