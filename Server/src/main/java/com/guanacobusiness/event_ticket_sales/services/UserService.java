@@ -15,6 +15,7 @@ public interface UserService {
     boolean register(SaveUserDTO user) throws Exception;
     boolean updatePassword(PasswordUpdateDTO userUpdateDTO, String newPassword) throws Exception;
     List<User> findByFragment(String fragment);
+    List<User> findByPermit(UUID permitCode);
     boolean login(AuthRequestDTO info);
 
 }
