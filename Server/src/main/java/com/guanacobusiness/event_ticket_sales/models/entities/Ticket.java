@@ -48,6 +48,15 @@ public class Ticket {
     List<Register> registers;
 
     public Ticket(Order order, Tier tier, User userOwner) {
+        super();
+        this.order = order;
+        this.tier = tier;
+        this.userOwner = userOwner;
+    }
+
+    public Ticket(UUID code, Order order, Tier tier, User userOwner) {
+        super();
+        this.code = code;
         this.order = order;
         this.tier = tier;
         this.userOwner = userOwner;

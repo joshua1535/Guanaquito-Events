@@ -178,8 +178,32 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public Register findByCode(UUID code) {
-        return registerRepository.findById(code).orElse(null);
+    public Boolean isEnabled(UUID ticketCode) {
+    
+        Register registers = registerRepository.findRegistersByTransferenceTimeIsNull()
+            .stream()
+            .filter(register -> (register.getTicket().getCode().equals(ticketCode)))
+            .findAny()
+            .orElse(null);
+
+        if(registers == null){
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public Register findByTransferenceCode(String transacCode) {
+    
+        Register foundRegister = registerRepository.FindRegisterByTransactionCode(transacCode);
+
+        if(foundRegister == null) {
+            return null;
+        }
+
+        return foundRegister;
+     
     }
     
 }
