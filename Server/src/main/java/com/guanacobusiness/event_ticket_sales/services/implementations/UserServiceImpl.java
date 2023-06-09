@@ -96,7 +96,9 @@ public class UserServiceImpl implements UserService{
         }
 
         return usersFound;
-
+    }
+    
+    @Override
     public boolean login(AuthRequestDTO info) {
         
         User user = userRepository.findByEmail(info.getIdentifier());
