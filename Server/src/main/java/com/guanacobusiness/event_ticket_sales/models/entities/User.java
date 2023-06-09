@@ -42,11 +42,11 @@ public class User {
     @JsonIgnore
     List<UserXPermit> userXPermits;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userBuyer", fetch = FetchType.LAZY)
     @JsonIgnore
     List<Order> orders;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userOwner", fetch = FetchType.LAZY)
     @JsonIgnore
     List<Ticket> tickets;
 

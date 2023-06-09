@@ -11,7 +11,6 @@ import com.guanacobusiness.event_ticket_sales.models.entities.UserXPermit;
 
 public interface UserXPermitRepository extends ListCrudRepository<UserXPermit, UUID>{
 
-    void save(User user, Permit permit) throws Exception;
     void deleteOneByCode(UUID code) throws Exception;
     void deleteByUserCodeAndPermitCode(UUID userCode, UUID permitCode) throws Exception;
     List<Permit> findPermitsByUserCode(UUID userCode);
