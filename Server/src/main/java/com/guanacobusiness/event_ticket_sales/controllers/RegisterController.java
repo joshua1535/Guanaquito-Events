@@ -49,7 +49,7 @@ public class RegisterController {
         return new ResponseEntity<>(registers, HttpStatus.OK);
     }
 
-    @GetMapping("/ticket/{codeco}")
+    @GetMapping("/ticket/{code}")
     public ResponseEntity<?> getAllRegistersByTicketCode(@PathVariable(name = "code") String code){
         UUID uuid = stringToUUID.convert(code);
         
