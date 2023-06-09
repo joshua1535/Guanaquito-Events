@@ -98,7 +98,7 @@ public class TicketServiceImpl implements TicketService{
 
         Ticket transferedTicket = new Ticket(ticket.getCode(), ticket.getOrder(), ticket.getTier(), newOwner);
 
-        Boolean ticketTransferDate = registerService.updateTransferenceTime(new Date(), transferedTicket.getCode());
+        Boolean ticketTransferDate = registerService.updateTransferenceTime(transferedTicket.getCode());
 
         if(!ticketTransferDate) {
             return false;
