@@ -12,7 +12,6 @@ public interface RegisterService {
     
     List<Register> findAll();
     List<Register> findAllByTicketCode(Ticket ticket);
-    Register findByCode(UUID code);
     Boolean save(SaveRegisterDTO info, Ticket ticket) throws Exception;
     Boolean updateTransactionCode(ChangeTransactionCodeDTO info) throws Exception;
     Boolean updateValidationTime(String transacCode) throws Exception;

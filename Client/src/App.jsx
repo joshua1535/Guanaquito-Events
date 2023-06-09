@@ -26,6 +26,7 @@ import EventsPermit from './pages/Event Permits/EventPermits';
 import AdminGraphs from './pages/Admin Graphs/AdminGraphs';
 import StatsPage from './pages/Stats/Stats';
 
+
 function App() {
   return (
     <div className="App">
@@ -56,8 +57,8 @@ function App() {
           <Route path="/admin-graphs" element={<AdminGraphs />} />
           <Route path="/admin-scanner" element={<TicketValidationPage />} />
           <Route path="/admin-graphs/graph" element={<StatsPage/>} />
-
-          {/* <Route path="/historyevents" element={<MyEvents />} /> */}
+          <Route path="/historyevents" element={<MyEvents />} />
+          <Route path="/permits-user" element={<EditPermitUsers />} />
           <Route path="*" element={<Error404Form />} />
         </Routes>
       </Router>

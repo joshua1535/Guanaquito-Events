@@ -1,12 +1,16 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.AmountOfTicketsSoldDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.TierMoneyCollectedDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 import com.guanacobusiness.event_ticket_sales.models.entities.Tier;
@@ -21,7 +25,8 @@ public class TierServiceImpl implements TierService{
     @Autowired
     private TierRepository tierRepository;
 
-
+    @Autowired 
+    private EventServiceImpl eventService;
 
     @Override
     public List<Tier> findAllTiers() {
@@ -30,8 +35,11 @@ public class TierServiceImpl implements TierService{
 
     @Override
     public List<Tier> findAllTiersByEventCode(UUID eventCode) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAllTiersByEventCode'");
+        Event eventFound = eventService.findEventByCode(eventCode);
+
+        if(eventFound == null) return null;
+
+        return eventFound.getTiers();
     }
 
     @Override
@@ -73,12 +81,76 @@ public class TierServiceImpl implements TierService{
     }
 
     @Override
-    public boolean delete(UUID code) throws Exception {
-        Tier tierFound = tierRepository.findById(code).orElse(null);
+    public boolean delete(UUID tierCode) throws Exception {
+        Tier tierFound = tierRepository.findById(tierCode).orElse(null);
 
         if(tierFound == null) return false;
 
-        tierRepository.deleteById(code);
+        tierRepository.deleteById(tierCode);
         return true;
+    }
+
+    @Override
+    public AmountOfTicketsSoldDTO getAmountOfTicketSold(UUID eventCode){
+
+        Event eventFound = eventService.findEventByCode(eventCode);
+
+        if(eventFound == null) return null;
+
+        List<Tier> tiers = eventFound.getTiers();
+
+        int totalTicketsSold = 0;
+
+        for(Tier tier : tiers){
+            totalTicketsSold += tier.getTickets().size();
+        }
+
+        int totalTickets = 0;
+
+        for(Tier tier : tiers){
+            totalTickets += tier.getCapacity();
+        }
+
+        AmountOfTicketsSoldDTO amountOfTicketsSoldDTO = new AmountOfTicketsSoldDTO(
+            totalTicketsSold,
+            totalTickets
+        );
+
+        return amountOfTicketsSoldDTO;
+    }
+
+    @Override
+    public BigDecimal getAmountOfMoneyCollected(UUID eventCode){
+        Event eventFound = eventService.findEventByCode(eventCode);
+
+        if(eventFound == null) return null;
+
+        List<Tier> tiers = eventFound.getTiers();
+
+        BigDecimal totalMoneyCollected = new BigDecimal(0);
+
+        for(Tier tier : tiers){
+            totalMoneyCollected = totalMoneyCollected.add(tier.getPrice().multiply(new BigDecimal(tier.getTickets().size())));
+        }
+
+        return totalMoneyCollected;
+    }
+
+    @Override
+    public List<TierMoneyCollectedDTO> getAmountOfMoneyCollectedPerTier(UUID eventCode){
+        Event eventFound = eventService.findEventByCode(eventCode);
+
+        if(eventFound == null) return null;
+
+        List<Tier> tiers = eventFound.getTiers();
+
+        List<TierMoneyCollectedDTO> moneyCollectedByTier = tiers.stream()
+        .map(tier -> new TierMoneyCollectedDTO(
+            tier.getCode(),
+            tier.getName(),
+            tier.getPrice().multiply(new BigDecimal(tier.getTickets().size()))))
+            .collect(Collectors.toList());
+
+        return moneyCollectedByTier;
     }
 }

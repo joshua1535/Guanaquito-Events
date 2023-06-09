@@ -11,5 +11,5 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 
 public interface EventRepository extends ListCrudRepository<Event, UUID>{
 
-    List<Event> findEventsByEventDateBefore(LocalDate date);
+    List<Event> findEventsByDateBefore(LocalDate date);
 }
