@@ -15,7 +15,9 @@ import TransferTicket from './pages/Transfer Ticket/TransferTicket';
 import ModifyStaff from './pages/Modify Staff/ModifyStaff';
 import TicketValidationPage from './pages/Ticket Validation/TicketValidation';
 import Error404Form from './pages/Error404/Error404Form';
-import StatsPage from './pages/Stats/Stats';
+import AdminUsers from './pages/Admin Users/AdminUsers';
+import EditPermitUsers from './pages/Edit Permit Users/EditPermitUsers';
+import MyTickets from './pages/My Tickets/MyTickets';
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/myorders" element={<MyOrders />} />
+          <Route path="/mytickets" element={<MyTickets />} />
           <Route path="/createevent" element={<CreateEvent />} />
           <Route path="/addtiers" element={<AddTiers />} />
           <Route path="/modifyevent" element={<ModifyEvent />} />
@@ -35,7 +38,8 @@ function App() {
           <Route path="/transferticket" element={<TransferTicket />} />
           <Route path="/modifystaff" element={<ModifyStaff />} />
           <Route path="/ticketvalidation" element={<TicketValidationPage />} />
-          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/admin-users" element={<AdminUsers />} />
+          <Route path="/permits-user" element={<EditPermitUsers />} />
           <Route path="*" element={<Error404Form />} />
         </Routes>
       </Router>
