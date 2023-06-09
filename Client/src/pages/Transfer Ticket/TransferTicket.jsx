@@ -22,6 +22,8 @@ import {
     Input,
     Select,
     Option,
+    Dialog,
+    Collapse,
   } from "@material-tailwind/react";
   import {
     ChevronDownIcon,
@@ -158,7 +160,16 @@ const profileMenuItems = [
 
 export default function CreateEvent() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
-    const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);    
+    const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handleSaveClick = () => {
+        setShowPopup(true);
+      };
+    
+      const handlePopupClose = () => {
+        setShowPopup(false);
+      };    
 
     React.useEffect(() => {
         window.addEventListener(
@@ -276,16 +287,44 @@ export default function CreateEvent() {
             </div>
           </div>        
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
-            <Button className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+            <Button 
+             className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
               Cancelar
             </Button>
-            <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+            <Button
+            onClick={handleSaveClick}
+            className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
               Continuar
             </Button>
           </div>
         </form>
       </div>
     </div>
+    {showPopup && (
+                <div className={[classes["popupContainer"]]}>
+      <Dialog open={true} onClose={handlePopupClose} className='Mobile-390*844:w-96 Mobile-280:w-96'>
+        <Dialog.Header className='font-text Mobile-390*844:text-base Mobile-280:text-sm'>
+          Transferencia
+        </Dialog.Header>
+        <Dialog.Body className='font-text text-justify Mobile-390*844:text-sm Mobile-280:text-sm'>
+        Envia este código a la persona que te transferíra la titularidad del/os ticket(s)
+        <p className=' Mobile-390*844:text-base Mobile-390*844:pb-3 text-center text-Orange text-2xl'> 
+          1589-842-0287
+        </p>
+        <div className=' sm:flex justify-center'>
+          <p className=" text-center pr-1">Tiempo de expiración:</p>
+          <p className="text-center font-bold text-red-600">10:00</p>
+
+        </div>
+        </Dialog.Body>
+        <Dialog.Footer className='flex justify-center font-text'>
+          <Button onClick={handlePopupClose} className='bg-Orange text-white'>
+          Generar Código
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
+        </div>  
+    )}
         </div>
         </div>
     )

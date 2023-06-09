@@ -55,6 +55,11 @@
     @apply font-bold text-xl text-center font-text text-yellowCapas mb-10 
 }
 
+.popupContainer{
+    @apply absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4
+    Mobile-390*844:w-5/6
+}
+
 .container3Inputs {
     @apply grid grid-cols-3 gap-4 w-5/6
     PC-1280*720:w-full
