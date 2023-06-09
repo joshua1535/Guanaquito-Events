@@ -1,17 +1,19 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeTransactionCodeDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
 import com.guanacobusiness.event_ticket_sales.repositories.RegisterRepository;
 import com.guanacobusiness.event_ticket_sales.services.RegisterService;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
+import com.guanacobusiness.event_ticket_sales.utils.CurrentDateTime;
+import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
 import jakarta.transaction.Transactional;
 
@@ -22,6 +24,12 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Autowired
     TicketService ticketService;
+
+    @Autowired
+    CurrentDateTime currentDateTime;
+
+    @Autowired
+    StringToUUID stringToUUID;
 
     @Override
     public List<Register> findAll() {
@@ -66,7 +74,9 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean updateTransactionCode(String transacCode, UUID ticketCode) throws Exception {
+    public Boolean updateTransactionCode(ChangeTransactionCodeDTO info) throws Exception {
+        UUID ticketCode = stringToUUID.convert(info.getTicketCode());
+
         Ticket foundTicket = ticketService.findTicketByCode(ticketCode);
 
         if(foundTicket == null) {
@@ -94,7 +104,7 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
-        registerToUpdate.setTransactionCode(transacCode);
+        registerToUpdate.setTransactionCode(info.getTransactionCode());
         registerRepository.save(registerToUpdate);
 
         return true;
@@ -102,12 +112,14 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean updateValidationTime(Date validationTime, String transactionCode) throws Exception {
+    public Boolean updateValidationTime(String transactionCode) throws Exception {
         Register foundRegister = registerRepository.FindRegisterByTransactionCode(transactionCode);
 
         if(foundRegister == null) {
             return false;
         }
+
+        String validationTime = currentDateTime.currentDateTime();
 
         foundRegister.setValidationTime(validationTime);
         registerRepository.save(foundRegister);
@@ -116,7 +128,7 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public Boolean updateTransferenceTime(Date transferenceTime, UUID ticketCode) throws Exception {
+    public Boolean updateTransferenceTime(UUID ticketCode) throws Exception {
         Ticket foundTicket = ticketService.findTicketByCode(ticketCode);
 
         //Si no encuentra el ticket no se puede actualizar la hora de transferencia
@@ -144,6 +156,8 @@ public class RegisterServiceImpl implements RegisterService {
         if(registerToUpdate == null) {
             return false;
         }
+
+        String transferenceTime = currentDateTime.currentDateTime();
 
         registerToUpdate.setTransferenceTime(transferenceTime);
         registerRepository.save(registerToUpdate);
@@ -189,7 +203,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
 
         return foundRegister;
-
+     
     }
     
 }

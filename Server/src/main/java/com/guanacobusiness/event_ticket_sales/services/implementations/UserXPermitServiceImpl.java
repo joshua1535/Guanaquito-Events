@@ -15,7 +15,7 @@ import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
 import jakarta.transaction.Transactional;
 
 @Service
-public class UserXPermitImpl implements UserXPermitService{
+public class UserXPermitServiceImpl implements UserXPermitService{
 
     @Autowired
     UserXPermitRepository userXPermitRepository;

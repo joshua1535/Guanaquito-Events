@@ -1,0 +1,35 @@
+.generalContainer {
+    @apply columns-2 
+}
+
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+
+
+
+.optionsContainer {
+    display: flex;   
+    font-family: 'PoppinsLight';
+    align-content: center;
+    justify-content: center;
+    background-color: #333F51;
+    color: #DD8E0A;
+    @apply 
+    w-full h-screen
+    Mobile-390*844:text-xl PC-800*600:text-2xl PC-1600*900:text-2xl PC-1366*768:text-2.5xl PC-1920*1080:text-2.5xl 
+    sm:w-1/4 md:w-1/4  lg:w-1/4  xl:w-1/4 2xl:w-1/4 hidden sm:inline-block
+}
+
+
+.categories
+{      
+    
+    @apply flex sm:grid h-max 
+}
+
