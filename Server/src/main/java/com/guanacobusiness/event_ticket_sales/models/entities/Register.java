@@ -1,6 +1,5 @@
 package com.guanacobusiness.event_ticket_sales.models.entities;
 
-import java.util.Date;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -30,16 +29,16 @@ public class Register {
     private String transactionCode;
 
     @Column(name = "transference_time")
-    private Date transferenceTime;
+    private String transferenceTime;
 
     @Column(name = "validation_time")
-    private Date validationTime;
+    private String validationTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ticket_code", nullable = false)
     private Ticket ticket;
 
-    public Register(String transactionCode, Date transferenceTime, Date validationTime, Ticket ticket) {
+    public Register(String transactionCode, String transferenceTime, String validationTime, Ticket ticket) {
         super();
         this.transactionCode = transactionCode;
         this.transferenceTime = transferenceTime;

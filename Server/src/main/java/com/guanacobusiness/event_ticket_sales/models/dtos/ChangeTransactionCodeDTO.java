@@ -10,10 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ValidateTicketDTO {
+public class ChangeTransactionCodeDTO {
 
     @NotBlank(message = "Code is required")
     @UUID(message = "Code is not valid")
     private String transactionCode;
 
+    @NotBlank(message = "Code is required")
+    @UUID(message = "Code is not valid")
+    private String ticketCode;
+    
 }
