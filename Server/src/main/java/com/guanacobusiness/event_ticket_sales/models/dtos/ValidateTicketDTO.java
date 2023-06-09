@@ -10,10 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ValidateTicketDTO {
 
-    @NotBlank(message = "The User Owner code is required")
-    @org.hibernate.validator.constraints.UUID(message = "User code must be a valid UUID")
-    private String userOwnerCode;
-
     @NotBlank(message = "The Validation code is required")
     @org.hibernate.validator.constraints.UUID(message = "User code must be a valid UUID")
     private String validationCode;

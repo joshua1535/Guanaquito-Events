@@ -8,6 +8,6 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
 public interface TicketMapper {
     
     FormatedTicketDTO toCustomTicketDTO(Ticket ticket);
-    List<FormatedTicketDTO> toCustomTicketDTO(List<Ticket> tickets);
+    List<FormatedTicketDTO> listToCustomTicketDTO(List<Ticket> tickets);
 
 }

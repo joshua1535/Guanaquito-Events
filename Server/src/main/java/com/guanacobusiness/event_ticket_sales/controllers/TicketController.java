@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeOwnershipDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTicketDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.ValidateTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
 import com.guanacobusiness.event_ticket_sales.services.TicketMapper;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
@@ -76,22 +75,8 @@ public class TicketController {
 
     }
 
-    @PostMapping("/validate")
-    public ResponseEntity<?> postValidateTicket(@Valid @RequestBody ValidateTicketDTO info) throws Exception {
-
-        Boolean ticketValidated = ticketService.validateTicket(info);
-
-        if(!ticketValidated) {
-            return new ResponseEntity<>("Ticket validation failed!", HttpStatus.BAD_REQUEST);
-            
-        }
-
-        return new ResponseEntity<>("Ticket validated successfully!", HttpStatus.OK);
-
-    }
-
-    @GetMapping("/all/{code}")
-    public ResponseEntity<?> getAllTickets(@PathVariable(name = "code") String code) {
+    @GetMapping("/user/{code}")
+    public ResponseEntity<?> getAllTicketsByUser(@PathVariable(name = "code") String code) {
     
         UUID uuid = UUID.fromString(code);
 
@@ -99,13 +84,13 @@ public class TicketController {
             return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
         }
 
-        List<Ticket> tickets = ticketService.findAllTickets(uuid);
+        List<Ticket> tickets = ticketService.findAllUserTickets(uuid);
         
         if(tickets.isEmpty()) {
             return new ResponseEntity<>("No tickets found!", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(ticketMapper.toCustomTicketDTO(tickets), HttpStatus.OK);
+        return new ResponseEntity<>(ticketMapper.listToCustomTicketDTO(tickets), HttpStatus.OK);
     
     }
 

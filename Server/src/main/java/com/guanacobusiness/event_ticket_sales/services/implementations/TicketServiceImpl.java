@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeOwnershipDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTicketDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.ValidateTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Order;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
@@ -112,7 +111,7 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public List<Ticket> findAllTickets(UUID userOwnerCode) {
+    public List<Ticket> findAllUserTickets(UUID userOwnerCode) {
     
         User user = userRepository.findByCode(userOwnerCode);
 
@@ -124,44 +123,6 @@ public class TicketServiceImpl implements TicketService{
 
         return tickets;
     
-    }
-
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public Boolean validateTicket(ValidateTicketDTO validateTicketDTO) throws Exception {
-
-        UUID uuid = UUID.fromString(validateTicketDTO.getUserOwnerCode());
-
-        if(uuid == null) {
-            return false;
-        }
-
-        Register register = registerService.findByTransferenceCode(validateTicketDTO.getValidationCode());
-
-        if(register == null) {
-            return false;
-        }
-
-        Ticket ticket = register.getTicket();
-
-        if(ticket == null) {
-            return false;
-        }
-
-        User Owner = userRepository.findByCode(uuid);
-
-        if(Owner == null) {
-            return false;
-        }
-
-        Boolean ticketValidationDate = registerService.updateValidationTime(new Date(), validateTicketDTO.getValidationCode());
-
-        if(!ticketValidationDate) {
-            return false;
-        }
-
-        return true;
-
     }
 
     @Override

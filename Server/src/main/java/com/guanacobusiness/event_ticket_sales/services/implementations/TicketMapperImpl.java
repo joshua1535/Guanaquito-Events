@@ -45,7 +45,7 @@ public class TicketMapperImpl implements TicketMapper{
     }
 
     @Override
-    public List<FormatedTicketDTO> toCustomTicketDTO(List<Ticket> tickets) {
+    public List<FormatedTicketDTO> listToCustomTicketDTO(List<Ticket> tickets) {
         return tickets.stream().map(ticket -> toCustomTicketDTO(ticket)).collect(Collectors.toList());
     }
     
