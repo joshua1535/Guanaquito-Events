@@ -1,0 +1,76 @@
+.generalContainer {
+    @apply columns-2 
+}
+
+.headerContainer{
+    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+}
+
+.headerTypography{
+    @apply relative mx-auto flex items-center text-white
+}
+
+
+
+
+.optionsContainer {
+    display: flex;   
+    font-family: 'PoppinsLight';
+    align-content: center;
+    justify-content: center;
+    background-color: #333F51;
+    color: #DD8E0A;
+    @apply 
+    w-full h-screen
+    Mobile-390*844:text-xl PC-800*600:text-2xl PC-1600*900:text-2xl PC-1366*768:text-2.5xl PC-1920*1080:text-2.5xl 
+    sm:w-1/4 md:w-1/4  lg:w-1/4  xl:w-1/4 2xl:w-1/4 hidden sm:inline-block
+}
+
+
+.categories
+{      
+    
+    @apply flex sm:grid h-max 
+}
+
+.title {
+    font-family: 'PoppinsLight';
+    @apply font-bold text-center text-white
+
+    PC-1920*1080:text-6xl PC-1920*1080:mt-14
+    PC-1600*900:text-5xl PC-1600*900:mt-14
+    PC-1366*768:text-4xl PC-1366*768:mt-14
+    PC-1280*720:text-4xl PC-1280*720:mt-14
+    PC-800*600:text-3xl PC-800*600:mt-14
+    PC-640*480:text-2xl PC-640*480:mt-12
+    Mobile-390*844:text-2xl Mobile-390*844:mt-4
+    Mobile-280:text-xl
+}
+.textCardContainer{
+    @apply flex items-center justify-center bg-white
+}	
+
+.cardImg{
+    @apply flex object-cover m-auto rounded-lg shadow-sm 
+    PC-1920*1080:w-CardTicketImgPC-1920*1080 PC-1920*1080:h-CardTicketImgPC-1920*1080
+    PC-1600*900:w-CardTicketImgPC-1600*900 PC-1600*900:h-CardTicketImgPC-1600*900
+    PC-1366*768:w-CardTicketImgPC-1366*768 PC-1366*768:h-CardTicketImgPC-1366*768
+    PC-1280*720:w-CardTicketImgPC-1280*720 PC-1280*720:h-CardTicketImgPC-1280*720
+    PC-800*600:w-CardTicketImgPC-800*600 PC-800*600:h-CardTicketImgPC-800*600
+    PC-640*480:w-CardTicketImgPC-640*480 PC-640*480:h-CardTicketImgPC-640*480
+    Mobile-390*844:w-CardTicketImgMobile-390*844 Mobile-390*844:h-CardTicketImgMobile-390*844
+    Mobile-280:w-CardTicketImgMobile-280 Mobile-280:h-CardTicketImgMobile-280
+}
+
+.cardContainer {
+    @apply grid grid-cols-3
+    PC-1920*1080:w-CardGeneralContainerPC-1920*1080 PC-1920*1080:h-CardGeneralContainerPC-1920*1080 PC-1920*1080:ml-24 PC-1920*1080:gap-24
+    PC-1600*900:w-CardGeneralContainerPC-1600*900 PC-1600*900:h-CardGeneralContainerPC-1600*900 PC-1600*900:ml-24 PC-1600*900:gap-20
+    PC-1366*768:w-CardGeneralContainerPC-1366*768 PC-1366*768:h-CardGeneralContainerPC-1366*768 PC-1366*768:m-auto PC-1366*768:gap-16
+    PC-1280*720:w-CardGeneralContainerPC-1280*720 PC-1280*720:h-CardGeneralContainerPC-1280*720 PC-1280*720:m-auto PC-1280*720:gap-14
+    PC-800*600:w-CardGeneralContainerPC-800*600 PC-800*600:h-CardGeneralContainerPC-800*600 PC-800*600:m-auto PC-800*600:grid-cols-2 PC-800*600:gap-12
+    PC-640*480:w-CardGeneralContainerPC-640*480 PC-640*480:h-CardGeneralContainerPC-640*480 PC-640*480:m-auto PC-640*480:grid-cols-1 PC-640*480:gap-8
+    Mobile-390*844:w-CardGeneralContainerMobile-390*844 Mobile-390*844:h-CardGeneralContainerMobile-390*844 Mobile-390*844:m-auto Mobile-390*844:grid-cols-1  Mobile-390*844:gap-5
+    Mobile-280:w-CardGeneralContainerMobile-280 Mobile-280:h-CardGeneralContainerMobile-280 Mobile-280:m-auto Mobile-280:grid-cols-1
+}
+

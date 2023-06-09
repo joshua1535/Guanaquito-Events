@@ -18,6 +18,7 @@ import Error404Form from './pages/Error404/Error404Form';
 import AdminUsers from './pages/Admin Users/AdminUsers';
 import EditPermitUsers from './pages/Edit Permit Users/EditPermitUsers';
 import MyTickets from './pages/My Tickets/MyTickets';
+import MyEvents from './pages/My Events/MyEvents';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="/ticketvalidation" element={<TicketValidationPage />} />
           <Route path="/admin-users" element={<AdminUsers />} />
           <Route path="/permits-user" element={<EditPermitUsers />} />
+          <Route path="/myevents" element={<MyEvents />} />
           <Route path="*" element={<Error404Form />} />
         </Routes>
       </Router>
