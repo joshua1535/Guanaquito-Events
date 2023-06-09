@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<Ticket> findTicketsByOrderCode(UUID orderCode) {
-        Order order = orderRepository.findOneByOrderCode(orderCode);
+        Order order = orderRepository.findOneByCode(orderCode);
 
         if(order == null) {
             return null;
@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<Order> findOrdersBetweenDates(DateRangeDTO info) {
         
-        List<Order> orders = orderRepository.findOrdersByDateAddedBetween(info.getStartDate(), info.getEndDate());
+        List<Order> orders = orderRepository.findOrdersByPurchaseDateBetween(info.getStartDate(), info.getEndDate());
 
         if(orders == null) {
             return null;

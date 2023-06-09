@@ -14,6 +14,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.repositories.UserRepository;
 import com.guanacobusiness.event_ticket_sales.services.PermitService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
+import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
 
 import jakarta.transaction.Transactional;
 
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     PermitService permitService;
+
+    @Autowired
+    UserXPermitService userXPermitService;
 
     @Override
     public List<User> findAll() {
@@ -75,7 +79,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> findByFragment(String fragment) {
-        List<User> usersFound = userRepository.findByUsernameContainingIgnoreCase(fragment);
+        List<User> usersFound = userRepository.findByEmailContainingIgnoreCase(fragment);
 
         return usersFound;
     }
@@ -89,7 +93,7 @@ public class UserServiceImpl implements UserService{
             return null;
         }
 
-        List<User> usersFound = userRepository.findByPermitCode(permitFound.getCode());
+        List<User> usersFound = userXPermitService.findUsersByPermitCode(permitFound.getCode());
 
         if(usersFound == null || usersFound.isEmpty()){
             return null;

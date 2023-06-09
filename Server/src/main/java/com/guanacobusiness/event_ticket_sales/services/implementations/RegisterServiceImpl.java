@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeTransactionCodeDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveRegisterDTO;
@@ -17,6 +18,7 @@ import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class RegisterServiceImpl implements RegisterService {
 
     @Autowired
@@ -113,7 +115,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Boolean updateValidationTime(String transactionCode) throws Exception {
-        Register foundRegister = registerRepository.FindRegisterByTransactionCode(transactionCode);
+        Register foundRegister = registerRepository.findByTransactionCode(transactionCode);
 
         if(foundRegister == null) {
             return false;
@@ -180,7 +182,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Boolean isEnabled(UUID ticketCode) {
     
-        Register registers = registerRepository.findRegistersByTransferenceTimeIsNull()
+        Register registers = registerRepository.findAllByTransferenceTimeIsNull()
             .stream()
             .filter(register -> (register.getTicket().getCode().equals(ticketCode)))
             .findAny()
@@ -196,14 +198,14 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Register findByTransferenceCode(String transacCode) {
     
-        Register foundRegister = registerRepository.FindRegisterByTransactionCode(transacCode);
+        Register foundRegister = registerRepository.findByTransactionCode(transacCode);
 
         if(foundRegister == null) {
             return null;
         }
 
         return foundRegister;
-     
+    
     }
     
 }
