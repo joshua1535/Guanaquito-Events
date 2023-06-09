@@ -1,9 +1,17 @@
 import logo from '../../../assets/logo.png';
 import classes from './EmailConfirmationForm.module.css';
 import imgtemplate from '../../../assets/loginimg.png';
+import {useNavigate} from 'react-router-dom';
 
 
-const EmailConfirmationForm = () => {
+const EmailConfirmationFormRegister = () => {
+
+    const navigate = useNavigate();
+
+    const confirmHandler = () => {
+        navigate('/passwordconfirmation');
+    };
+
     return (
         <div className={classes["generalContainer"]}>
             <div className={classes["inputsContainer"]} >
@@ -20,7 +28,9 @@ const EmailConfirmationForm = () => {
 
            <div className={classes["sendContainer"]}>
 
-           <button className={classes["buttonsend"]}>
+           <button 
+           onClick={confirmHandler}
+           className={classes["buttonsend"]}>
                 Enviar
             </button> 
             <p className={classes["resendbutton"]} > Reenviar codigo</p>       
@@ -36,4 +46,4 @@ const EmailConfirmationForm = () => {
     )
 }
 
-    export default EmailConfirmationForm;
+    export default EmailConfirmationFormRegister;

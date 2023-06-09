@@ -1,10 +1,19 @@
 import logo from '../../../assets/logo.png';
 import classes from './UpdatePasswordForm.module.css';
 import imgtemplate from '../../../assets/loginimg.png';
+import { useNavigate } from 'react-router-dom';
 
 
 const UpdatePasswordForm = () => {
+
+    const navigate = useNavigate();
+
+    const updateHandler = () => {
+        navigate('/');
+    };
+
     return (
+        
         <div className={classes["generalContainer"]}>
             <div className={classes["inputsContainer"]} >
             <img className= {classes["logoImg"]} src={logo} />
@@ -23,7 +32,9 @@ const UpdatePasswordForm = () => {
 
            <div className={classes["loginContainer"]}>
 
-           <button className={classes["buttonlogin"]}>
+           <button 
+           onClick={updateHandler}
+           className={classes["buttonlogin"]}>
                 Actualizar Contraseña
             </button>        
 

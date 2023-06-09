@@ -19,6 +19,7 @@ import logo from "../../assets/logo.png";
 import imgtemplate from "../../assets/loginimg.png";
 import classes from "./EditPermitUsers.module.css";
 import { ChevronDownIcon, Bars2Icon, ArrowLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 const users = [
   {
@@ -50,65 +51,37 @@ const availablePermits = [
   },
 ];
 
+//profile menu component
 const profileMenuItems = [
   {
-    label: "Mis tickets",
-  },
-  {
-    label: "Historial de eventos",
-  },
-  {
-    label: "Transferir ticket",
-  },
-  {
-    label: "Eventos",
+    label: "Administrar usuarios",
   },
   {
     label: "Sign Out",
   },
 ];
-
-const navListItems = [
-  {
-    label: "Eventos",
-  },
-  {
-    label: "Mis tickets",
-  },
-];
-
-function NavList() {
-  return (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-      <NavListMenu />
-      {navListItems.map(({ label }, key) => (
-        <Typography
-          key={label}
-          as="a"
-          href="#"
-          color="white"
-          className="font-normal"
-        >
-          <MenuItem className="flex items-center gap-2 lg:rounded-full">
-            {label}
-          </MenuItem>
-        </Typography>
-      ))}
-    </ul>
-  );
-}
-
+ 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
 
+  const navigate = useNavigate();
+
+  const handleMenuClick = (label) => {
+  if (label === "Administrar usuarios") {
+      navigate('/admin-users');
+  } else if (label === "Sign Out") {
+      navigate('/');
+  }
+  };
+ 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
         <Button
           variant="text"
           color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
+          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 ml-auto"
         >
           <Avatar
             variant="circular"
@@ -131,7 +104,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={ () => handleMenuClick(label)}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -153,25 +126,6 @@ function ProfileMenu() {
   );
 }
 
-function NavListMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-  const triggers = {
-    onMouseEnter: () => setIsMenuOpen(true),
-    onMouseLeave: () => setIsMenuOpen(false),
-  };
-
-  return (
-    <Typography
-      {...triggers}
-      as="a"
-      href="#"
-      color="white"
-      className="font-normal"
-    ></Typography>
-  );
-}
-
 
 
 
@@ -180,6 +134,37 @@ export default function EditPermitUsers() {
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const [selectedUser, setSelectedUser] = useState(users[0]);
   const [userList, setUserList] = useState(users);
+
+  const navigate = useNavigate();
+
+  const handleSaveClick = () => {
+    const updatedUserList = [...userList];
+    const userIndex = updatedUserList.findIndex(
+      (user) => user.email === selectedUser.email
+    );
+    updatedUserList[userIndex] = selectedUser;
+    setUserList(updatedUserList);
+    navigate('/admin-users');
+  };
+
+
+  const handleDisableAccount = () => {
+    const updatedUser = { ...selectedUser };
+    updatedUser.disabled = !updatedUser.disabled;
+    setSelectedUser(updatedUser);
+
+    const updatedUserList = [...userList];
+    const userIndex = updatedUserList.findIndex(
+      (user) => user.email === selectedUser.email
+    );
+    updatedUserList[userIndex] = updatedUser;
+    setUserList(updatedUserList);
+
+  };
+
+  const handleCancelClick = () => {
+    navigate(-1);
+  };
 
   const handlePermissionChange = (permitName) => {
     const updatedUser = { ...selectedUser };
@@ -215,36 +200,22 @@ export default function EditPermitUsers() {
 
   return (
     <div className={classes["generalContainer"]}>
-      <header className={classes["headerContainer"]}>
+      <header className={[classes["headerContainer"]]}>
         <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
-          <div className={classes["headerTypography"]}>
-            <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
-            <Typography
-              as="a"
-              href="#"
-              className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-            >
-              Guanaco Business
-            </Typography>
-            <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
-              <NavList />
-            </div>
-            <IconButton
-              size="sm"
-              color="blue-gray"
-              variant="text"
-              onClick={toggleIsNavOpen}
-              className="ml-auto mr-2 lg:hidden"
-            >
-              <Bars2Icon className="h-6 w-6" />
-            </IconButton>
-            <ProfileMenu />
+        <div className={[classes["headerTypography"]]}>
+          <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
+          <Typography
+            as="a"
+            href="#"
+            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
+          >
+            Guanaco Business
+          </Typography>
+          
+          <ProfileMenu />
           </div>
-          <Collapse open={isNavOpen} className="overflow-scroll">
-            <NavList />
-          </Collapse>
         </Navbar>
-      </header>
+        </header>
       <div className={classes["bodyContainer"]}>
         <div className={classes["userPermitsContainer"]}>
           <div className={classes["userContainer"]}>
@@ -268,7 +239,9 @@ export default function EditPermitUsers() {
             ))}
           </div>
           <div className={classes["disablebuttonContainer"]}>
-              <Button color="red">
+              <Button 
+              onClick={handleDisableAccount}
+              color="red">
                 Deshabilitar cuenta
               </Button>
               </div>
@@ -342,11 +315,15 @@ export default function EditPermitUsers() {
         </div>
                     <div className={classes["buttonsContainer"]}>
             <div className={classes["buttonContainer"]}>
-                <Button className="mt-4 bg-black">
+                <Button 
+                onClick={handleCancelClick}
+                className="mt-4 bg-black">
                     Cancelar
                 </Button>
                 <div className={classes["buttonContainer"]}>
-                <Button className="mt-4 bg-yellowCapas" >
+                <Button 
+                onClick={handleSaveClick}
+                className="mt-4 bg-yellowCapas" >
                     Guardar cambios
                 </Button>
             </div>

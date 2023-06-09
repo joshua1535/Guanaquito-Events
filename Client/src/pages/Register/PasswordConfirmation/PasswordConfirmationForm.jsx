@@ -1,9 +1,16 @@
 import logo from '../../../assets/logo.png';
 import classes from './PasswordConfirmationForm.module.css';
 import imgtemplate from '../../../assets/loginimg.png';
+import { useNavigate } from 'react-router-dom';
 
 
 const PasswordConfirmationForm = () => {
+
+    const navigate = useNavigate();
+
+    const confirmHandler= () => {
+        navigate('/');
+    };
     return (
         <div className={classes["generalContainer"]}>
             <div className={classes["inputsContainer"]} >
@@ -23,7 +30,9 @@ const PasswordConfirmationForm = () => {
 
            <div className={classes["loginContainer"]}>
 
-           <button className={classes["buttonlogin"]}>
+           <button 
+           onClick={confirmHandler}
+           className={classes["buttonlogin"]}>
                 Continuar
             </button>        
 
