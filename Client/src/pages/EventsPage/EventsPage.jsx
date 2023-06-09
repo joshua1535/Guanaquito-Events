@@ -18,6 +18,7 @@ import {
   ChevronDownIcon,
   Bars2Icon,
 } from "@heroicons/react/24/outline";
+import { useNavigate } from 'react-router-dom';
 
 // profile menu component
 const profileMenuItems = [
@@ -28,7 +29,7 @@ const profileMenuItems = [
     label: "Historial de eventos",
   },
   {
-    label: "Transferir ticket",
+    label: "Mis ordenes",
   },
   {
     label: "Eventos",
@@ -37,11 +38,44 @@ const profileMenuItems = [
     label: "Sign Out",
   },
 ];
-
+ 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
- 
+
+  const navigate = useNavigate();
+  const handleMenu = (label) => {
+    if (label === "Sign Out") {
+      closeMenu();
+      navigate("/");
+      
+    }
+    
+    if (label === "Eventos") {
+      closeMenu();
+      navigate("/events");
+    }
+
+    if (label === "Mis tickets") {
+      closeMenu();
+      navigate("/mytickets");
+    }
+
+    if (label === "Historial de eventos") {
+      closeMenu();
+      navigate("/historyevents");
+    }
+
+    if (label === "Mis ordenes") {
+      closeMenu();
+      navigate("/myorders");
+    }
+
+
+  };
+
+  
+  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -71,7 +105,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={() => handleMenu(label)}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -94,6 +128,8 @@ function ProfileMenu() {
   );
 }
 
+
+ 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
  
@@ -102,83 +138,49 @@ function NavListMenu() {
     onMouseLeave: () => setIsMenuOpen(false),
   };
 }
-
+ 
+  
+ 
 // nav list component
 const navListItems = [
   {
     label: "Eventos",
-    mobilelabel: 'Todos',
   },
   {
     label: "Mis tickets",
-    mobilelabel: 'Cine',
   },
-  {
-    label: "",
-    mobilelabel: 'Conciertos',
-  },
-  {
-    label: "",
-    mobilelabel: 'Obras de teatro',
-  },
-  {
-    label: "",
-    mobilelabel: 'Deportes',
-  },
-  
 ];
+ 
+function NavList() {
+  const navigate = useNavigate();
+  
+  const navListHandler = (label) => {
+    if (label === "Eventos") {
+      navigate("/events");
+    } else if (label === "Mis tickets") {
+      navigate("/mytickets");
+    }
+  };
 
-function NavList({ selectedCategory, setSelectedCategory  }) {
-  const [isMobileNavVisible, setMobileNavVisible] = useState(false);
-
-  // Oculta la barra de navegación móvil cuando la ventana es lo suficientemente grande.
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setMobileNavVisible(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Limpiar el listener cuando el componente se desmonta.
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-    }, []);
-
-    const handleCategoryClick = (category) => {
-      setSelectedCategory(category);
-      setMobileNavVisible(false); // Cierra la barra de navegación móvil cuando se selecciona una categoría
-    };
 
   return (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       <NavListMenu />
-      {navListItems.map(({ label,mobilelabel}, key) => (
+      {navListItems.map(({ label}, key) => (
         <Typography
           key={label}
           as="a"
           href="#"
           variant="lg"
           color="white"
-          className="font-normal "
+          className="font-normal"
         >
-          {label !== "" &&
           <MenuItem 
-          className="hidden mobi sm:inline-block hover:bg-Orange hover:text-black active:bg-Orange active:text-black items-center gap-2 lg:rounded-full"
-          style={{ fontFamily: "PoppinsLight" } }
-          >
+          onClick={() => navListHandler(label)}
+          className="flex items-center gap-2 lg:rounded-full">
             {label}
           </MenuItem>
-            }
-          <MenuItem 
-          className="sm:hidden PC-1920*1080:hidden PC-1600*900:hidden PC-1366*768:hidden inline-block hover:bg-Orange hover:text-black active:bg-Orange active:text-black items-center gap-2 lg:rounded-full"
-          style={{ fontFamily: "PoppinsLight" } }
-          onClick={() => handleCategoryClick(mobilelabel)}>
-            {mobilelabel}
-          </MenuItem>
-        </Typography>        
+        </Typography>
       ))}
     </ul>
   );
@@ -207,6 +209,13 @@ const EventsPage = () => {
 
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+
+
+  const navigate = useNavigate();
+
+  const viewBuyTicketsHandler = () => {
+    navigate("/buytickets");
+  };
 
   React.useEffect(() => {
     window.addEventListener(
@@ -320,6 +329,7 @@ const EventsPage = () => {
                 src={imgSrc} alt="Imagen de evento"
                 className=" w-40 h-56 object-cover mb-2 rounded"/>
                 <button 
+                onClick={viewBuyTicketsHandler}
                 className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
                 style={ { fontFamily: "PoppinsLight" }}
                 >Comprar boleto

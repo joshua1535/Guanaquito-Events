@@ -147,3 +147,7 @@
     PC-640*480:hidden   
     w-screen h-screen 
 }
+
+.buttonforgotpassword {
+    @apply m-auto
+}

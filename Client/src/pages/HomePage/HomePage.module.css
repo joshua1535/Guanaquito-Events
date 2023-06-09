@@ -12,6 +12,7 @@
     @apply 
     relative
     object-center
+    m-auto
     PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 PC-1920*1080:mt-24
     PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900 PC-1600*900:mt-16
     PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768 PC-1366*768:mt-16
@@ -74,7 +75,7 @@
     absolute
     inset-x-5
     top-1/4
-    PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 
+    PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 PC-1920*1080:top-0
     PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900
     PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768
     PC-1280*720:w-CarouselItemPC-1280*720 PC-1280*720:h-CarouselItemPC-1280*720
@@ -88,7 +89,7 @@
 
 .buttonCarousel{
     @apply bg-transparent border-amber-400 border-2 outline-4 rounded-full text-amber-400 hover:bg-amber-400 hover:text-white font-light
-    PC-1920*1080:h-ButtonCarouselPC-1920*1080 PC-1920*1080:w-ButtonCarouselPC-1920*1080
+    PC-1920*1080:h-ButtonCarouselPC-1920*1080 PC-1920*1080:w-ButtonCarouselPC-1920*1080 PC-1920*1080:my-2
     PC-1600*900:h-ButtonCarouselPC-1600*900 PC-1600*900:w-ButtonCarouselPC-1600*900
     PC-1366*768:h-ButtonCarouselPC-1366*768 PC-1366*768:w-ButtonCarouselPC-1366*768
     PC-1280*720:h-ButtonCarouselPC-1280*720 PC-1280*720:w-ButtonCarouselPC-1280*720

@@ -28,9 +28,7 @@ import {
     ChevronDownIcon,
     Bars2Icon,
   } from "@heroicons/react/24/outline";
-
-  import { PencilIcon } from "@heroicons/react/24/solid";
-import { ArrowDownTrayIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from 'react-router-dom';
 
 const TABLE_HEAD = ["Evento", "Fecha", "Localidad", "Precio", "Total"];
 
@@ -159,7 +157,7 @@ const profileMenuItems = [
       label: "Historial de eventos",
     },
     {
-      label: "Transferir ticket",
+      label: "Mis ordenes",
     },
     {
       label: "Eventos",
@@ -172,7 +170,40 @@ const profileMenuItems = [
   function ProfileMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const closeMenu = () => setIsMenuOpen(false);
-   
+  
+    const navigate = useNavigate();
+    const handleMenu = (label) => {
+      if (label === "Sign Out") {
+        closeMenu();
+        navigate("/");
+        
+      }
+      
+      if (label === "Eventos") {
+        closeMenu();
+        navigate("/events");
+      }
+  
+      if (label === "Mis tickets") {
+        closeMenu();
+        navigate("/mytickets");
+      }
+  
+      if (label === "Historial de eventos") {
+        closeMenu();
+        navigate("/historyevents");
+      }
+  
+      if (label === "Mis ordenes") {
+        closeMenu();
+        navigate("/myorders");
+      }
+  
+  
+    };
+  
+    
+    
     return (
       <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
         <MenuHandler>
@@ -202,7 +233,7 @@ const profileMenuItems = [
             return (
               <MenuItem
                 key={label}
-                onClick={closeMenu}
+                onClick={() => handleMenu(label)}
                 className={`flex items-center gap-2 rounded ${
                   isLastItem
                     ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -234,7 +265,7 @@ const profileMenuItems = [
       onMouseEnter: () => setIsMenuOpen(true),
       onMouseLeave: () => setIsMenuOpen(false),
     };
-    }
+  }
    
     
    
@@ -248,7 +279,23 @@ const profileMenuItems = [
     },
   ];
    
- function NavList() {
+  
+  
+    
+  
+  
+  function NavList() {
+    const navigate = useNavigate();
+    
+    const navListHandler = (label) => {
+      if (label === "Eventos") {
+        navigate("/events");
+      } else if (label === "Mis tickets") {
+        navigate("/mytickets");
+      }
+    };
+  
+  
     return (
       <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
         <NavListMenu />
@@ -261,7 +308,9 @@ const profileMenuItems = [
             color="white"
             className="font-normal"
           >
-            <MenuItem className="flex items-center gap-2 lg:rounded-full">
+            <MenuItem 
+            onClick={() => navListHandler(label)}
+            className="flex items-center gap-2 lg:rounded-full">
               {label}
             </MenuItem>
           </Typography>
