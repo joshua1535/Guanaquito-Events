@@ -55,11 +55,11 @@
 
 .usersInEventContainer {
     @apply grid grid-cols-4 gap-4 font-text overflow-y-auto w-5/6 text-white
-    PC-1920*1080:w-fit PC-1920*1080:mx-auto
-    PC-1600*900:w-5/6 PC-1600*900:mx-auto
-    PC-1366*768:w-full PC-1366*768:mx-auto
-    PC-1280*720:w-full PC-1280*720:mx-auto
-    PC-800*600:w-full PC-800*600:mx-auto
+    PC-1920*1080:w-fit PC-1920*1080:mx-auto PC-1920*1080:gap-28
+    PC-1600*900:w-5/6 PC-1600*900:mx-auto PC-1600*900:gap-28
+    PC-1366*768:w-full PC-1366*768:mx-auto PC-1366*768:gap-24
+    PC-1280*720:w-full PC-1280*720:mx-auto PC-1280*720:gap-20
+    PC-800*600:w-full PC-800*600:mx-auto PC-800*600:gap-16
     PC-640*480:w-full PC-640*480:mx-auto PC-640*480:grid-cols-3
     Mobile-390*844:w-5/6 Mobile-390*844:mx-auto Mobile-390*844:grid-cols-2
     Mobile-280:w-full Mobile-280:mx-auto Mobile-280:grid-cols-1

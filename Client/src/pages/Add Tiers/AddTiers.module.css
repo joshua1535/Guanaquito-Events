@@ -1,4 +1,6 @@
 .generalContainer{
+
+    @apply flex flex-col justify-between min-h-screen
 }
 
 .headerContainer{

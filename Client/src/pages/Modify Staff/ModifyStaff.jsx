@@ -22,6 +22,9 @@ import {
     Bars2Icon,
     ArrowLeftIcon
 } from "@heroicons/react/24/outline";
+import { useNavigate } from 'react-router-dom';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+
 
 
 const usersStaff = [
@@ -91,65 +94,42 @@ const usersInEventDefault = [
 ];
         
 
+// profile menu component
 const profileMenuItems = [
   {
-    label: "Mis tickets",
+    label: "Gestionar eventos",
   },
   {
-    label: "Historial de eventos",
-  },
-  {
-    label: "Transferir ticket",
-  },
-  {
-    label: "Eventos",
+    label: "Crear evento",
   },
   {
     label: "Sign Out",
   },
 ];
-
-const navListItems = [
-  {
-    label: "Eventos",
-  },
-  {
-    label: "Mis tickets",
-  },
-];
-
-function NavList() {
-    return (
-        <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-            <NavListMenu />
-            {navListItems.map(({ label }, key) => (
-                <Typography
-                    key={label}
-                    as="a"
-                    href="#"
-                    color="white"
-                    className="font-normal"
-                >
-                    <MenuItem className="flex items-center gap-2 lg:rounded-full">
-                        {label}
-                    </MenuItem>
-                </Typography>
-            ))}
-        </ul>
-    );
-}
-
+ 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
 
+  const navigate = useNavigate();
+
+  const handleMenuClick = (label) => {
+  if (label === "Gestionar eventos") {
+      navigate('/admin-event');
+  } else if (label === "Crear evento") {
+      navigate('/admin-event/createevent');
+  } else if (label === "Sign Out") {
+      navigate('/');
+  }
+  };
+ 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
         <Button
           variant="text"
           color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
+          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 ml-auto"
         >
           <Avatar
             variant="circular"
@@ -172,7 +152,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={ () => handleMenuClick(label)}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -194,26 +174,6 @@ function ProfileMenu() {
   );
 }
 
-function NavListMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-  const triggers = {
-    onMouseEnter: () => setIsMenuOpen(true),
-    onMouseLeave: () => setIsMenuOpen(false),
-  };
-
-  return (
-    <Typography
-      {...triggers}
-      as="a"
-      href="#"
-      color="white"
-      className="font-normal"
-    >
-    </Typography>
-  );
-}
-
 export default function ModifyStaff() {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
@@ -222,7 +182,13 @@ export default function ModifyStaff() {
     const [selectedUser, setSelectedUser] = useState("");
     const [userList, setUserList] = useState([]);
     const [usersInEvent, setUsersInEvent] = useState(usersInEventDefault);
-  
+
+    const navigate = useNavigate();
+
+    const handleBackClick = () => {
+        navigate(-1);
+    }
+
     useEffect(() => {
       window.addEventListener(
         "resize",
@@ -261,37 +227,25 @@ export default function ModifyStaff() {
 
   return (
     <div className={[classes["generalContainer"]]}>
-        <header className={[classes["headerContainer"]]}>
-      <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
-      <div className={[classes["headerTypography"]]}>
-        <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
-        <Typography
-          as="a"
-          href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-        >
-          Guanaco Business
-        </Typography>
-        <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
-          <NavList />
-        </div>
-        <IconButton
-          size="sm"
-          color="blue-gray"
-          variant="text"
-          onClick={toggleIsNavOpen}
-          className="ml-auto mr-2 lg:hidden"
-        >
-          <Bars2Icon className="h-6 w-6" />
-        </IconButton>
-        <ProfileMenu />
+      <header className={[classes["headerContainer"]]}>
+    <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
+    <div className={[classes["headerTypography"]]}>
+      <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
+      <Typography
+        as="a"
+        href="#"
+        className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
+      >
+        Guanaco Business
+      </Typography>
+      
+      <ProfileMenu />
       </div>
-      <Collapse open={isNavOpen} className="overflow-scroll">
-        <NavList />
-      </Collapse>
-    </Navbar>
-      </header>
-      <IconButton size="sm" color="blue-gray" variant="text" className="flex justify-start m-4">
+  </Navbar>
+    </header>
+      <IconButton 
+      onClick={handleBackClick}
+      size="sm" color="blue-gray" variant="text" className="flex justify-start m-4">
                 <ArrowLeftIcon className="h-6 w-6 text-white" />
             </IconButton>
       <div className={[classes["bodyContainer"]]}>
@@ -333,6 +287,41 @@ export default function ModifyStaff() {
           </div>
     </div>
     </div>
+
+    <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
+
+      <div className='relative mx-auto flex mb-5 items-center text-white'>        
+        <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
+        <Typography
+          as="a"
+          href="#"
+          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
+        >
+          Guanaco Business
+        </Typography>
+      </div>
+      <p className='h-max w-max text-sm text-gray-500'>
+      © 2023 Copyright
+      </p>
+      <div className='flex justify-start content-start'>
+        </div>
+      <div className='flex justify-end content-end'>
+          <FaFacebook
+          className='mr-2 w-8 h-8'
+
+          />
+
+          <FaTwitter
+          className='mr-2 ml-2 w-8 h-8'
+          />
+          <FaInstagram 
+          className='mr-2 ml-2 w-8 h-8'
+          />
+
+      </div>
+
+      </footer>
+
     </div>
   );
 }

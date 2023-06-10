@@ -18,6 +18,8 @@ import {
   ChevronDownIcon,
   Bars2Icon,
 } from "@heroicons/react/24/outline";
+import { useNavigate } from 'react-router-dom';
+
 
 // profile menu component
 const profileMenuItems = [
@@ -28,7 +30,7 @@ const profileMenuItems = [
     label: "Historial de eventos",
   },
   {
-    label: "Transferir ticket",
+    label: "Mis ordenes",
   },
   {
     label: "Eventos",
@@ -37,13 +39,44 @@ const profileMenuItems = [
     label: "Sign Out",
   },
 ];
-
-
  
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
- 
+
+  const navigate = useNavigate();
+  const handleMenu = (label) => {
+    if (label === "Sign Out") {
+      closeMenu();
+      navigate("/");
+      
+    }
+    
+    if (label === "Eventos") {
+      closeMenu();
+      navigate("/events");
+    }
+
+    if (label === "Mis tickets") {
+      closeMenu();
+      navigate("/mytickets");
+    }
+
+    if (label === "Historial de eventos") {
+      closeMenu();
+      navigate("/historyevents");
+    }
+
+    if (label === "Mis ordenes") {
+      closeMenu();
+      navigate("/myorders");
+    }
+
+
+  };
+
+  
+  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -73,7 +106,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={() => handleMenu(label)}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -82,6 +115,7 @@ function ProfileMenu() {
             >
               <Typography
                 as="span"
+                variant="lg"
                 className="font-normal"
                 color={isLastItem ? "red" : "inherit"}
               >
@@ -104,7 +138,7 @@ function NavListMenu() {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
-  }
+}
  
   
  
@@ -118,7 +152,23 @@ const navListItems = [
   },
 ];
  
+
+
+  
+
+
 function NavList() {
+  const navigate = useNavigate();
+  
+  const navListHandler = (label) => {
+    if (label === "Eventos") {
+      navigate("/events");
+    } else if (label === "Mis tickets") {
+      navigate("/mytickets");
+    }
+  };
+
+
   return (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       <NavListMenu />
@@ -127,10 +177,13 @@ function NavList() {
           key={label}
           as="a"
           href="#"
+          variant="lg"
           color="white"
           className="font-normal"
         >
-          <MenuItem className="flex items-center gap-2 lg:rounded-full">
+          <MenuItem 
+          onClick={() => navListHandler(label)}
+          className="flex items-center gap-2 lg:rounded-full">
             {label}
           </MenuItem>
         </Typography>
@@ -209,6 +262,28 @@ const Tickets = [
 
 const MyEvents = () => {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [activeButton, setActiveButton] = useState(1);
+
+  const [showDetails, setShowDetails] = useState(false);
+
+
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    setShowDetails(true);
+  };
+
+  const handleButtonClick2 = () => {
+    setShowDetails(false);
+  };
+  
+
+  const handleBackButton = () => {
+    navigate(-1);
+  };
+
+  const handleBuyButton = () => {
+    navigate("/mytickets");
+  };
 
 
   const [isNavOpen, setIsNavOpen] = React.useState(false);
@@ -223,14 +298,15 @@ const MyEvents = () => {
 
   return (
     <>
-      <header className={[classes["headerContainer"]]}>
+        <header className={[classes["headerContainer"]]}>
         <Navbar  className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
         <div className={[classes["headerTypography"]]}>
-        <img src={logo} alt="logo" className=" h-12 w-12 mx-4" />
+        <img src={logo} alt="logo" className="hidden sm:inline-block h-12 w-12 mx-4" />
         <Typography
           as="a"
           href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
+          className="mr-4 text-xl hidden sm:inline-block  cursor-pointer py-1.5 font-medium text-white"
+          style={{ fontFamily: "PoppinsLight" } }
         >
           Guanaco Business
         </Typography>
@@ -249,8 +325,9 @@ const MyEvents = () => {
         <ProfileMenu />
       </div>
       <MobileNav open={isNavOpen} className="overflow-scroll">
-        <NavList selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+        <NavList />
       </MobileNav>
+
       </Navbar>
     </header>
       <div className="flex  flex-col sm:flex-col h-screen ">
@@ -358,14 +435,13 @@ const MyEvents = () => {
                 ">
                 {ticket.location}
               </Typography>
-            </div>
-
+            </div>           
               </div>
-            ))}
+            ))}                       
           </div>
         </div>
-      </div>
-    </>
+      </div>      
+    </>    
   );
 };
 

@@ -37,7 +37,7 @@ public class Order {
     @JoinColumn(name = "user_buyer_code", nullable = false)
     private User userBuyer;
 
-    @Column(name = "purchase_time", nullable = false)
+    @Column(name = "purchase_date", nullable = false)
     private Date purchaseDate;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)

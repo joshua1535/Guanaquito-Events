@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import {
   Carousel,
   Navbar,
-  MobileNav,
+  Collapse,
   Typography,
   Button,
   Menu,
@@ -25,6 +25,8 @@ import {
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useNavigate } from 'react-router-dom';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const listEvents = [
   {
@@ -209,7 +211,7 @@ const profileMenuItems = [
     label: "Historial de eventos",
   },
   {
-    label: "Transferir ticket",
+    label: "Mis ordenes",
   },
   {
     label: "Eventos",
@@ -222,7 +224,40 @@ const profileMenuItems = [
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
- 
+
+  const navigate = useNavigate();
+  const handleMenu = (label) => {
+    if (label === "Sign Out") {
+      closeMenu();
+      navigate("/");
+      
+    }
+    
+    if (label === "Eventos") {
+      closeMenu();
+      navigate("/events");
+    }
+
+    if (label === "Mis tickets") {
+      closeMenu();
+      navigate("/mytickets");
+    }
+
+    if (label === "Historial de eventos") {
+      closeMenu();
+      navigate("/historyevents");
+    }
+
+    if (label === "Mis ordenes") {
+      closeMenu();
+      navigate("/myorders");
+    }
+
+
+  };
+
+  
+  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -252,7 +287,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={() => handleMenu(label)}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -298,7 +333,23 @@ const navListItems = [
   },
 ];
  
+
+
+  
+
+
 function NavList() {
+  const navigate = useNavigate();
+  
+  const navListHandler = (label) => {
+    if (label === "Eventos") {
+      navigate("/events");
+    } else if (label === "Mis tickets") {
+      navigate("/mytickets");
+    }
+  };
+
+
   return (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       <NavListMenu />
@@ -311,7 +362,9 @@ function NavList() {
           color="white"
           className="font-normal"
         >
-          <MenuItem className="flex items-center gap-2 lg:rounded-full">
+          <MenuItem 
+          onClick={() => navListHandler(label)}
+          className="flex items-center gap-2 lg:rounded-full">
             {label}
           </MenuItem>
         </Typography>
@@ -325,6 +378,16 @@ export default function HomePage() {
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const [recentEventImages, setRecentEventImages] = React.useState([]);
   const [recentMovieImages, setRecentMovieImages] = React.useState([]);
+
+  const navigate = useNavigate();
+
+  const viewBuyTicketsHandler = () => {
+    navigate("/buytickets");
+  };
+
+  const viewEventsHandler = () => {
+    navigate("/events");
+  };
  
   React.useEffect(() => {
     window.addEventListener(
@@ -372,9 +435,9 @@ export default function HomePage() {
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
-      </MobileNav>
+      </Collapse>
       </Navbar>
     </header>
       <Carousel className={classes["carouselContainer"]}>
@@ -384,7 +447,9 @@ export default function HomePage() {
       <div className={classes["imgBackgroundContainer"]}>
         <div className={classes["buttonContainer"]}>
           <div className="flex gap-2">
-            <button className={classes["buttonCarousel"]}>Tickets</button>
+            <button 
+            onClick={viewBuyTicketsHandler}
+            className={classes["buttonCarousel"]}>Tickets</button>
           </div>
         </div>
       </div>
@@ -404,7 +469,9 @@ export default function HomePage() {
            alt="Cine" className={classes["categoryImage"]} />
 
           {/* Botón "Ver más eventos de esta categoría" */}
-          <button className={classes["viewMoreButton"]}>Ver más</button>
+          <button 
+          onClick={viewEventsHandler}
+          className={classes["viewMoreButton"]}>Ver más</button>
         </div>
 
         <div className={classes["rightColumn"]}>
@@ -477,6 +544,39 @@ export default function HomePage() {
 
 </div>
 <SliderCards/>
+          <footer className=" bg-bluefooter text-white mt-5 py-4 px-6 text-center">
+
+          <div className='relative mx-auto flex mb-5 items-center text-white'>        
+            <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
+            <Typography
+              as="a"
+              href="#"
+              className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
+            >
+              Guanaco Business
+            </Typography>
+          </div>
+          <p className='h-max w-max text-sm text-gray-500'>
+          © 2023 Copyright
+          </p>
+          <div className='flex justify-start content-start'>
+            </div>
+          <div className='flex justify-end content-end'>
+              <FaFacebook
+              className='mr-2 w-8 h-8'
+
+               />
+
+              <FaTwitter
+              className='mr-2 ml-2 w-8 h-8'
+              />
+              <FaInstagram 
+              className='mr-2 ml-2 w-8 h-8'
+              />
+
+          </div>
+
+          </footer>
 </div>
       );
       

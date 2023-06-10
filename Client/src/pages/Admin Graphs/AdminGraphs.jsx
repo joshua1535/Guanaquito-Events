@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './AdminEvents.module.css';
+import './AdminGraphs.module.css';
 import logo from '../../assets/logo.png';
-import classes from './AdminEvents.module.css';
+import classes from './AdminGraphs.module.css';
 import {
   Navbar,
   MobileNav,
@@ -28,7 +28,7 @@ const profileMenuItems = [
     label: "Gestionar eventos",
   },
   {
-    label: "Crear evento",
+    label: "Validar QR",
   },
   {
     label: "Sign Out",
@@ -43,9 +43,9 @@ function ProfileMenu() {
 
   const handleMenuClick = (label) => {
   if (label === "Gestionar eventos") {
-      navigate('/admin-event');
-  } else if (label === "Crear evento") {
-      navigate('/admin-event/createevent');
+      navigate('/admin-graphs');
+  } else if (label === "Validar QR") {
+      navigate('/admin-scanner');
   } else if (label === "Sign Out") {
       navigate('/');
   }
@@ -107,7 +107,7 @@ function ProfileMenu() {
 
 
 
-const AdminEvents = () => {
+const AdminGraphs = () => {
   const categories = ["Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
   const [selectedCategory, setSelectedCategory] = useState('Todos');
 
@@ -128,13 +128,14 @@ const AdminEvents = () => {
 
   const navigate = useNavigate();
 
-  const createEventClick = () => {
-    navigate('/admin-event/createevent');
+
+  const viewGraphHandler = () => {
+    navigate('/admin-graphs/graph');
   }
 
-  const editEventClick = () => {
-    navigate('/admin-event/eventpermit');
-  }
+    const viewScannerHandler = () => {
+    navigate('/admin-scanner');
+    }
 
   React.useEffect(() => {
     window.addEventListener(
@@ -144,7 +145,7 @@ const AdminEvents = () => {
   }, []);
 
   useEffect(() => {
-    document.title = "Admin Events";
+    document.title = "Admin Graphs";
 }, []);
 
   return (
@@ -166,19 +167,10 @@ const AdminEvents = () => {
         </div>
     </Navbar>
       </header>
-      <div className="flex sm:justify-center flex-col sm:flex-row h-max">
+      <div className="flex sm:justify-center flex-col sm:flex-row h-screen bg-dark-blue">
 
-      <div className=" h-max p-4 ">
+      <div className=" h-max bg-dark-blue pt-4 ">
             <div className="flex flex-col md:flex-row m-0 px-4  w-full md:w-full justify-center items-center">
-              <div className='mb-4 md:mb-0'>
-                  <button
-                    onClick={createEventClick}
-                    style={ { fontFamily: "Poppins" }}
-                   className='w-44 h-10 px-8 mr-0 md:mr-4 rounded-lg text-white bg-Orange'>
-                      Crear evento
-                  </button>
-              </div>
-
               <div className='w-full'>
                   <input 
                       placeholder='Buscar eventos Ej. Super Mario Bros' 
@@ -191,29 +183,34 @@ const AdminEvents = () => {
           PC-1920*1080:space-x-10
           PC-1920*1080:pt-4
           PC-1600*900:space-x-7
-           p-0 flex-wrap sm:space-x-4 justify-center">
+           p-0 flex-wrap  sm:space-x-4 justify-center">
             {images1[selectedCategory].map((imgSrc, index)=> (
               <div className=" p-4 rounded-lg m-2 sm:m-0" key={index}>
                 <img 
                 src={imgSrc} alt="Imagen de evento"
                 className="
+                    m-auto
                   PC-1920*1080:w-56 PC-1920*1080:h-80
                   PC-1600*900:w-48 PC-1600*900:h-72
                  w-40 h-56 object-cover mb-2 rounded"/>
-                <div className="flex justify-center">
+                <div className="flex flex-col justify-center">
                 <button 
-                onClick={editEventClick}
+                onClick={viewGraphHandler}
+                className="border border-Orange  bg-transparent text-Orange px-14 py-2 my-4 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
+                style={ { fontFamily: "PoppinsLight" }}
+                >Ver estadísticas
+                </button>
+                <button 
+                onClick={viewScannerHandler}
                 className="border border-Orange  bg-transparent text-Orange px-14 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
                 style={ { fontFamily: "PoppinsLight" }}
-                >Editar
+                >Validar QR
                 </button>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
-      <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
+          <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
 
         <div className='relative mx-auto flex mb-5 items-center text-white'>        
           <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
@@ -245,10 +242,15 @@ const AdminEvents = () => {
 
         </div>
 
-      </footer>
-    </div>
+        </footer>
+        </div>
+        
+      </div>
+
+      
+</div>
       </>
   );
 };
 
-export default AdminEvents;
+export default AdminGraphs;

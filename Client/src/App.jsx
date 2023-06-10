@@ -18,7 +18,15 @@ import Error404Form from './pages/Error404/Error404Form';
 import AdminUsers from './pages/Admin Users/AdminUsers';
 import EditPermitUsers from './pages/Edit Permit Users/EditPermitUsers';
 import MyTickets from './pages/My Tickets/MyTickets';
+import BuyTicket from './pages/BuyTicketPage/BuyTicketPage';
+import EmailConfirmationFormRegister from './pages/Register/EmailConfirmation/EmailConfirmationForm';
+import PasswordConfirmationForm from './pages/Register/PasswordConfirmation/PasswordConfirmationForm';
+import AdminEvents from './pages/Admin Events/AdminEvents';
+import EventsPermit from './pages/Event Permits/EventPermits';
+import AdminGraphs from './pages/Admin Graphs/AdminGraphs';
+import StatsPage from './pages/Stats/Stats';
 import MyEvents from './pages/My Events/MyEvents';
+
 
 function App() {
   return (
@@ -27,21 +35,31 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/emailconfirmation" element={<EmailConfirmationForm />} />
+          <Route path="/emailregister" element={<EmailConfirmationFormRegister />} />
+          <Route path="/passwordconfirmation" element={<PasswordConfirmationForm />} />
           <Route path="/updatepassword" element={<UpdatePasswordForm />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/myorders" element={<MyOrders />} />
           <Route path="/mytickets" element={<MyTickets />} />
-          <Route path="/createevent" element={<CreateEvent />} />
-          <Route path="/addtiers" element={<AddTiers />} />
-          <Route path="/modifyevent" element={<ModifyEvent />} />
+          <Route path="/buytickets" element={<BuyTicket />} />
+          <Route path="/admin-event/createevent" element={<CreateEvent />} />
+          <Route path="/admin-event/modifyevent" element={<ModifyEvent />} />
+          <Route path="/admin-event/addtiers" element={<AddTiers />} />
+          <Route path="/admin-event/" element={<AdminEvents />} />
+          <Route path="/admin-event/modifyevent/addtier" element={<AddTiers />} />
+          <Route path="/admin-event/eventpermit" element={<EventsPermit />} />
+          <Route path="/admin-event/modifystaff" element={<ModifyStaff />} />
           <Route path="/qr" element={<QRPage />} />
-          <Route path="/transferticket" element={<TransferTicket />} />
-          <Route path="/modifystaff" element={<ModifyStaff />} />
+          <Route path="/transferticket" element={<TransferTicket />} />  
           <Route path="/ticketvalidation" element={<TicketValidationPage />} />
           <Route path="/admin-users" element={<AdminUsers />} />
+          <Route path="/admin-users/permits-user" element={<EditPermitUsers />} />
+          <Route path="/admin-graphs" element={<AdminGraphs />} />
+          <Route path="/admin-scanner" element={<TicketValidationPage />} />
+          <Route path="/admin-graphs/graph" element={<StatsPage/>} />
+          <Route path="/historyevents" element={<MyEvents />} />
           <Route path="/permits-user" element={<EditPermitUsers />} />
-          <Route path="/myevents" element={<MyEvents />} />
           <Route path="*" element={<Error404Form />} />
         </Routes>
       </Router>

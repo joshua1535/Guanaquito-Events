@@ -2,9 +2,27 @@ import logo from '../../assets/logo.png';
 import './LoginForm.module.css';
 import classes from './LoginForm.module.css';
 import imgtemplate from '../../assets/loginimg.png';
+import { useNavigate } from 'react-router-dom';
 
 
 const LoginForm = () => {
+
+    const navigate = useNavigate();
+
+    const signinHandler = () => {
+        navigate('/home');
+    };
+
+    const forgotpasswordHandler = () => {
+        navigate('/emailconfirmation');
+    };
+
+    const registerHandler = () => {
+        navigate('/emailregister');
+    };
+
+
+    
     return (
         <div className={classes["generalContainer"]}>
             <div className={classes["inputsContainer"]} >
@@ -21,17 +39,25 @@ const LoginForm = () => {
                 <div className={classes["inputOptionsContainer"]}>
                     <input type="checkbox" class="form-checkbox"/>
                     <p className={classes["rememberMeTitle"]} >Recuerdame</p>
+                    <button
+                    onClick={forgotpasswordHandler}              
+                    className={classes["buttonforgotpassword"]} >
                     <p className={classes["forgotpassword"]} > ¿Olvidaste tu contraseña?</p>
+                    </button>
                 </div>
             </div>
 
            <div className={classes["loginContainer"]}>
 
-           <button className={classes["buttonlogin"]}>
+           <button 
+            onClick={signinHandler}
+           className={classes["buttonlogin"]}>
                 Iniciar sesión
             </button>            
 
-            <button className={classes["buttonlogingoogle"]}>
+            <button 
+            onClick={registerHandler}
+            className={classes["buttonlogingoogle"]}>
                 <img className={classes["imgbuttonlogingoogle"]} src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"/>
                 <span>Iniciar sesion con Google</span>
             </button>
