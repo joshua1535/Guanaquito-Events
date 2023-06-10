@@ -32,7 +32,7 @@ public class Tier {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID code;
 
-    @Column(name = "name")
+    @Column(name = "tier_name")
     private String name;
 
     @Column(name = "price")
