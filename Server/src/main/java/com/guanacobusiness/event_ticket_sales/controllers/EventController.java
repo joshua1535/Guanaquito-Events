@@ -1,19 +1,24 @@
 package com.guanacobusiness.event_ticket_sales.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
@@ -26,6 +31,8 @@ import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/event")
@@ -162,14 +169,15 @@ public class EventController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> saveEvent(@RequestBody SaveEventDTO info ) {
-        Category category = categoryService.findCategoryByCode(info.getCategoryCode());
-
-        if (category == null) {
-            return new ResponseEntity<>("Category Not Found",HttpStatus.NOT_FOUND);
-        }
-
+    public ResponseEntity<?> saveEvent(@Valid @RequestBody SaveEventDTO info ) {
         try {
+            Category category = categoryService.findCategoryByCode(info.getCategoryCode());
+
+            if (category == null) {
+                return new ResponseEntity<>("Category Not Found",HttpStatus.NOT_FOUND);
+            }
+            System.out.println(info);
+            System.out.println(category);
             eventService.save(info, category);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
@@ -178,30 +186,11 @@ public class EventController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<?> updateEvent(@RequestBody UpdateEventDTO info) {
+    public ResponseEntity<?> updateEvent(@Valid @RequestBody UpdateEventDTO info) {
         try {
             boolean updated = eventService.update(info);
             if (updated) {
-                return new ResponseEntity<>(HttpStatus.OK);
-            }
-            return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/{code}")
-    public ResponseEntity<?> deleteEvent(@PathVariable(name = "code") String code) {
-        UUID uuid = stringToUUID.convert(code);
-
-        if (uuid == null) {
-            return new ResponseEntity<>("Invalid Code",HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-            boolean deleted = eventService.delete(uuid);
-            if (deleted) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>("Event updated successfully",HttpStatus.OK);
             }
             return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -220,7 +209,7 @@ public class EventController {
         try {
             boolean changed = eventService.changeEventStatus(uuid);
             if (changed) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>("Event Status Changed",HttpStatus.OK);
             }
             return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -228,5 +217,16 @@ public class EventController {
         }
     }
 
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+    MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 }

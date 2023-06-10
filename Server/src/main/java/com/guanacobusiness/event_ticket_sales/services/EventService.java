@@ -17,6 +17,5 @@ public interface EventService {
     Event findEventByCode(UUID code);
     void save(SaveEventDTO info, Category category) throws Exception;
     boolean update(UpdateEventDTO info) throws Exception;
-    boolean delete(UUID code) throws Exception;
     boolean changeEventStatus(UUID code) throws Exception;
 }

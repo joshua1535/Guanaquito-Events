@@ -1,8 +1,6 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
 import java.time.LocalDate;
-import java.util.Date;
-//import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,24 +53,19 @@ public class EventServiceImpl implements EventService{
     @Override
     public List<Event> findAllCurrentEvents() {
         LocalDate currentDate = LocalDate.now();
-        Date date = java.sql.Date.valueOf(currentDate);
 
         List<Event> eventList = eventRepository.findAll();
 
-        return eventList.stream()
-        .filter(event -> (event.getDate().equals(date) || event.getDate().after(date)))
-        .collect(Collectors.toList());
+        return eventList.stream().filter(event -> event.getDate().equals(currentDate) || event.getDate().isAfter(currentDate)).collect(Collectors.toList());
     }
 
     @Override
     public List<Event> findAllArchivedEvents() {
         LocalDate currentDate = LocalDate.now();
-        Date date = java.sql.Date.valueOf(currentDate);
 
         List<Event> eventList = eventRepository.findAll();
 
-        return eventList.stream().filter(event -> event.getDate().before(date)).collect(Collectors.toList());
-        //return eventRepository.findEventsByEventDateBefore(currentDate);
+        return eventList.stream().filter(event -> event.getDate().isBefore(currentDate)).collect(Collectors.toList());
     }
 
     @Override
@@ -83,18 +76,22 @@ public class EventServiceImpl implements EventService{
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void save(SaveEventDTO info, Category category) throws Exception {
-        Event newEvent = new Event(
-            info.getTitle(),
-            info.getInvolvedPeople(),
-            info.getImage(),
-            info.getDate(),
-            info.getTime(),
-            info.getDuration(),
-            info.getSponsors(),
-            true,
-            category
-        );
+        System.out.println(info);
+        System.out.println(category + " " + category.getCode());
+        Event newEvent = new Event();
+        newEvent.setTitle(info.getTitle());
+        newEvent.setInvolvedPeople(info.getInvolvedPeople());
+        newEvent.setImage(info.getImage());
+        newEvent.setDate(info.getDate());
+        newEvent.setTime(info.getTime());
+        newEvent.setDuration(info.getDuration());
+        newEvent.setSponsors(info.getSponsors());
+        newEvent.setActive(true);
+        newEvent.setCategory(category);
 
+        System.out.println(newEvent);
+        System.out.println(newEvent.getCategory());
+        System.out.println(newEvent);
         eventRepository.save(newEvent);   
     }
 
@@ -130,19 +127,6 @@ public class EventServiceImpl implements EventService{
         else {updatedEvent.setCategory(eventFound.getCategory());}
 
         eventRepository.save(updatedEvent);
-        return true;
-    }
-
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public boolean delete(UUID code) throws Exception {
-        Event eventFound = eventRepository.findById(code).orElse(null);
-
-        if (eventFound == null) {
-            return false;
-        }
-
-        eventRepository.deleteById(code);
         return true;
     }
 

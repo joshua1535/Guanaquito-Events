@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.models.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "event")
+@Table(name = "event", schema = "public")
 @ToString(exclude = {"userXEvents", "tiers"})
 public class Event {
 
@@ -37,17 +38,18 @@ public class Event {
     @Column(name = "event_title")
     private String title;
 
-    @Column(name = "invloved_people")
+    @Column(name = "involved_people")
     private String involvedPeople;
 
     @Column(name = "event_image")
     private String image;
 
     @Column(name = "event_date")
-    private Date date;
+    private LocalDate date;
+    //private Date date;
 
     @Column(name = "event_time")
-    private java.sql.Time time;
+    private LocalTime time;
 
     @Column(name = "duration")
     private Integer duration;
@@ -70,7 +72,7 @@ public class Event {
     @JoinColumn(name = "category_code")
     private Category category;
 
-    public Event(String title, String involvedPeople, String image, Date date, java.sql.Time time, Integer duration,
+    public Event(String title, String involvedPeople, String image, LocalDate date, LocalTime time, Integer duration,
             String sponsors, Boolean active, Category category) {
         super();
         this.title = title;

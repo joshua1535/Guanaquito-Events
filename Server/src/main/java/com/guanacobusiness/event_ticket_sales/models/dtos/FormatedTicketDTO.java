@@ -1,7 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.models.dtos;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,10 +19,10 @@ public class FormatedTicketDTO {
     private String eventPicture;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date eventDate;
+    private LocalDate eventDate;
 
     @DateTimeFormat(pattern = "HH:mm")
-    private Time time;
+    private LocalTime time;
 
     private String eventTitle;
 
