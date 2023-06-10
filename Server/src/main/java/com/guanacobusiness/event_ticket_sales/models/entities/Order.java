@@ -25,7 +25,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @ToString(exclude = {"tickets"})
-@Table(name = "order", schema = "public")
+@Table(name = "order",schema = "public")
 public class Order {
 
     @Id

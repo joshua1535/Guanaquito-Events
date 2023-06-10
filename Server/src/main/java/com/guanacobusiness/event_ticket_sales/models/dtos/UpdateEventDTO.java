@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.models.dtos;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,11 +27,10 @@ public class UpdateEventDTO {
     private String image;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @DateTimeFormat(pattern = "HH:mm")
-    private java.sql.Time time;
-    //private LocalTime time;
+    private LocalTime time;
 
     private Integer duration;
 
