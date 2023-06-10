@@ -166,9 +166,9 @@ const AdminEvents = () => {
         </div>
     </Navbar>
       </header>
-      <div className="flex sm:justify-center flex-col sm:flex-row h-max bg-dark-blue">
+      <div className="flex sm:justify-center flex-col sm:flex-row h-max">
 
-      <div className=" h-max bg-dark-blue  p-4">
+      <div className=" h-max p-4 ">
             <div className="flex flex-col md:flex-row m-0 px-4  w-full md:w-full justify-center items-center">
               <div className='mb-4 md:mb-0'>
                   <button
