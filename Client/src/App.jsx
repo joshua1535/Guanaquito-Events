@@ -25,6 +25,7 @@ import AdminEvents from './pages/Admin Events/AdminEvents';
 import EventsPermit from './pages/Event Permits/EventPermits';
 import AdminGraphs from './pages/Admin Graphs/AdminGraphs';
 import StatsPage from './pages/Stats/Stats';
+import MyEvents from './pages/My Events/MyEvents';
 
 
 function App() {
