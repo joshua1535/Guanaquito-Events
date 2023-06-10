@@ -6,4 +6,5 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 
 public interface CategoryRepository extends ListCrudRepository<Category, String> {
     Category findByName(String name);
+    Category findByCodeOrName(String code, String name);
 }

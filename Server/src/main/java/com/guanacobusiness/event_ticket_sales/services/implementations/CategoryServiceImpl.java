@@ -31,14 +31,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public boolean save(SaveCategoryDTO info) throws Exception{
-        Category newCategory = new Category(info.getCode(), info.getName());
-
-        Category categoryFound = categoryRepository.findByName(info.getName());
+        Category categoryFound = categoryRepository.findByCodeOrName(info.getCode(), info.getName());
 
         if (categoryFound != null) {
             return false;
         }
-
+        Category newCategory = new Category(info.getCode(), info.getName());
         categoryRepository.save(newCategory);
         return true;
     }
