@@ -25,7 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "event")
+@Table(name = "event", schema = "public")
 @ToString(exclude = {"userXEvents", "tiers"})
 public class Event {
 
@@ -37,7 +37,7 @@ public class Event {
     @Column(name = "event_title")
     private String title;
 
-    @Column(name = "invloved_people")
+    @Column(name = "involved_people")
     private String involvedPeople;
 
     @Column(name = "event_image")

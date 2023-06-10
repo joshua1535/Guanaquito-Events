@@ -40,14 +40,14 @@ public class TicketServiceImpl implements TicketService{
     @Transactional(rollbackOn = Exception.class)
     public Boolean save(SaveTicketDTO saveTicketDTO) throws Exception {
         
-        User foundUser = userRepository.findByCode(saveTicketDTO.getUserOwner().getCode());
+        User foundUser = userRepository.findByCode(UUID.fromString(saveTicketDTO.getUserOwner()));
 
         if(foundUser == null) {
             return false;
         }
 
         Order foundOrder = foundUser.getOrders().stream()
-            .filter(order -> order.getCode().equals(saveTicketDTO.getOrder().getCode()))
+            .filter(order -> order.getCode().equals(UUID.fromString(saveTicketDTO.getOrder())))
             .findFirst()
             .orElse(null);
 
@@ -55,7 +55,7 @@ public class TicketServiceImpl implements TicketService{
             return false;
         }
 
-        Tier foundTier = tierService.findTierByCode(saveTicketDTO.getTier().getCode());
+        Tier foundTier = tierService.findTierByCode(UUID.fromString(saveTicketDTO.getTier()));
 
         if(foundTier == null) {
             return false;
@@ -64,6 +64,7 @@ public class TicketServiceImpl implements TicketService{
         Ticket ticket = new Ticket(foundOrder, foundTier, foundUser);
 
         ticketRepository.save(ticket);
+    
         return true;
     }
 
