@@ -9,7 +9,7 @@ public interface CategoryService {
     List<Category>findAllCategories();
     Category findCategoryByCode(String id);
     boolean save(SaveCategoryDTO info) throws Exception;
-    boolean update(SaveCategoryDTO info) throws Exception;
+    boolean update(SaveCategoryDTO info, Category category) throws Exception;
     boolean delete(String code) throws Exception;
 
 }
