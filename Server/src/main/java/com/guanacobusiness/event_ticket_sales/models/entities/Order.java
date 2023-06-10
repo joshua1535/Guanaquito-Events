@@ -25,7 +25,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @ToString(exclude = {"tickets"})
-@Table(name = "order")
+@Table(name = "order", schema = "public")
 public class Order {
 
     @Id
@@ -37,7 +37,7 @@ public class Order {
     @JoinColumn(name = "user_buyer_code", nullable = false)
     private User userBuyer;
 
-    @Column(name = "purchase_time", nullable = false)
+    @Column(name = "purchase_date", nullable = false)
     private Date purchaseDate;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
