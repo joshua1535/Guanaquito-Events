@@ -12,6 +12,7 @@ module.exports = withMT({
         "darkless-blue" : "#333F51", 
         "yellowCapas" : "#F59E0B",
         "blueCapas": "#2C3544",
+        "bluefooter":"#262D38",
     },
     width: {
       "1/7": "14.2857143%",

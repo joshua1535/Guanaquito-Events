@@ -19,6 +19,8 @@ import {
   Bars2Icon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+
 
 //profile menu component
 const profileMenuItems = [
@@ -148,6 +150,7 @@ const AdminGraphs = () => {
 
   return (
     <>
+    <div className="flex flex-col justify-between min-h-screen">
         <header className={[classes["headerContainer"]]}>
       <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
       <div className={[classes["headerTypography"]]}>
@@ -166,7 +169,7 @@ const AdminGraphs = () => {
       </header>
       <div className="flex sm:justify-center flex-col sm:flex-row h-screen bg-dark-blue">
 
-      <div className=" h-max bg-dark-blue  p-4">
+      <div className=" h-max bg-dark-blue pt-4 ">
             <div className="flex flex-col md:flex-row m-0 px-4  w-full md:w-full justify-center items-center">
               <div className='w-full'>
                   <input 
@@ -207,8 +210,45 @@ const AdminGraphs = () => {
               </div>
             ))}
           </div>
+          <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
+
+        <div className='relative mx-auto flex mb-5 items-center text-white'>        
+          <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
+          <Typography
+            as="a"
+            href="#"
+            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
+          >
+            Guanaco Business
+          </Typography>
         </div>
+        <p className='h-max w-max text-sm text-gray-500'>
+        © 2023 Copyright
+        </p>
+        <div className='flex justify-start content-start'>
+          </div>
+        <div className='flex justify-end content-end'>
+            <FaFacebook
+            className='mr-2 w-8 h-8'
+
+            />
+
+            <FaTwitter
+            className='mr-2 ml-2 w-8 h-8'
+            />
+            <FaInstagram 
+            className='mr-2 ml-2 w-8 h-8'
+            />
+
+        </div>
+
+        </footer>
+        </div>
+        
       </div>
+
+      
+</div>
       </>
   );
 };
