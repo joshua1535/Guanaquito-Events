@@ -13,6 +13,8 @@ import {
   IconButton,
   Select,
   Option,
+  Dialog,
+  DialogHeader,
 } from "@material-tailwind/react";
 import logo from "../../assets/logo.png";
 import imgtemplate from "../../assets/loginimg.png";
@@ -20,7 +22,8 @@ import classes from "./ModifyStaff.module.css";
 import {
     ChevronDownIcon,
     Bars2Icon,
-    ArrowLeftIcon
+    ArrowLeftIcon,
+    MinusIcon
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
@@ -182,6 +185,7 @@ export default function ModifyStaff() {
     const [selectedUser, setSelectedUser] = useState("");
     const [userList, setUserList] = useState([]);
     const [usersInEvent, setUsersInEvent] = useState(usersInEventDefault);
+    const [alreadyInList, setAlreadyInList] = useState(false);
 
     const navigate = useNavigate();
 
@@ -201,17 +205,26 @@ export default function ModifyStaff() {
     }, []);
   
     const handleAddUser = () => {
+
+        if (userList.includes(selectedUser)) {
+          setAlreadyInList(true);
+          return;
+        }
+
+
         if (selectedUser) {
           const selectedUserObj = usersStaff.find((user) => user.email === selectedUser);
+
           setUserList((cur) => [...cur, selectedUser]);
       
           const newUsersInEvent = [
             ...usersInEvent,
             selectedUserObj
           ];
+
           setUsersInEvent(newUsersInEvent);
         }
-      
+        
         setSelectedUser("");
       
         const newUsers = usersStaff.filter((user) => user.email !== selectedUser);
@@ -224,6 +237,12 @@ export default function ModifyStaff() {
           setFilteredUsers(filteredUsers);
         }
       };
+
+      const handleRemoveUser = (email) => {
+        const newUsersInEvent = usersInEvent.filter((user) => user.email !== email);
+        setUsersInEvent(newUsersInEvent);
+      }
+
 
   return (
     <div className={[classes["generalContainer"]]}>
@@ -270,10 +289,31 @@ export default function ModifyStaff() {
             ))}
           </Select>
           <Button onClick={handleAddUser} className="w-36 bg-green-500 Mobile-280:w-fit"> Agregar </Button>  
+          {alreadyInList && 
+          //Mostrar popup
+          <Dialog open={true} onClose={() => setAlreadyInList(false)} className='Mobile-390*844:w-96 Mobile-280:w-96'>
+        <Dialog.Header className='font-text Mobile-390*844:text-base Mobile-280:text-sm'>
+          Error
+        </Dialog.Header>
+        <Dialog.Body className='font-text Mobile-280:text-sm'>
+          El usuario ya está en la lista de staff.
+        </Dialog.Body>
+        <Dialog.Footer className='font-text'>
+          <Button onClick = {() => setAlreadyInList(false)}>
+            Aceptar
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
+          } 
             </div>
           <div className={classes["usersInEventContainer"]}>
             {usersInEvent.map((user) => (
                 <div key={user.email} className={classes["userInEvent"]}>
+                <IconButton 
+                onClick={() => handleRemoveUser(user.email)}
+                size="sm" color="blue-gray" variant="text" className="flex justify-start m-4">
+                  <MinusIcon className="h-6 w-6 text-red-600" />
+                </IconButton>
                 <Avatar
                     src={user.avatar}
                     alt={user.name}
