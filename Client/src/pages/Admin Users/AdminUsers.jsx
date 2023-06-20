@@ -3,8 +3,6 @@ import {
   Carousel,
   Navbar,
   Collapse,
-  Typography,
-  Button,
   Menu,
   MenuHandler,
   MenuList,
@@ -13,6 +11,18 @@ import {
   IconButton,
   Select,
   Option,
+  Card,
+  CardHeader,
+  Input,
+  Typography,
+  Button,
+  CardBody,
+  Chip,
+  CardFooter,
+  Tabs,
+  TabsHeader,
+  Tab,
+  Tooltip,
 } from "@material-tailwind/react";
 import logo from "../../assets/logo.png";
 import imgtemplate from "../../assets/loginimg.png";
@@ -24,75 +34,208 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 
 
-
-const usersStaff = [
+const users = [
     {
         email: "danyfifitax@gmail.com",
         rol: ["Admin", "Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png",
+        estado: "Activo",
+        fecha: "2021-09-01"
     },
     {
         email: "joshuamontano@gmail.com",
         rol: ["Admin", "Graficas"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png",
+        estado: "Activo",
+        fecha: "2021-09-01"
     },
     {
         email: "jonathanmorales@gmail.com",
         rol: ["Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png",
+        estado: "Activo",
+        fecha: "2021-09-01"
     },
     {
         email: "dasdsadasdx@gmail.com",
         rol: ["Admin", "Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png",
+        estado: "Activo",
+        fecha: "2021-09-01"
     },
     {
         email: "danyfiasdasd12asdax@gmail.com",
         rol: ["Admin", "Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png",
+        estado: "Activo",
+        fecha: "2021-09-01"
     },
     {
         email: "jonathaasdasdasd2s@gmail.com",
         rol: ["Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png",
+        estado: "Activo",
+        fecha: "2021-09-01"
     },
     {
         email: "jonathanm213123dales@gmail.com",
         rol: ["Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png",
+        estado: "Activo",
+        fecha: "2021-09-01"
     },
 ];
 
-const usersInEventDefault = [
-        {
-            email: "jonathanmor215125ales@gmail.com",
-            rol: ["Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
-        },
-        {
-            email: "jonathanmoral616es@gmail.com",
-            rol: ["Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
-        },
-        {
-            email: "danyfifit251515ax@gmail.com",
-            rol: ["Admin", "Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
-        },
-        {
-            email: "danyfifitasdad231ax@gmail.com",
-            rol: ["Admin", "Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
-        },
-        {
-            email: "danyfifita2qwasdax@gmail.com",
-            rol: ["Admin", "Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
-        },
+const TABS = [
+  {
+    label: "Todos",
+    value: "todos",
+  },
+  {
+    label: "Clientes",
+    value: "clientes",
+  },
+  {
+    label: "Empleados",
+    value: "empleados",
+  },
 ];
+ 
+const TABLE_HEAD = ["Usuario", "Roles", "Estado", "Registrado desde", ""];
+ 
+const TABLE_ROWS = users.map((user) => ({
+  email: user.email,
+  rol: user.rol,
+  avatar: user.avatar,
+  estado: user.estado,
+  fecha: user.fecha,
+}));
+
+function UserTable() {
+
+  return (
+    
+    <Card className="flex justify-start w-full rounded-none bg-transparent shadow-none font-text">
+      <CardHeader floated={false} shadow={false} className="rounded-none bg-transparent Mobile-390*844:my-4 Mobile-280:my-4 ">
+        <div className="flex items-center justify-between gap-4  PC-1920*1080:flex-row PC-1600*900:flex-row PC PC-800*600:flex-col 
+        PC-640*480:flex-col Mobile-390*844:flex-col Mobile-280:flex-col bg-transparent">
+          <Tabs value="all" className="w-full md:w-max bg-blue-gray-200 rounded-lg">
+            <TabsHeader className="bg-transparent">
+              {TABS.map(({ label, value }) => (
+                <Tab key={value} value={value} className="Mobile-390*844:text-md Mobile-280:text-xs PC-640*480:text-md PC-800*600:text-md  ">
+                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                </Tab>
+              ))}
+            </TabsHeader>
+          </Tabs>
+          <div className="w-full md:w-72">
+            <Input label="Search" icon={<MagnifyingGlassIcon className="h-5 w-5" />} />
+          </div>
+        </div>
+      </CardHeader>
+      <CardBody className="overflow-auto px-0">
         
+        <table className="mt-4 w-full min-w-max table-auto text-left">
+          <thead>
+            <tr >
+              <th className="p-4 border-y border-blue-gray-100 sticky left-0 Mobile-390*844:w-6 Mobile-280:w-2 PC-640*480:w-14 bg-blue-gray-200 ">
+                <Typography
+                  color="blue-gray"
+                  className="text-base Mobile-390*844:text-sm Mobile-280:text-xs"
+                >
+                  {TABLE_HEAD[0]}
+                </Typography>
+              </th>
+              {TABLE_HEAD.slice(1).map((head) => (
+                <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-200 p-4 text-left">
+                  <Typography
+                    color="blue-gray"
+                    className="text-base Mobile-390*844:text-sm Mobile-280:text-xs"
+                  >
+                    {head}
+                  </Typography>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {TABLE_ROWS.map(({ email, rol, avatar, estado, fecha }) => {
+              const isLast = TABLE_ROWS[TABLE_ROWS.length - 1].email === email;
+              //Si es el primer elemento de la tabla que sea sticky
+              const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50 ";
+              const firstElement = isLast ? "p-4 sticky left-0 Mobile-390*844:w-6 Mobile-280:w-4 PC-640*480:w-14 bg-blueCapas Mobile-280:p-0" 
+              :"p-4 border-b border-blue-gray-50 sticky left-0 Mobile-390*844:w-6 Mobile-280:w-4 PC-640*480:w-14 bg-blueCapas Mobile-280:p-0"
+
+              return (
+                <tr key={email}>
+                  <td className={firstElement}>
+                    <div className="flex items-center gap-3 Mobile-390*844:gap-0 Mobile-280:gap-0 break-words ">
+                      <Avatar src={avatar} alt={email} size="md" className="Mobile-390*844:hidden Mobile-280:hidden" />
+                      <div className="flex flex-col">
+                        <Typography className="text-white text-base Mobile-390*844:text-xs Mobile-280:text-xs PC-640*480:text-sm">
+                          {email}
+                        </Typography>
+                      </div>
+                    </div>
+                  </td>
+                  <td className={classes}>
+                    <div className="flex items-center gap-2">
+                      {rol.map((rol) => (
+                        <p key={rol} className="bg-blue-gray-100 text-black rounded-full px-3 py-2 text-xs">
+                          {rol}
+                        </p>
+                      ))}
+                    </div>
+                  </td>
+                  <td className={classes}>
+                    <div className="w-max">
+                      <Chip
+                        variant="gradient"
+                        size="sm"
+                        value={estado === "Activo" ? "online" : "offline"}
+                        color={estado === "Activo" ? "green" : "blue-gray"}
+                        className="static"
+                      />
+                    </div>
+                  </td>
+                  <td className={classes}>
+                    <Typography variant="small" color="white" className="font-normal">
+                      {fecha}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Tooltip content="Edit User">
+                      <IconButton variant="text" className="text-yellowCapas">
+                        <PencilIcon className="h-6 w-6" />
+                      </IconButton>
+                    </Tooltip>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </CardBody>
+      <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+        <Typography variant="small" color="white" className="font-normal">
+          Pagina 1
+        </Typography>
+        <div className="flex gap-2">
+          <Button variant="outlined" color="white" size="sm">
+            Anterior
+          </Button>
+          <Button variant="outlined" color="white" size="sm">
+            Siguiente
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
 
 //profile menu component
 const profileMenuItems = [
@@ -172,10 +315,8 @@ export default function AdminUsers() {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const [searchValue, setSearchValue] = useState("");
-    const [filteredUsers, setFilteredUsers] = useState(usersStaff);
     const [selectedUser, setSelectedUser] = useState("");
     const [userList, setUserList] = useState([]);
-    const [usersInEvent, setUsersInEvent] = useState(usersInEventDefault);
 
     const navigate = useNavigate();
 
@@ -196,30 +337,6 @@ export default function AdminUsers() {
       document.title = "Admin Users";
     }, []);
   
-    const handleAddUser = () => {
-        if (selectedUser) {
-          const selectedUserObj = usersStaff.find((user) => user.email === selectedUser);
-          setUserList((cur) => [...cur, selectedUser]);
-      
-          const newUsersInEvent = [
-            ...usersInEvent,
-            selectedUserObj
-          ];
-          setUsersInEvent(newUsersInEvent);
-        }
-      
-        setSelectedUser("");
-      
-        const newUsers = usersStaff.filter((user) => user.email !== selectedUser);
-        setFilteredUsers(newUsers);
-      
-        if (searchValue) {
-          const filteredUsers = newUsers.filter((user) =>
-            user.email.includes(searchValue)
-          );
-          setFilteredUsers(filteredUsers);
-        }
-      };
 
   return (
     <div className={[classes["generalContainer"]]}>
@@ -240,24 +357,14 @@ export default function AdminUsers() {
         </Navbar>
         </header>
       <div className={[classes["bodyContainer"]]}>
-      <h1 className={[classes["title"]]}>Administrar usuarios</h1>
-        <div className={[classes["staffContainer"]]}>
-            <div className={[classes["staffAddContainer"]]}>
-        <Select
-            value={selectedUser}
-            onChange={(value) => setSelectedUser(value)}
-            className="mb-4 bg-white Mobile-280:w-full"
-                >
-            {filteredUsers.map((user) => (
-              <Option key={user.email} value={user.email}>
-                {user.email}
-              </Option>
-            ))}
-          </Select>
-          <Button onClick={handleAddUser} className="w-32 bg-green-500 Mobile-280:w-fit"> Agregar </Button>  
-            </div>
-          <div className={classes["usersInEventContainer"]}>
-            {usersInEvent.map((user) => (
+        <div className={[classes["titleContainer"]]}>
+          <Typography variant="h1" className={[classes["title"]]}>
+            Administrar usuarios
+          </Typography>
+        </div>
+          <UserTable/>
+         {/*  <div className={classes["usersInEventContainer"]}>
+            {users.map((user) => (
                 <div key={user.email} className={classes["userInEvent"]}>
                 <Avatar
                     src={user.avatar}
@@ -277,43 +384,8 @@ export default function AdminUsers() {
               </div>
                 </div>
             ))}
-          </div>
+          </div> */}
     </div>
-    </div>
-
-    <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
-
-      <div className='relative mx-auto flex mb-5 items-center text-white'>        
-        <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
-        <Typography
-          as="a"
-          href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-        >
-          Guanaco Business
-        </Typography>
-      </div>
-      <p className='h-max w-max text-sm text-gray-500'>
-      © 2023 Copyright
-      </p>
-      <div className='flex justify-start content-start'>
-        </div>
-      <div className='flex justify-end content-end'>
-          <FaFacebook
-          className='mr-2 w-8 h-8'
-
-          />
-
-          <FaTwitter
-          className='mr-2 ml-2 w-8 h-8'
-          />
-          <FaInstagram 
-          className='mr-2 ml-2 w-8 h-8'
-          />
-
-      </div>
-
-    </footer>
     </div>
   );
 }
