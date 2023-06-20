@@ -1,4 +1,6 @@
 .generalContainer{
+
+    @apply flex flex-col min-h-screen
 }
 
 .headerContainer{
@@ -11,7 +13,7 @@
 
 .bodyContainer {
     @apply grid grid-cols-2
-    PC-1920*1080:grid-cols-2
+    PC-1920*1080:flex PC-1920*1080:flex-grow PC-1920*1080:-mt-80 PC-1920*1080:items-center PC-1920*1080:justify-center
     PC-1600*900:grid-cols-2
     PC-1366*768:grid-cols-2
     PC-1280*720:grid-cols-2
@@ -19,6 +21,7 @@
     PC-640*480:grid-cols-1
     Mobile-390*844:grid-cols-1
     Mobile-280:grid-cols-1
+    
 }	
 
 .infoEventContainer {
@@ -41,10 +44,10 @@
 
 .eventTitle {
     @apply font-text text-white
-    PC-1920*1080:text-5xl
-    PC-1600*900:text-5xl 
-    PC-1366*768:text-4xl
-    PC-1280*720:text-3xl
+    PC-1920*1080:text-3xl
+    PC-1600*900:text-3xl 
+    PC-1366*768:text-3xl
+    PC-1280*720:text-2.5xl
     PC-800*600:text-3xl
     PC-640*480:text-xl
     Mobile-390*844:text-lg
@@ -55,9 +58,9 @@
 .title1 {
     @apply text-center text-white font-text
 
-    PC-1920*1080:text-3xl
-    PC-1600*900:text-3xl 
-    PC-1366*768:text-3xl
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl 
+    PC-1366*768:text-2xl
     PC-1280*720:text-2xl
     PC-800*600:text-xl
     PC-640*480:text-base
@@ -68,9 +71,9 @@
 .title2 {
     @apply text-center text-orange-500 font-text ml-2
 
-    PC-1920*1080:text-3xl
-    PC-1600*900:text-3xl 
-    PC-1366*768:text-3xl
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl 
+    PC-1366*768:text-2xl
     PC-1280*720:text-2xl
     PC-800*600:text-xl
     PC-640*480:text-base
@@ -80,14 +83,14 @@
 
 
 .imgContainer {
-    @apply flex flex-col items-center my-10 gap-4 font-text
+    @apply flex flex-col items-center  gap-4 font-text
     
 }
 
 
 .imgEvent {
     @apply h-2/3 w-2/3 rounded-md object-cover shadow-md
-    PC-1920*1080:h-CardGeneralImgPC-1920*1080 PC-1920*1080:w-CardGeneralImgPC-1920*1080
+    PC-1920*1080:h-CardGeneralImgPC-1920*1080 PC-1920*1080:w-CardGeneralImgPC-1920*1080 PC-1920*1080:me-52
     PC-1600*900:h-CardGeneralImgPC-1600*900 PC-1600*900:w-CardGeneralImgPC-1600*900
     PC-1366*768:h-CardGeneralImgPC-1366*768 PC-1366*768:w-CardGeneralImgPC-1366*768
     PC-1280*720:h-CardGeneralImgPC-1280*720 PC-1280*720:w-CardGeneralImgPC-1280*720
@@ -106,7 +109,7 @@
 }
 
 .buttonmodifyContainer {
-    @apply flex flex-row justify-start h-auto w-fit my-10 gap-4 p-4 font-text rounded-md bg-yellowCapas
+    @apply flex flex-row justify-start h-fit w-fit my-10 gap-4 p-4 font-text rounded-md bg-yellowCapas
     PC-800*600:my-0
     PC-640*480:my-0
     Mobile-390*844:my-0
@@ -115,10 +118,10 @@
 
 .modifyEventButton {
     @apply 
-    PC-1920*1080:text-2xl
-    PC-1600*900:text-2xl
+    PC-1920*1080:text-xl
+    PC-1600*900:text-xl
     PC-1366*768:text-xl
-    PC-1280*720:text-lg
+    PC-1280*720:text-sm
     PC-800*600:text-base
     PC-640*480:text-base
     Mobile-390*844:text-sm
@@ -127,10 +130,10 @@
 
 .buttonmodifyStaffContainer {
     @apply flex flex-row justify-start h-auto w-fit p-4 my-10 gap-4 font-text rounded-md bg-blue-500
-    PC-1920*1080:text-2xl
-    PC-1600*900:text-2xl
+    PC-1920*1080:text-xl
+    PC-1600*900:text-xl
     PC-1366*768:text-xl
-    PC-1280*720:text-lg
+    PC-1280*720:text-sm
     PC-800*600:text-base
     PC-640*480:text-base
     Mobile-390*844:text-sm
@@ -143,10 +146,10 @@
 
 .buttonDisableContainer {
     @apply flex flex-row justify-start h-auto w-fit gap-4 p-4 font-text text-white bg-red-500 rounded-md my-4 
-    PC-1920*1080:text-2xl
-    PC-1600*900:text-2xl
+    PC-1920*1080:text-xl
+    PC-1600*900:text-xl
     PC-1366*768:text-xl
-    PC-1280*720:text-lg
+    PC-1280*720:text-sm
     PC-800*600:text-base PC-800*600:my-4 PC-800*600:w-fit
     PC-640*480:text-base PC-640*480:w-full
     Mobile-390*844:text-sm Mobile-390*844:w-full

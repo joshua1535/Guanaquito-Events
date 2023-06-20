@@ -171,6 +171,7 @@ export default function EventsPermit() {
       size="sm" color="blue-gray" variant="text" className="flex justify-start m-4">
                 <ArrowLeftIcon className="h-6 w-6 text-white" />
             </IconButton>
+            <div className="flex flex-col min-h-screen"> 
         <div className={[classes["bodyContainer"]]}>
             <div className={[classes["imgContainer"]]}>
             <img src="https://www.coldplay.com/wp/wp-content/uploads/2023/05/cannot-wait.jpg"
@@ -218,6 +219,7 @@ export default function EventsPermit() {
             </div>
             
             </div>
+        </div>
           <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
 
             <div className='relative mx-auto flex mb-5 items-center text-white'>        
