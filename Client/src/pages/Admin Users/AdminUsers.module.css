@@ -10,86 +10,30 @@
 }
 
 .bodyContainer {
-    @apply grid grid-cols-1
+    @apply grid grid-cols-1 gap-4 font-text my-4 mx-56 
+    PC-1920*1080:mx-56
+    PC-1600*900:mx-52
+    PC-1366*768:mx-48
+    PC-1280*720:mx-36
+    PC-800*600:mx-20
+    PC-640*480:mx-0
+    Mobile-390*844:mx-0
+    Mobile-280:mx-0
     
 }	
+
 
 .title {
     font-family: 'PoppinsLight';
     @apply font-bold text-center text-white
 
-    PC-1920*1080:text-6xl PC-1920*1080:mt-14
+    PC-1920*1080:text-3xl PC-1920*1080:mt-2
     PC-1600*900:text-5xl PC-1600*900:mt-14
     PC-1366*768:text-4xl PC-1366*768:mt-14
-    PC-1280*720:text-4xl PC-1280*720:mt-14
-    PC-800*600:text-3xl PC-800*600:mt-14
+    PC-1280*720:text-3xl PC-1280*720:mt-14
+    PC-800*600:text-2xl PC-800*600:mt-14
     PC-640*480:text-2xl PC-640*480:mt-12
     Mobile-390*844:text-2xl Mobile-390*844:mt-4
     Mobile-280:text-xl
 }
 
-
-.staffContainer {
-    @apply flex flex-col justify-start h-auto  gap-4 font-text 
-    PC-1920*1080:w-2/3 PC-1920*1080:mx-auto
-    PC-1600*900:w-2/3 PC-1600*900:mx-auto
-    PC-1366*768:w-2/3 PC-1366*768:mx-auto
-    PC-1280*720:w-2/3 PC-1280*720:mx-auto
-    PC-800*600:w-2/3 PC-800*600:mx-auto
-    PC-640*480:w-2/3 PC-640*480:mx-auto
-    Mobile-390*844:w-full Mobile-390*844:mx-auto
-    Mobile-280:w-2/3 Mobile-280:mx-auto
-}
-
-.staffAddContainer {
-    @apply flex flex-row justify-start h-auto w-2/3 gap-4 font-text my-8
-    PC-1920*1080:w-2/3 PC-1920*1080:mx-auto
-    PC-1600*900:w-2/3 PC-1600*900:mx-auto
-    PC-1366*768:w-2/3 PC-1366*768:mx-auto
-    PC-1280*720:w-fit PC-1280*720:mx-auto
-    PC-800*600:w-fit PC-800*600:mx-auto
-    PC-640*480:w-fit PC-640*480:mx-auto
-    Mobile-390*844:w-fit Mobile-390*844:mx-auto
-    Mobile-280:w-48 Mobile-280:mx-auto Mobile-280:flex-col
-}
-
-.usersInEventContainer {
-    @apply grid grid-cols-4 gap-4 font-text overflow-y-auto w-5/6 text-white
-    PC-1920*1080:w-fit PC-1920*1080:mx-auto PC-1920*1080:gap-28
-    PC-1600*900:w-5/6 PC-1600*900:mx-auto PC-1600*900:gap-28
-    PC-1366*768:w-full PC-1366*768:mx-auto PC-1366*768:gap-24
-    PC-1280*720:w-full PC-1280*720:mx-auto PC-1280*720:gap-20
-    PC-800*600:w-full PC-800*600:mx-auto PC-800*600:gap-16
-    PC-640*480:w-full PC-640*480:mx-auto PC-640*480:grid-cols-3
-    Mobile-390*844:w-5/6 Mobile-390*844:mx-auto Mobile-390*844:grid-cols-2
-    Mobile-280:w-full Mobile-280:mx-auto Mobile-280:grid-cols-1
-}
-
-.userInEvent {
-    @apply flex flex-col h-auto  font-text  text-xs text-center
-    PC-1920*1080:w-full PC-1920*1080:mx-auto 
-    PC-1600*900:w-full PC-1600*900:mx-auto
-    PC-1366*768:w-full PC-1366*768:mx-auto
-    PC-1280*720:w-full PC-1280*720:mx-auto
-    PC-800*600:w-full PC-800*600:mx-auto
-    PC-640*480:w-full PC-640*480:mx-auto
-    Mobile-390*844:w-full Mobile-390*844:mx-auto
-    Mobile-280:w-full Mobile-280:mx-auto
-}
-
-.emailContainer {
-    @apply flex flex-col justify-start h-auto w-2/3 gap-4 font-text my-8 break-words
-    PC-1920*1080:w-2/3 PC-1920*1080:mx-auto
-    PC-1600*900:w-2/3 PC-1600*900:mx-auto
-    PC-1366*768:w-2/3 PC-1366*768:mx-auto
-    PC-1280*720:w-2/3 PC-1280*720:mx-auto
-    PC-800*600:w-2/3 PC-800*600:mx-auto
-    PC-640*480:w-2/3 PC-640*480:mx-auto
-    Mobile-390*844:w-full Mobile-390*844:mx-auto
-    Mobile-280:w-2/3 Mobile-280:mx-auto
-}
-
-.editPermitsButton {
-    @apply bg-yellowCapas outline-none border-none rounded-lg font-bold text-xs py-2 px-4 text-black w-auto
-
-}
