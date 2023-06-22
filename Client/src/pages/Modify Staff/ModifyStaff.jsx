@@ -23,7 +23,7 @@ import {
     ChevronDownIcon,
     Bars2Icon,
     ArrowLeftIcon,
-    MinusIcon
+    TrashIcon
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
@@ -34,37 +34,37 @@ const usersStaff = [
     {
         email: "danyfifitax@gmail.com",
         rol: ["Admin", "Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
     },
     {
         email: "joshuamontano@gmail.com",
         rol: ["Admin", "Graficas"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
     },
     {
         email: "jonathanmorales@gmail.com",
         rol: ["Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
     },
     {
         email: "dasdsadasdx@gmail.com",
         rol: ["Admin", "Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
     },
     {
         email: "danyfiasdasd12asdax@gmail.com",
         rol: ["Admin", "Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
     },
     {
         email: "jonathaasdasdasd2s@gmail.com",
         rol: ["Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
     },
     {
         email: "jonathanm213123dales@gmail.com",
         rol: ["Scanner"],
-        avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+        avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
     },
 ];
 
@@ -72,29 +72,31 @@ const usersInEventDefault = [
         {
             email: "jonathanmor215125ales@gmail.com",
             rol: ["Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+            avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
         },
         {
             email: "jonathanmoral616es@gmail.com",
             rol: ["Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+            avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
         },
         {
             email: "danyfifit251515ax@gmail.com",
             rol: ["Admin", "Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+            avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
         },
         {
             email: "danyfifitasdad231ax@gmail.com",
             rol: ["Admin", "Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+            avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
         },
         {
             email: "danyfifita2qwasdax@gmail.com",
             rol: ["Admin", "Scanner"],
-            avatar: "https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+            avatar: "https://i.pinimg.com/736x/37/8a/27/378a270e775265622393da8c0527417e.jpg"
         },
 ];
+
+
         
 
 // profile menu component
@@ -270,10 +272,19 @@ export default function ModifyStaff() {
       <div className={[classes["bodyContainer"]]}>
       <div className={[classes["imgContainer"]]}>
           <img
-            src="https://www.coldplay.com/wp/wp-content/uploads/2023/05/cannot-wait.jpg"
+            src="https://coldplaytour.com/wp-content/uploads/2021/10/ColdPlay-Tour.jpg"
             alt="eventImg"
             className={[classes["imgEvent"]]}>
             </img>
+        <div className={[classes["imgTextContainer"]]}>
+          <Typography as="h1" className={[classes["imgText"]]}>
+            Coldplay Tour
+          </Typography>
+          <Typography as="h2" className={[classes["imgText2"]]}>
+            Usuarios asignados: 10
+          </Typography>
+          
+          </div>
         </div>
         <div className={[classes["staffContainer"]]}>
             <div className={[classes["staffAddContainer"]]}>
@@ -288,7 +299,7 @@ export default function ModifyStaff() {
               </Option>
             ))}
           </Select>
-          <Button onClick={handleAddUser} className="w-36 bg-green-500 Mobile-280:w-fit"> Agregar </Button>  
+          <Button onClick={handleAddUser} className="w-36 bg-green-500 Mobile-280:w-fit"> Buscar</Button>  
           {alreadyInList && 
           //Mostrar popup
           <Dialog open={true} onClose={() => setAlreadyInList(false)} className='Mobile-390*844:w-96 Mobile-280:w-96'>
@@ -312,12 +323,22 @@ export default function ModifyStaff() {
                 <IconButton 
                 onClick={() => handleRemoveUser(user.email)}
                 size="sm" color="blue-gray" variant="text" className="flex justify-start m-4">
-                  <MinusIcon className="h-6 w-6 text-red-600" />
+                  <TrashIcon className="h-4 w-4 text-yellowCapas" />
                 </IconButton>
                 <Avatar
                     src={user.avatar}
                     alt={user.name}
-                    className="w-auto h-auto "
+                    className="w-16 h-16 mx-auto
+                    PC-1920*1080:w-16 PC-1920*1080:h-16
+                    PC-1600*900:w-14 PC-1600*900:h-14
+                    PC-1366*768:w-12 PC-1366*768:h-12
+                    PC-1280*720:w-10 PC-1280*720:h-10
+                    PC-800*600:w-10 PC-800*600:h-10
+                    PC-640*480:w-8 PC-640*480:h-8
+                    Mobile-390*844:w-10 Mobile-390*844:h-10
+                    Mobile-280:w-12 Mobile-280:h-12
+                    IpadAir:w-16 IpadAir:h-16
+                    "
                 />
                 <div className={[classes["emailContainer"]]}>
                 <p>{user.email}</p>
@@ -327,8 +348,8 @@ export default function ModifyStaff() {
           </div>
     </div>
     </div>
-
-    <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
+    <div className={[classes["footerContainer"]]}>
+    <footer className="  bg-bluefooter text-white mt-2 py-4 px-6 text-center">
 
       <div className='relative mx-auto flex mb-5 items-center text-white'>        
         <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
@@ -362,6 +383,7 @@ export default function ModifyStaff() {
 
       </footer>
 
+    </div>
     </div>
   );
 }
