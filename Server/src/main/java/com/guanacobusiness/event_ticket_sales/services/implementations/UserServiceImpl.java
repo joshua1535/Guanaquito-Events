@@ -4,17 +4,22 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AuthRequestDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveUserDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
+import com.guanacobusiness.event_ticket_sales.models.entities.Token;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
+import com.guanacobusiness.event_ticket_sales.repositories.TokenRepository;
 import com.guanacobusiness.event_ticket_sales.repositories.UserRepository;
 import com.guanacobusiness.event_ticket_sales.services.PermitService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
+import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
 
 import jakarta.transaction.Transactional;
 
@@ -29,6 +34,15 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     UserXPermitService userXPermitService;
+
+    @Autowired
+	private JWTTools jwtTools;
+	
+	@Autowired
+	private TokenRepository tokenRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> findAll() {
@@ -46,11 +60,12 @@ public class UserServiceImpl implements UserService{
     @Transactional(rollbackOn = Exception.class)
     public boolean register(SaveUserDTO user) throws Exception {
         
-        User newUser = new User(user.getEmail(), user.getPassword(), user.getProfilePicture());
+        User newUser = new User(user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getProfilePicture());
 
         if (newUser.getEmail().isEmpty() || newUser.getPassword().isEmpty()) {
             throw new Exception("Cannot register user with empty email or password");
         }
+
         User userComparation = userRepository.findByEmailOrCode(newUser.getEmail(), newUser.getCode());
         if (userComparation != null) {
             return false;
@@ -103,19 +118,79 @@ public class UserServiceImpl implements UserService{
     }
     
     @Override
-    public boolean login(AuthRequestDTO info) {
+    public User login(AuthRequestDTO info) {
         
         User user = userRepository.findByEmail(info.getIdentifier());
 
         if(user == null){
-            return false;
+            return null;
         }
 
-        if(!user.getPassword().equals(info.getPassword())){
-            return false;
-        }
+        return user;
+    }
 
-        return true;
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public Token registerToken(User user) throws Exception {
+        cleanTokens(user);
+            
+        String tokenString = jwtTools.generateToken(user);
+        Token token = new Token(tokenString, user);
+            
+        tokenRepository.save(token);
+            
+        return token;
+    }
+
+    @Override
+    public Boolean isTokenValid(User user, String token) {
+        try {
+            cleanTokens(user);
+            List<Token> tokens = tokenRepository.findByUserAndActive(user, true);
+                
+            tokens.stream()
+                .filter(tk -> tk.getContent().equals(token))
+                .findAny()
+                .orElseThrow(() -> new Exception());
+            
+            return true;
+        } catch (Exception e) {
+            return false;
+        }		
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void cleanTokens(User user) throws Exception {
+        List<Token> tokens = tokenRepository.findByUserAndActive(user, true);
+            
+        tokens.forEach(token -> {
+            if(!jwtTools.verifyToken(token.getContent())) {
+                token.setActive(false);
+                tokenRepository.save(token);
+            }
+        });
+            
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+	public User findUserAuthenticated() {
+		String email = SecurityContextHolder
+			.getContext()
+			.getAuthentication()
+			.getName();
+		
+		return userRepository.findByEmail(email);
+	}
+
+    @Override
+    public Boolean comparePassword(String toCompare, String current) {
+        return passwordEncoder.matches(toCompare, current);
     }
 
 }
