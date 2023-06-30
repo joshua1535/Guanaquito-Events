@@ -3,11 +3,11 @@ package com.guanacobusiness.event_ticket_sales.repositories;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 
-public interface RegisterRepository extends ListCrudRepository<Register, UUID> {
+public interface RegisterRepository extends JpaRepository<Register, UUID> {
     List<Register> findAllByTransferenceTimeIsNull();
     List<Register> findAllByValidationTimeIsNull();
     Register findByTicketCodeAndValidationTimeIsNotNull(UUID ticketCode);
