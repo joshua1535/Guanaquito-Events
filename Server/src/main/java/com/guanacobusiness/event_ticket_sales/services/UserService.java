@@ -21,6 +21,7 @@ public interface UserService {
     Token registerToken(User user) throws Exception;
 	Boolean isTokenValid(User user, String token);
 	void cleanTokens(User user) throws Exception;
+    void cleanTokens() throws Exception;
     User findByEmail(String email);
     User findUserAuthenticated();
     Boolean comparePassword(String toCompare, String current);
