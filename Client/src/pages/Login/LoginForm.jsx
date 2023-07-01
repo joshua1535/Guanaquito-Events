@@ -18,7 +18,7 @@ const LoginForm = () => {
     };
 
     const registerHandler = () => {
-        navigate('/emailregister');
+        navigate('/register');
     };
 
 
@@ -59,8 +59,7 @@ const LoginForm = () => {
             <button 
             onClick={registerHandler}
             className={classes["buttonlogingoogle"]}>
-                <img className={classes["imgbuttonlogingoogle"]} src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"/>
-                <span>Iniciar sesion con Google</span>
+                <span>Registrarse</span>
             </button>
 
             </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import LoginForm from './pages/Login/LoginForm.jsx';
+import RegisterForm from './pages/Register/RegisterForm.jsx';
 import EmailConfirmationForm from './pages/UpdatePassword/EmailConfirmation/EmailConfirmationForm';
 import UpdatePasswordForm from './pages/UpdatePassword/UpdatePassword/UpdatePasswordForm';
 import HomePage from './pages/HomePage/HomePage';
@@ -28,12 +29,14 @@ import StatsPage from './pages/Stats/Stats';
 import MyEvents from './pages/My Events/MyEvents';
 
 
+
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
           <Route path="/" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
           <Route path="/emailconfirmation" element={<EmailConfirmationForm />} />
           <Route path="/emailregister" element={<EmailConfirmationFormRegister />} />
           <Route path="/passwordconfirmation" element={<PasswordConfirmationForm />} />
