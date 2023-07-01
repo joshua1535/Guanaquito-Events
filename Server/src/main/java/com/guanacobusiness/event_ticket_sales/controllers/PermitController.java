@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,8 @@ import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.PermitService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/permit")
@@ -68,7 +71,7 @@ public class PermitController {
     }
 
     @PostMapping("/{code}")
-    public ResponseEntity<?> grantPermitToUser(@PathVariable(name = "code") String code, ModifyPermitDTO info) throws Exception{
+    public ResponseEntity<?> grantPermitToUser(@PathVariable(name = "code") String code,@Valid @RequestBody ModifyPermitDTO info) throws Exception{
 
         UUID uuid = UUID.fromString(code);
 
@@ -105,7 +108,7 @@ public class PermitController {
     
 
     @DeleteMapping("/{code}")
-    public ResponseEntity<?> revokePermitToUser(@PathVariable(name = "code") String code, ModifyPermitDTO info) throws Exception{
+    public ResponseEntity<?> revokePermitToUser(@PathVariable(name = "code") String code, @Valid @RequestBody ModifyPermitDTO info) throws Exception{
 
         UUID uuid = UUID.fromString(code);
 

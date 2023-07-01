@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import com.guanacobusiness.event_ticket_sales.repositories.UserRepository;
 import com.guanacobusiness.event_ticket_sales.services.PermitService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
+import com.guanacobusiness.event_ticket_sales.utils.CurrentDateTime;
 import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
 
 import jakarta.transaction.Transactional;
@@ -44,9 +49,18 @@ public class UserServiceImpl implements UserService{
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    CurrentDateTime currentDateTime;
+
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Page<User> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("email"));
+        return userRepository.findAll(pageable);
     }
 
     @Override
@@ -62,9 +76,9 @@ public class UserServiceImpl implements UserService{
         
         User newUser = new User(user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getProfilePicture());
 
-        if (newUser.getEmail().isEmpty() || newUser.getPassword().isEmpty()) {
+        /* if (newUser.getEmail().isEmpty() || newUser.getPassword().isEmpty()) {
             throw new Exception("Cannot register user with empty email or password");
-        }
+        } */
 
         User userComparation = userRepository.findByEmailOrCode(newUser.getEmail(), newUser.getCode());
         if (userComparation != null) {
@@ -100,6 +114,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Page<User> findByFragment(String fragment, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("email"));
+        Page<User> usersFound = userRepository.findByEmailContainingIgnoreCase(fragment, pageable);
+
+        return usersFound;
+    }
+
+    @Override
     public List<User> findByPermit(UUID permitCode) {
     
         Permit permitFound = permitService.findPermitByCode(permitCode);
@@ -116,6 +138,18 @@ public class UserServiceImpl implements UserService{
 
         return usersFound;
     }
+
+    /* @Override
+    public Page<User> findByPermit(UUID permitCode, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("email"));
+        //Page<User> usersFound = userXPermitService.findUsersByPermitCode(permitCode, pageable);
+
+        if(usersFound == null || usersFound.isEmpty()){
+            return null;
+        }
+
+        return usersFound;
+    } */
     
     @Override
     public User login(AuthRequestDTO info) {
