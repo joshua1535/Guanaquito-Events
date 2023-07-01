@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.guanacobusiness.event_ticket_sales.models.dtos.AuthRequestDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveUserDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.UserFoundDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
 import com.guanacobusiness.event_ticket_sales.models.entities.Token;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
@@ -198,6 +199,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public Boolean comparePassword(String toCompare, String current) {
         return passwordEncoder.matches(toCompare, current);
+    }
+
+    @Override
+    public UserFoundDTO whoami(String email) {
+    
+        User foundUser = userRepository.findByEmail(email);
+
+        if (foundUser == null) {
+            return null;
+        }
+
+        return new UserFoundDTO(foundUser.getEmail(), foundUser.getProfilePicture());
+    
     }
 
 }

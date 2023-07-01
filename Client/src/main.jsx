@@ -6,10 +6,14 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ThemeProvider } from '@material-tailwind/react';
 
+import { UserProvider } from './Context/userContext';
+
 const root = ReactDOM.createRoot(document.getElementById('app'));
 
 root.render(
     <ThemeProvider>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </ThemeProvider>
 );
