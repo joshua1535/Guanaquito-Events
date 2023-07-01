@@ -15,6 +15,7 @@ const UpdatePasswordForm = () => {
     return (
         
         <div className={classes["generalContainer"]}>
+            <form>
             <div className={classes["inputsContainer"]} >
             <img className= {classes["logoImg"]} src={logo} />
             <h1 className={classes["logintitle"]}>Guanaco Business</h1>
@@ -40,6 +41,7 @@ const UpdatePasswordForm = () => {
 
             </div>
             </div>
+            </form>
 
             <div className={classes["imgContainer"]} >
             <img className={classes["imgtemplate"]} src={imgtemplate} /></div>
