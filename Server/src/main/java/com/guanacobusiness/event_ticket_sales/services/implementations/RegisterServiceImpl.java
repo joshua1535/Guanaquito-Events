@@ -1,5 +1,6 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -121,7 +122,7 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
-        String validationTime = currentDateTime.currentDateTime();
+        LocalDateTime validationTime = currentDateTime.now();
 
         foundRegister.setValidationTime(validationTime);
         registerRepository.save(foundRegister);
@@ -159,7 +160,7 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
-        String transferenceTime = currentDateTime.currentDateTime();
+        LocalDateTime transferenceTime = currentDateTime.now();
 
         registerToUpdate.setTransferenceTime(transferenceTime);
         registerRepository.save(registerToUpdate);

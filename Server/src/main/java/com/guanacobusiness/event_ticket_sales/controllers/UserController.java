@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
+import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
+import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
+import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
+import com.guanacobusiness.event_ticket_sales.utils.UserMapper;
 
 import jakarta.validation.Valid;
 
@@ -31,19 +37,30 @@ public class UserController {
     UserService userService;
 
     @Autowired
+    UserXPermitService userXPermitService;
+
+    @Autowired
     private StringToUUID stringToUUID;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllUsers(){
+    @Autowired
+    private UserMapper userMapper;
 
-        List<User> users = userService.findAll();
+    @Autowired
+    private PageDTOMapper pageDTOMapper;
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+
+        Page<User> users = userService.findAll(page, size);
 
         if(users.isEmpty() || users == null){
             return new ResponseEntity<>("No Users Found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    
+        List<FormatedUser> formatedUsers = userMapper.map(users.getContent());
+        PageDTO<FormatedUser> response = pageDTOMapper.map(formatedUsers, users);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/change-password")
@@ -65,20 +82,22 @@ public class UserController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<?> findUserByFragment(@RequestParam(required = false) String fragment){
+    public ResponseEntity<?> findUserByFragment(@RequestParam(defaultValue = "") String fragment,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
 
-        List<User> users = userService.findByFragment(fragment);
+        Page<User> users = userService.findByFragment(fragment, page, size);
 
         if(users.isEmpty() || users == null){
             return new ResponseEntity<>("No Users Found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<FormatedUser> formatedUsers = userMapper.map(users.getContent());
+        PageDTO<FormatedUser> response = pageDTOMapper.map(formatedUsers, users);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     
     }
 
     @GetMapping("/all/{code}")
-    public ResponseEntity<?> getAllUsersByPermit(@PathVariable(name = "code") String code){
+    public ResponseEntity<?> getAllUsersByPermit(@PathVariable(name = "code") String code,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
 
         UUID uuid = stringToUUID.convert(code);
 
@@ -86,13 +105,13 @@ public class UserController {
             return new ResponseEntity<>("Invalid Code",HttpStatus.BAD_REQUEST);
         }
 
-        List<User> users = userService.findByPermit(uuid);
+        PageDTO<FormatedUser> result = userXPermitService.findUsersByPermitCode(uuid,page, size);
 
-        if(users.isEmpty() || users == null){
+        if( result == null){
             return new ResponseEntity<>("No Users Found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }
