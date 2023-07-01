@@ -81,7 +81,8 @@ public class WebSecurityConfig {
         }));
         
         //JWT filter
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(corsFilter(), JWTTokenFilter.class);
 
         return http.build();
     }

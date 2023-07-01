@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.guanacobusiness.event_ticket_sales.models.dtos.AuthRequestDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveUserDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.TokenDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.UserFoundDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Token;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
+import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -32,6 +36,9 @@ public class AuthController {
     
     @Autowired
     UserService userService;
+
+    @Autowired
+    JWTTools jwtUtil;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SaveUserDTO info) throws Exception{
@@ -76,6 +83,31 @@ public class AuthController {
 
         } catch (Exception e) {
             return new ResponseEntity<>("Internal Server Error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/whoami")
+    public ResponseEntity<?> whoami(HttpServletRequest request){
+        
+        try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
+            String jwt = request.getHeader("Authorization").substring(7);
+            String userEmail = jwtUtil.getUsernameFrom(jwt);
+
+            UserFoundDTO foundUser = userService.whoami(userEmail);
+            
+            if(foundUser == null){
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(foundUser, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

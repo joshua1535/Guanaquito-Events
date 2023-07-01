@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.guanacobusiness.event_ticket_sales.models.dtos.AuthRequestDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveUserDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.UserFoundDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Token;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 
@@ -25,5 +26,6 @@ public interface UserService {
     User findByEmail(String email);
     User findUserAuthenticated();
     Boolean comparePassword(String toCompare, String current);
+    UserFoundDTO whoami(String email);
 
 }

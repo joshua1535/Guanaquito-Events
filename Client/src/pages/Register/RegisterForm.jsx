@@ -5,7 +5,7 @@ import imgtemplate from '../../assets/loginimg.png';
 import { useNavigate } from 'react-router-dom';
 
 import { useState } from 'react';
-//import { useUserContext } from '../../Context/userContext'
+import { useUserContext } from '../../Context/userContext'
 
 const RegisterForm = () => {
 
@@ -15,10 +15,9 @@ const RegisterForm = () => {
         navigate('/');
     };
 
-    /*const { signup } = useUserContext();
+    const { signup } = useUserContext();
 
     const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const [error, setError] = useState(false);
@@ -31,24 +30,22 @@ const RegisterForm = () => {
 
         e.preventDefault();
 
-        const registered = await signup(username, email, password);
+        const registered = await signup(email, password, "https://pbs.twimg.com/media/FHAsufPX0Agj5Wg?format=jpg&name=large");
 
         setError(!registered);
     
         if(registered) {
-            navigate('/');
+            navigate('/emailregister');
         }
 
         setEmail("");
-        setUsername("");
         setPassword("");
 
     }
-    */
 
     return (
         <div className={classes["generalContainer"]}>
-            <form >
+            <form onSubmit={onSubmitHandler}>
                 <div className={classes["inputsContainer"]} >
                     <img className= {classes["logoImg"]} src={logo} />
                     <h1 className={classes["logintitle"]}>Guanaco Business</h1>
@@ -57,27 +54,18 @@ const RegisterForm = () => {
                         <p className={classes["inputemailTitle"]} > Correo electronico</p>
                         <input className={classes["inputformat"]} 
                             type="text" 
-                            //value={email} 
+                            value={email} 
                             placeholder="Ej. danyfifitax@gmail.com"
-                            //onChange={(e) => onChange(e, setEmail)}
+                            onChange={(e) => onChange(e, setEmail)}
                             />
-                    </div>
-                    <div className={classes["inputpasswordContainer"]}>
-                        <p className={classes["inputpasswordTitle"]} > Nombre de usuario</p>
-                        <input className={classes["inputformat"]} 
-                        type="text"
-                        //value={username}
-                        placeholder="Ej. DJKelex" 
-                        //onChange={(e) => onChange(e, setUsername)}
-                        />
                     </div>
                     <div className={classes["inputpasswordContainer"]}>
                         <p className={classes["inputpasswordTitle"]} > Contraseña</p>
                         <input className={classes["inputformat"]} 
                         type="password" 
-                        //value={password}
+                        value={password}
                         placeholder="*****************" 
-                        //onChange={(e) => onChange(e, setPassword)}
+                        onChange={(e) => onChange(e, setPassword)}
                         />
                     </div>
 
