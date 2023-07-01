@@ -1,0 +1,153 @@
+.generalContainer {
+    @apply 
+    Mobile-390*844:flex Mobile-390*844:flex-col
+    sm:columns-2
+    PC-800*600:flex PC-800*600:flex-col 
+    PC-640*480:flex PC-640*480:flex-col
+}
+
+.inputsContainer {
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    @apply p-6 h-screen text-center 
+}
+
+.logoImg {
+    @apply mx-auto  mt-auto
+    PC-800*600:h-20
+    PC-640*480:h-14 PC-640*480:mt-0
+}
+
+.logintitle
+{
+    font-size: xx-large;
+    color: #FFFFFF;
+    font-family: 'PoppinsBold'; 
+    @apply 
+    PC-800*600:text-2xl   
+    PC-640*480:text-xl
+
+}
+
+.logintitle2
+{
+    font-size:x-large;
+    color: #FFFFFF;
+    font-family: 'PoppinsBold';
+    @apply 
+    mt-9 mb-4
+    PC-800*600:text-xl PC-800*600:mt-4
+    PC-640*480:text-xl PC-640*480:mt-3
+
+}
+
+.inputemailTitle{
+    @apply text  text-left  p-1 
+}
+
+.inputemailContainer {
+    @apply m-auto justify-center h-min w-min
+}
+
+.inputformat
+{
+    font-family: 'PoppinsLight';
+    @apply rounded p-2 w-80
+}
+
+.inputpasswordContainer {
+    @apply mx-auto mt-5 justify-center h-min w-min
+}
+
+.inputpasswordTitle{
+    @apply text  text-left  p-1 
+}
+
+.inputOptionsContainer {
+    @apply mt-2 flex justify-start
+}
+
+.rememberMeTitle {
+    @apply textsmall ms-1
+}
+
+.text 
+{
+    font-family: 'PoppinsLight';
+    color: #FFFFFF;
+
+}
+
+.textsmall 
+{
+    font-family: 'PoppinsLight';
+    color: #FFFFFF;
+    font-size: small;
+
+}
+
+.forgotpassword
+{
+    font-family: 'PoppinsLight';
+    color: #F59E0B;
+    font-size: small;
+    text-decoration: underline;
+    @apply ms-auto
+}
+
+
+.loginContainer {
+    @apply mx-auto mt-5 justify-center h-min w-min
+}
+
+
+.buttonlogin
+{
+    font-family: 'PoppinsExtraLight';
+    color: #FFFFFF;
+    font-weight: lighter;
+    background-color: #F59E0B;
+    border-radius: 10px;
+    border: none;
+    width: 80%;
+    height: 40px;
+    @apply mt-2 p-2 mb-5 w-80 hover:bg-orange-500 font-bold rounded
+    PC-640*480:mt-0
+}
+
+
+.buttonlogingoogle
+{
+    font-family: 'PoppinsLight';
+    color: #556987;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: none;
+    @apply justify-center px-4 py-2 w-80 border flex gap-2 rounded
+    
+
+}
+
+.buttonlogingoogle:hover
+{
+    @apply shadow
+}
+
+
+.imgbuttonlogingoogle
+{
+    @apply w-5 h-5
+}
+
+.imgtemplate{
+
+    @apply hidden sm:inline-block
+    PC-800*600:hidden
+    PC-640*480:hidden   
+    w-screen h-screen 
+}
+
+.buttonforgotpassword {
+    @apply m-auto
+}
