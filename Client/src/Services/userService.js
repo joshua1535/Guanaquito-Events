@@ -58,4 +58,44 @@ export const userService = {
         }
     },
 
+    getAllUsers: async function (page = 0, size = 10, token) {
+        try {
+            const response = await API.get('/user/all', {
+                params: {
+                    page: page,
+                    size: size
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllUsersByPermit: async function(code , page = 0, size = 10, token) {
+    
+        try {
+          const response = await API.get(`user/all/${code}`, 
+          {
+            params: {
+                page: page,
+                size: size
+            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    
+          return response.data;
+    
+        } catch(error) {
+          console.error(`Error obteniendo los usuarios por permisos ${code}: `, error);
+          throw error;
+        }
+    }     
+
 };
