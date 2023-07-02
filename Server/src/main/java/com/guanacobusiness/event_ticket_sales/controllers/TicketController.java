@@ -49,7 +49,7 @@ public class TicketController {
     JWTTools jwtUtil;
 
     @PostMapping("/")
-    public ResponseEntity<?> postTicket(@Valid @RequestBody SaveTicketDTO info, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> postTicket(@Valid @RequestBody List<SaveTicketDTO> info, HttpServletRequest request) throws Exception {
     
         try {
 
@@ -66,7 +66,7 @@ public class TicketController {
                 return new ResponseEntity<>("User not found!", HttpStatus.BAD_REQUEST);
             }
 
-            info.setUserOwner(user.getCode().toString());
+            info.forEach(ticket -> ticket.setUserOwner(user.getCode().toString()));
 
             Boolean response = ticketService.save(info);
 
@@ -78,6 +78,7 @@ public class TicketController {
 
             return new ResponseEntity<>("Ticket buyed successfully!", HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e.getMessage() + " " + e.getCause());
             return new ResponseEntity<>("Ticket buy failed!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     

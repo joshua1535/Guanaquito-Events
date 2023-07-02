@@ -28,9 +28,20 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void createOrder(CreateOrderDTO info, User user) throws Exception {
+    public Order createOrder(CreateOrderDTO info, User user) throws Exception {
     
-        orderRepository.save(new Order(user, info.getPurchaseDate()));
+        try {
+            
+            Order newOrder = new Order(user, info.getPurchaseDate());
+
+            orderRepository.save(newOrder);
+
+            return newOrder;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;    
+        }
     
     }
 
