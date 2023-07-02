@@ -356,7 +356,7 @@ export default function HomePage() {
     if(token){
       eventService.getAllEvents(token)
           .then((data) => {
-            setEvents(data);
+            setEvents(data.content);
           })
           .catch((error) => {
               console.error('Hubo un error al obtener las eventos:', error);

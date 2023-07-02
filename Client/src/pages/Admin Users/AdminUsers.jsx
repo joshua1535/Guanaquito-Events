@@ -278,6 +278,8 @@ export default function AdminUsers() {
   const [size, setSize] = useState(5); // número de usuarios por página
   const { user, token } = useUserContext(); // obteniendo token de contexto de usuario
 
+  console.log('El token del usuario es:', token);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -285,13 +287,13 @@ export default function AdminUsers() {
         userService.getAllUsers(page, size, token)
             .then((data) => {
               setUsers(data.content)        
-                console.log('Los usuarios obtenidas:', data.content);
+                console.log('Los usuarios obtenidos:', data.content);
             })
             .catch((error) => {
-                console.error('Hubo un error al obtener las eventos:', error);
+                console.error('Hubo un error al obtener los usuarios:', error);
             });
         }
-    }, [token, page, size]); 
+    }, [ page, size,token]); 
 
 
   /*

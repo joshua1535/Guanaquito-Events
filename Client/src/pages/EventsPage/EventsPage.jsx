@@ -119,7 +119,6 @@ function ProfileMenu() {
             >
               <Typography
                 as="span"
-                variant="lg"
                 className="font-normal"
                 color={isLastItem ? "red" : "inherit"}
               >
@@ -176,7 +175,6 @@ function NavList() {
           key={label}
           as="a"
           href="#"
-          variant="lg"
           color="white"
           className="font-normal"
         >
@@ -213,7 +211,7 @@ const EventsPage = () => {
     if(token){
       eventService.getAllEvents(token)
           .then((data) => {
-            setEvents(prevEvents => ({...prevEvents, Todos: data}));          
+            setEvents(prevEvents => ({...prevEvents, Todos: data.content}));          
               console.log('Los eventos obtenidas:', events.Todos);
           })
           .catch((error) => {
@@ -222,17 +220,19 @@ const EventsPage = () => {
       }
   }, [token]); 
 
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('Cine01',token)
+      eventService.getEventsByCategory('C',page,size,token,)
           .then((data) => {
             if(data===undefined)
             {
 
             }
             else{
-            setEvents(prevEvents => ({...prevEvents, Cine: data}));          
+            setEvents(prevEvents => ({...prevEvents, Cine: data.content}));          
               console.log('Los eventos cine obtenidas:', events.Cine);
             }
           })
@@ -240,18 +240,20 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['Cine01',token]); 
+  }, ['C',page,size,token]); 
+
+  
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('Conciertos01',token)
+      eventService.getEventsByCategory('M',page,size,token)
           .then((data) => {
             if(data===undefined)
             {
 
             }
             else{
-            setEvents(prevEvents => ({...prevEvents, Conciertos: data}));          
+            setEvents(prevEvents => ({...prevEvents, Conciertos: data.content}));          
               console.log('Los eventos Conciertos obtenidas:', events.Conciertos);
             }
           })
@@ -259,18 +261,18 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['Conciertos01',token]); 
+  }, ['M',page,size,token]); 
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('Obras de teatro01',token)
+      eventService.getEventsByCategory('O',token)
           .then((data) => {
             if(data===undefined)
             {
 
             }
             else{
-            setEvents(prevEvents => ({...prevEvents, "Obras de teatro": data}));          
+            setEvents(prevEvents => ({...prevEvents, "Obras de teatro": data.content}));          
               console.log('Los eventos teatro obtenidas:', events['Obras de teatro']);
             }
           })
@@ -278,18 +280,18 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['Obras de teatro01',token]); 
+  }, ['O',token]); 
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('Deportes01',token)
+      eventService.getEventsByCategory('D',token)
           .then((data) => {
             if(data===undefined)
             {
 
             }
             else{
-            setEvents(prevEvents => ({...prevEvents, Deportes: data}));          
+            setEvents(prevEvents => ({...prevEvents, Deportes: data.content}));          
               console.log('Los eventos teatro obtenidas:', events.Deportes);
             }
           })
@@ -297,7 +299,7 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['Deportes0101',token]); 
+  }, ['D',token]); 
 
   
 
