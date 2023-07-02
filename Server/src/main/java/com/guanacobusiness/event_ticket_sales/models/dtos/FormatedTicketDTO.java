@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FormatedTicketDTO {
-    
+
+    private String ticketCode;
+
     private Boolean available;
 
     private String eventPicture;

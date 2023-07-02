@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PasswordUpdateDTO {
 
-    @NotEmpty(message = "User code cannot be empty")
-    @org.hibernate.validator.constraints.UUID(message = "User code must be a valid UUID")
     private String userCode;
 
     @NotEmpty(message = "Username or email required")

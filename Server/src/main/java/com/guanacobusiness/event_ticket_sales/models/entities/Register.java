@@ -29,10 +29,10 @@ public class Register {
     @Column(name = "transaction_code")
     private String transactionCode;
 
-    @Column(name = "transference_time")
+    @Column(name = "transference_date")
     private LocalDateTime transferenceTime;
 
-    @Column(name = "validation_time")
+    @Column(name = "validation_date")
     private LocalDateTime validationTime;
 
     @ManyToOne(fetch = FetchType.EAGER)

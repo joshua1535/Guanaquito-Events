@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
@@ -33,6 +32,9 @@ public class UserXPermitServiceImpl implements UserXPermitService{
 
     @Autowired
     PageDTOMapper pageDTOMapper;
+
+    @Autowired
+    UserServiceImpl userService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -82,9 +84,16 @@ public class UserXPermitServiceImpl implements UserXPermitService{
 
     @Override
     public List<Permit> findPermitsByUserCode(UUID userCode) {
-        List<Permit> permits = userXPermitRepository.findPermitsByUserCode(userCode);
 
-        if(permits.isEmpty()) {
+        User user = userService.findByCode(userCode);
+
+        if(user == null) {
+            return null;
+        }
+
+        List<Permit> permits = user.getUserXPermits().stream().map(UserXPermit::getPermit).toList();
+
+        if(permits == null) {
             return null;
         }
 

@@ -22,10 +22,12 @@ import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
+import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 import com.guanacobusiness.event_ticket_sales.utils.UserMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -48,8 +50,15 @@ public class UserController {
     @Autowired
     private PageDTOMapper pageDTOMapper;
 
+    @Autowired
+    JWTTools jwtUtil;
+
     @GetMapping("/all")
-    public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request){
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         Page<User> users = userService.findAll(page, size);
 
@@ -61,28 +70,47 @@ public class UserController {
         PageDTO<FormatedUser> response = pageDTOMapper.map(formatedUsers, users);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    
     }
 
     @PatchMapping("/change-password")
-    public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordUpdateDTO userUpdateDTO){
+    public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordUpdateDTO userUpdateDTO, HttpServletRequest request){
 
         try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
+            String jwt = request.getHeader("Authorization").substring(7);
+            String userEmail = jwtUtil.getUsernameFrom(jwt);
+
+            userUpdateDTO.setUserCode(userService.findByEmail(userEmail).getCode().toString());
+
             boolean updated = userService.updatePassword(userUpdateDTO, userUpdateDTO.getNewPassword());
         
             if(!updated){
-                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+
+                return new ResponseEntity<>("Email or old password incorrect", HttpStatus.BAD_REQUEST);
                 
             }
         
             return new ResponseEntity<>("Password Updated", HttpStatus.OK);
+
         } catch (Exception e) {
+
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        
         }
 
     }
 
     @GetMapping("/find")
-    public ResponseEntity<?> findUserByFragment(@RequestParam(defaultValue = "") String fragment,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<?> findUserByFragment(@RequestParam(defaultValue = "") String fragment,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request){
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         Page<User> users = userService.findByFragment(fragment, page, size);
 
@@ -92,12 +120,17 @@ public class UserController {
 
         List<FormatedUser> formatedUsers = userMapper.map(users.getContent());
         PageDTO<FormatedUser> response = pageDTOMapper.map(formatedUsers, users);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     
     }
 
-    @GetMapping("/all/{code}")
-    public ResponseEntity<?> getAllUsersByPermit(@PathVariable(name = "code") String code,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    @GetMapping("/all-by-permit")
+    public ResponseEntity<?> getAllUsersByPermit(@PathVariable(name = "code") String code,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request){
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         UUID uuid = stringToUUID.convert(code);
 

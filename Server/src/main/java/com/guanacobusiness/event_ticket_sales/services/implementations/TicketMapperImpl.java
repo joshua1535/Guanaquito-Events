@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
+import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.services.RegisterService;
 import com.guanacobusiness.event_ticket_sales.services.TicketMapper;
@@ -27,12 +28,13 @@ public class TicketMapperImpl implements TicketMapper{
     EventService eventService;
 
     @Override
-    public FormatedTicketDTO toCustomTicketDTO(Ticket ticket) {
+    public FormatedTicketDTO toCustomTicketDTO(Ticket ticket, User user) {
         
         Event event = eventService.findEventByCode(ticket.getTier().getEvent().getCode());
 
         FormatedTicketDTO formatedTicketDTO = new FormatedTicketDTO(
-                registerService.isEnabled(ticket.getCode()) ? true : false,
+                ticket.getCode().toString(),
+                registerService.isAvailable(ticket, user),
                 event.getImage(),
                 event.getDate(),
                 event.getTime(),
@@ -45,8 +47,8 @@ public class TicketMapperImpl implements TicketMapper{
     }
 
     @Override
-    public List<FormatedTicketDTO> listToCustomTicketDTO(List<Ticket> tickets) {
-        return tickets.stream().map(ticket -> toCustomTicketDTO(ticket)).collect(Collectors.toList());
+    public List<FormatedTicketDTO> listToCustomTicketDTO(List<Ticket> tickets, User user) {
+        return tickets.stream().map(ticket -> toCustomTicketDTO(ticket, user)).collect(Collectors.toList());
     }
-    
+
 }

@@ -3,7 +3,6 @@ package com.guanacobusiness.event_ticket_sales.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,9 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Order;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.OrderService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
+import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -40,16 +40,20 @@ public class OrderController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/")
-    public ResponseEntity<?> saveOrder(@Valid @RequestBody CreateOrderDTO info) throws Exception {
-        
-        UUID uuid = UUID.fromString(info.getUserCode());
+    @Autowired
+    JWTTools jwtUtil;
 
-        if(uuid == null) {
-            return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
+    @PostMapping("/")
+    public ResponseEntity<?> saveOrder(@Valid @RequestBody CreateOrderDTO info, HttpServletRequest request) throws Exception {
+        
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.findByCode(uuid);
+        String jwt = request.getHeader("Authorization").substring(7);
+        String userEmail = jwtUtil.getUsernameFrom(jwt);
+
+        User user = userService.findByEmail(userEmail);
 
         if(user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
@@ -66,16 +70,19 @@ public class OrderController {
 
     }
 
-    @GetMapping("/user/{code}")
-    public ResponseEntity<?> findAllOrdersByUserBuyerCode(@PathVariable(name = "code") String code) {
+    @GetMapping("/user-orders")
+    public ResponseEntity<?> findAllOrdersByUserBuyerCode(HttpServletRequest request) {
     
-        UUID uuid = UUID.fromString(code);
-
-        if(uuid == null) {
-            return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
 
-        List<Order> orders = orderService.findAllOrdersByUserBuyerCode(uuid);
+        String jwt = request.getHeader("Authorization").substring(7);
+        String userEmail = jwtUtil.getUsernameFrom(jwt);
+
+        User user = userService.findByEmail(userEmail);
+
+        List<Order> orders = orderService.findAllOrdersByUserBuyerCode(user.getCode());
 
         if(orders == null) {
             return new ResponseEntity<>("Orders not found", HttpStatus.NOT_FOUND);
@@ -86,8 +93,12 @@ public class OrderController {
     }
 
     @GetMapping("/byDateRange")
-    public ResponseEntity<?> findAllOrdersByDateRange(@Valid @RequestBody DateRangeDTO info){
+    public ResponseEntity<?> findAllOrdersByDateRange(@Valid @RequestBody DateRangeDTO info, HttpServletRequest request ){
     
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Order> orders = orderService.findOrdersBetweenDates(info);
     
         if(orders == null || orders.isEmpty()) {

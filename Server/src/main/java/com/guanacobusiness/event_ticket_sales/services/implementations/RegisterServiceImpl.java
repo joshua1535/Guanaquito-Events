@@ -11,6 +11,7 @@ import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeTransactionCodeD
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
+import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.repositories.RegisterRepository;
 import com.guanacobusiness.event_ticket_sales.services.RegisterService;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
@@ -62,7 +63,7 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
-        Register registerToUpdate = registers.stream().filter(register -> (register.getTransferenceTime().equals(null) && register.getValidationTime().equals(null))).findFirst().orElse(null);
+        Register registerToUpdate = registers.stream().filter(register -> (register.getTransferenceTime() == null && register.getValidationTime() == null )).findFirst().orElse(null);
         
         //Si se encuentra un registro vacio no se puede crear uno nuevo
         if(registerToUpdate != null) {
@@ -100,7 +101,7 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
-        Register registerToUpdate = registers.stream().filter(register -> (register.getTransferenceTime().equals(null) && register.getValidationTime().equals(null))).findFirst().orElse(null);
+        Register registerToUpdate = registers.stream().filter(register -> (register.getTransferenceTime() == null && register.getValidationTime() == null)).findFirst().orElse(null);
         
         //Si no encuentra un registro vacio no se puede actualizar el codigo de transaccion
         if(registerToUpdate == null) {
@@ -153,7 +154,7 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
-        Register registerToUpdate = registers.stream().filter(register -> (register.getTransferenceTime().equals(null) && register.getValidationTime().equals(null))).findFirst().orElse(null);
+        Register registerToUpdate = registers.stream().filter(register -> (register.getTransferenceTime() == null && register.getValidationTime() == null)).findFirst().orElse(null);
         
         //Si no encuentra un registro vacio no se puede actualizar la hora de transferencia
         if(registerToUpdate == null) {
@@ -207,6 +208,34 @@ public class RegisterServiceImpl implements RegisterService {
 
         return foundRegister;
     
+    }
+
+    @Override
+    public Boolean isAvailable(Ticket ticket, User user) {
+
+        List<Register> registers = ticket.getRegisters();
+
+        if(registers == null || registers.isEmpty()) {
+            return true;
+        }
+    
+        Register validatedRegister = registers.stream().filter(register -> (register.getValidationTime() != null)).findFirst().orElse(null);
+
+        if(validatedRegister != null) {
+            System.out.println("Validation time no es null");
+            return false;
+        }
+
+        System.out.println("comprador: " + ticket.getOrder().getUserBuyer().getEmail() + " usuario: " + user.getEmail());
+        Register transferedRegister = registers.stream().filter(register -> (register.getTransferenceTime() != null && ticket.getOrder().getUserBuyer().getEmail() == user.getEmail())).findFirst().orElse(null);
+
+        if(transferedRegister != null) {
+            System.out.println("entro aqui?");
+            return false;
+        }
+
+        return true;
+
     }
     
 }

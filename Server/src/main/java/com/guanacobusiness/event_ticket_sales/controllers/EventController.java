@@ -32,6 +32,7 @@ import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -55,7 +56,12 @@ public class EventController {
     private UserService userService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllEvents() {
+    public ResponseEntity<?> getAllEvents(HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Event> events = eventService.findAllEvents();
 
         if(events == null || events.isEmpty()){
@@ -66,7 +72,11 @@ public class EventController {
     }
     
     @GetMapping("/{code}")
-    public ResponseEntity<?> findEventByCode(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> findEventByCode(@PathVariable(name = "code") String code, HttpServletRequest request ) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         UUID uuid = stringToUUID.convert(code);
 
@@ -84,7 +94,12 @@ public class EventController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<?> getAllActiveEvents() {
+    public ResponseEntity<?> getAllActiveEvents(HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Event> events = eventService.findAllActiveEvents();
 
         if (events.isEmpty()) {
@@ -95,7 +110,12 @@ public class EventController {
     }
 
     @GetMapping("/inactive")
-    public ResponseEntity<?> getAllInactiveEvents() {
+    public ResponseEntity<?> getAllInactiveEvents(HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Event> events = eventService.findAllInactiveEvents();
 
         if (events.isEmpty()) {
@@ -106,7 +126,12 @@ public class EventController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<?> getAllCurrentEvents() {
+    public ResponseEntity<?> getAllCurrentEvents(HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Event> events = eventService.findAllCurrentEvents();
 
         if (events.isEmpty()) {
@@ -117,7 +142,12 @@ public class EventController {
     }
 
     @GetMapping("/archived")
-    public ResponseEntity<?> getAllArchivedEvents() {
+    public ResponseEntity<?> getAllArchivedEvents(HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Event> events = eventService.findAllArchivedEvents();
 
         if (events.isEmpty()) {
@@ -128,7 +158,12 @@ public class EventController {
     }
 
     @GetMapping("/category/{code}")
-    public ResponseEntity<?> findAllEventsByCategory(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> findAllEventsByCategory(@PathVariable(name = "code") String code, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         Category category = categoryService.findCategoryByCode(code);
 
         if (category == null) {
@@ -145,7 +180,12 @@ public class EventController {
     }
 
     @GetMapping("/user/{code}")
-    public ResponseEntity<?> findAllEventsByUser(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> findAllEventsByUser(@PathVariable(name = "code") String code, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         UUID uuid = stringToUUID.convert(code);
 
         if (uuid == null) {
@@ -169,8 +209,13 @@ public class EventController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> saveEvent(@Valid @RequestBody SaveEventDTO info ) {
+    public ResponseEntity<?> saveEvent(@Valid @RequestBody SaveEventDTO info, HttpServletRequest request ) {
         try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
             Category category = categoryService.findCategoryByCode(info.getCategoryCode());
 
             if (category == null) {
@@ -186,8 +231,13 @@ public class EventController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<?> updateEvent(@Valid @RequestBody UpdateEventDTO info) {
+    public ResponseEntity<?> updateEvent(@Valid @RequestBody UpdateEventDTO info, HttpServletRequest request) {
         try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
             boolean updated = eventService.update(info);
             if (updated) {
                 return new ResponseEntity<>("Event updated successfully",HttpStatus.OK);
@@ -199,7 +249,12 @@ public class EventController {
     }
 
     @PatchMapping("/status/{code}")
-    public ResponseEntity<?> changeEventStatus(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> changeEventStatus(@PathVariable(name = "code") String code, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         UUID uuid = stringToUUID.convert(code);
 
         if (uuid == null) {
