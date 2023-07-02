@@ -321,49 +321,85 @@ function NavList() {
 export default function HomePage() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
-  const [recentEventImages, setRecentEventImages] = React.useState([]);
-  const [recentMovieImages, setRecentMovieImages] = React.useState([]);
+  const [recentMoviesEvents, setRecentMoviesEvents] = useState([]);
+  const [recentSportsEvents, setRecentSportsEvents] = useState([]);
+  const [recentConcertsEvents, setRecentConcertsEvents] = useState([]);
+  const [recentTheaterEvents, setRecentTheaterEvents] = useState([]);
   const { user, token} = useUserContext();
   const [events, setEvents] = useState([]);
-  const [recentEvents, setRecentEvents] = useState([]); // Para guardar los eventos recientes
   const [page, setPage] = useState(0); // Para controlar la página actual
-  const [size] = useState(6); // Para controlar el tamaño de la página
+  const [size] = useState(4); // Para controlar el tamaño de la página
 
 
 
   const navigate = useNavigate();
 
-  const viewBuyTicketsHandler = () => {
-    navigate("/buytickets");
+  const viewBuyTicketsHandler = (code) => {
+    navigate(`/buytickets/${code}`);
   };
 
   const viewEventsHandler = () => {
     navigate("/events");
   };
   
-
-  useEffect(() => {
-    //ordenar por fecha mas reciente y asignar los 3 primeros a recentEvents
-     const sortedEvents = events.sort((a, b) => {
-       return new Date(b.date) - new Date(a.date);
-     });
-     const recentEvents = sortedEvents.slice(0, 3);
-     setRecentEvents(recentEvents);
-    }, [events]);
    
   
   useEffect(() => {
     if(token){
-      eventService.getAllEvents(token)
+      eventService.getCurrentEvents(0, size, token)
           .then((data) => {
             setEvents(data.content);
           })
           .catch((error) => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
+          eventService.getEventsByCategory("CI",0, 6, token)
+          .then((data) => {
+            setRecentMoviesEvents(data.content);
+            console.log("soy las peliculas")
+            console.log(data.content);
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      eventService.getEventsByCategory("DE",0, 6, token)
+          .then((data) => {
+            setRecentSportsEvents(data.content);
+            console.log("soy los deportes")
+            console.log(data.content);
+          }
+          )
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          }
+          );
+      eventService.getEventsByCategory("MU",0, 6, token)
+          .then((data) => {
+            setRecentConcertsEvents(data.content);
+            console.log("soy los conciertos")
+            console.log(data.content);
+          }
+          )
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          }
+          );
+      eventService.getEventsByCategory("OB",0, 6, token)
+          .then((data) => {
+            setRecentTheaterEvents(data.content);
+            console.log("soy los teatros")
+            console.log(data.content);
+          }
+          )
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          }
+          );
       }
   }, [token]); 
- 
+
+
+
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -406,14 +442,14 @@ export default function HomePage() {
     </header>
       <Carousel
       className={classes["carouselContainer"]}>
-    {recentEvents.map(({ image }, index) => (
+    {events.map(({ image }, index) => (
     <div className={classes["imgContainer"]} key={index}>
       <img src={image} alt={`image ${index + 1}`} className={classes["imgCarouselFormat"]} />
       <div className={classes["imgBackgroundContainer"]}>
         <div className={classes["buttonContainer"]}>
           <div className="flex gap-2">
             <button 
-            onClick={viewBuyTicketsHandler}
+            onClick={() => viewBuyTicketsHandler(events[index].code)}
             className={classes["buttonCarousel"]}>Tickets</button>
           </div>
         </div>
@@ -441,8 +477,8 @@ export default function HomePage() {
 
         <div className={classes["rightColumn"]}>
         {/* Tarjetas de eventos más pequeñas */}
-        {events.filter((event ) => event.category.name === "Cine").length > 0 ? (
-          events
+        {recentMoviesEvents.filter((event ) => event.category.name === "Cine").length > 0 ? (
+          recentMoviesEvents
             .filter((event) => event.category.name === "Cine")
             .map((event, index) => (
               <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
@@ -483,8 +519,8 @@ export default function HomePage() {
 
         <div className={classes["rightColumn"]}>
         {/* Tarjetas de eventos más pequeñas */}
-        {events.filter((event ) => event.category.name === "Música").length > 0 ? (
-          events
+        {recentConcertsEvents.filter((event ) => event.category.name === "Música").length > 0 ? (
+          recentConcertsEvents
             .filter((event) => event.category.name === "Música")
             .map((event, index) => (
               <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
@@ -525,8 +561,8 @@ export default function HomePage() {
 
         <div className={classes["rightColumn"]}>
         {/* Tarjetas de eventos más pequeñas */}
-        {events.filter((event ) => event.category.name === "Deportes").length > 0 ? (
-          events
+        {recentSportsEvents.filter((event ) => event.category.name === "Deportes").length > 0 ? (
+          recentSportsEvents
             .filter((event) => event.category.name === "Deportes")
             .map((event, index) => (
               <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
@@ -568,8 +604,8 @@ export default function HomePage() {
 
         <div className={classes["rightColumn"]}>
         {/* Tarjetas de eventos más pequeñas */}
-        {events.filter((event ) => event.category.name === "Obras de teatro").length > 0 ? (
-          events
+        {recentTheaterEvents.filter((event ) => event.category.name === "Obras de teatro").length > 0 ? (
+          recentTheaterEvents
             .filter((event) => event.category.name === "Obras de teatro")
             .map((event, index) => (
               <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
