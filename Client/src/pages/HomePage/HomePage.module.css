@@ -13,13 +13,14 @@
     relative
     object-center
     m-auto
+    shadow-xl
     PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 PC-1920*1080:mt-24
     PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900 PC-1600*900:mt-16
     PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768 PC-1366*768:mt-16
     PC-1280*720:w-CarouselItemPC-1280*720 PC-1280*720:h-CarouselItemPC-1280*720 PC-1280*720:mt-16
     PC-800*600:w-CarouselItemPC-800*600 PC-800*600:h-CarouselItemPC-800*600 PC-800*600:mt-14
     PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480 PC-640*480:mt-12
-    Mobile-390*844:w-full Mobile-390*844:h-CarouselItemMobile-390*844 Mobile-390*844:mt-4
+    Mobile-390*844:w-full Mobile-390*844:h-CarouselItemMobile-390*844 Mobile-390*844:mt-0
 
 }
 
@@ -75,6 +76,7 @@
     absolute
     inset-x-5
     top-1/4
+    py-1
     PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 PC-1920*1080:top-0
     PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900
     PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768
@@ -82,7 +84,7 @@
     PC-800*600:w-CarouselItemPC-800*600 PC-800*600:h-CarouselItemPC-800*600
     PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480
     Mobile-390*844:w-CarouselItemMobile-390*844 Mobile-390*844:h-CarouselItemMobile-390*844
-    Mobile-280:w-CarouselItemMobile-280 Mobile-280:h-CarouselItemMobile-280
+    Mobile-280:w-CarouselItemMobile-280 Mobile-280:h-CarouselItemMobile-280 
 
 }
 
@@ -96,7 +98,7 @@
     PC-800*600:h-ButtonCarouselPC-800*600 PC-800*600:w-ButtonCarouselPC-800*600
     PC-640*480:h-ButtonCarouselPC-640*480 PC-640*480:w-ButtonCarouselPC-640*480
     Mobile-390*844:h-ButtonCarouselMobile-390*844 Mobile-390*844:w-ButtonCarouselMobile-390*844 
-    Mobile-280:h-ButtonCarouselMobile-280 Mobile-280:w-ButtonCarouselMobile-280 Mobile-280:text-xs
+    Mobile-280:h-ButtonCarouselMobile-280 Mobile-280:w-ButtonCarouselMobile-280 Mobile-280:text-xs Mobile-280:mr-36 
 }
 
 .categoriesContainer {
@@ -127,6 +129,7 @@
     Mobile-280:hidden
 }
 
+
 .eventsContainer {
     @apply columns-2 flex m-auto p-6
     Mobile-390*844:hidden
@@ -139,7 +142,7 @@
 }	
 
 .categoryImage {
-    @apply w-full
+    @apply w-full border-2 border-white rounded-sm shadow-md
 }	
 
 .viewMoreButton{
@@ -175,7 +178,10 @@
 .eventTitle {
     font-family: 'PoppinsLight';
 
-    @apply PC-1920*1080:text-xl
+    @apply 
+    my-2
+    font-bold
+    PC-1920*1080:text-xl
     PC-1600*900:text-lg
     PC-1366*768:text-lg
     PC-1280*720:text-sm

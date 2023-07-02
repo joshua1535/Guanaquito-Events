@@ -5,7 +5,7 @@ const UserContext = React.createContext();
 
 export const UserProvider = (props) => {
 
-    const [token, setToken] = useState(undefined);
+    const [token, setToken] = useState(getToken());
     const [user, setUser] = useState(undefined);
     const [tokenVerified, setTokenVerified] = useState(false);
 
