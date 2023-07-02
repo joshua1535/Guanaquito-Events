@@ -35,7 +35,8 @@ const RegisterForm = () => {
         setError(!registered);
     
         if(registered) {
-            navigate('/emailregister');
+            //navigate('/emailregister');
+            navigate('/');
         }
 
         setEmail("");
