@@ -38,34 +38,47 @@ public class TicketServiceImpl implements TicketService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean save(SaveTicketDTO saveTicketDTO) throws Exception {
+    public Boolean save(List<SaveTicketDTO> saveTicketDTO) throws Exception {
         
-        User foundUser = userRepository.findByCode(UUID.fromString(saveTicketDTO.getUserOwner()));
+        User userBuyer = userRepository.findByCode(UUID.fromString(saveTicketDTO.get(0).getUserOwner()));
 
-        if(foundUser == null) {
+        if(userBuyer == null) {
             return false;
         }
 
-        Order foundOrder = foundUser.getOrders().stream()
-            .filter(order -> order.getCode().equals(UUID.fromString(saveTicketDTO.getOrder())))
+        Order currentOrder = userBuyer.getOrders().stream()
+            .filter(order -> order.getCode().equals(UUID.fromString(saveTicketDTO.get(0).getOrder())))
             .findFirst()
             .orElse(null);
 
-        if(foundOrder == null) {
+        if(currentOrder == null) {
             return false;
         }
 
-        Tier foundTier = tierService.findTierByCode(UUID.fromString(saveTicketDTO.getTier()));
+        try {
+        
+            for (SaveTicketDTO ticketDTO : saveTicketDTO) {
 
-        if(foundTier == null) {
+                Tier tier = tierService.findTierByCode(UUID.fromString(ticketDTO.getTier()));
+
+                if(tier == null) {
+                    return false;
+                }
+
+                Ticket ticket = new Ticket(currentOrder, tier, userBuyer);
+
+                ticketRepository.save(ticket);
+
+            }
+
+            return true;
+
+        } catch (Exception e) {
+        
+            System.out.println(e.getMessage());
             return false;
+        
         }
-
-        Ticket ticket = new Ticket(foundOrder, foundTier, foundUser);
-
-        ticketRepository.save(ticket);
-    
-        return true;
     }
 
     @Override

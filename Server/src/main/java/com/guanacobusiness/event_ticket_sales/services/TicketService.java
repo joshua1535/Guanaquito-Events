@@ -10,7 +10,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.User;
 
 public interface TicketService {
 
-    Boolean save(SaveTicketDTO saveTicketDTO) throws Exception;
+    Boolean save(List<SaveTicketDTO> saveTicketDTO) throws Exception;
     Boolean changeOwnership(ChangeOwnershipDTO changeOwnershipDTO) throws Exception;
     List<Ticket> findAllUserTickets(User user);
     Ticket findTicketByCode(UUID code);

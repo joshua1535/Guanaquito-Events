@@ -61,8 +61,8 @@ public class OrderController {
 
         try {
         
-            orderService.createOrder(info, user);
-            return new ResponseEntity<>("Order saved!",HttpStatus.OK);
+            Order createdOrder = orderService.createOrder(info, user);
+            return new ResponseEntity<>(createdOrder.getCode().toString(),HttpStatus.OK);
         
         } catch (Exception e) {
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
