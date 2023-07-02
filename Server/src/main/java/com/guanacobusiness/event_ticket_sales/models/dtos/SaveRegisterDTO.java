@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class SaveRegisterDTO {
     
     @NotBlank(message = "Code is required")
-    @UUID(message = "Event Code is not valid")
+    //@UUID(message = "Event Code is not valid")
     private String transactionCode;
 
     @NotBlank(message = "Code is required")

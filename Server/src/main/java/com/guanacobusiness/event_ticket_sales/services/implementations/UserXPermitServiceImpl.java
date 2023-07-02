@@ -37,6 +37,9 @@ public class UserXPermitServiceImpl implements UserXPermitService{
     @Autowired
     PageDTOMapper pageDTOMapper;
 
+    @Autowired
+    UserServiceImpl userService;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Boolean save(User user, Permit permit) throws Exception {
@@ -82,7 +85,9 @@ public class UserXPermitServiceImpl implements UserXPermitService{
 
         return true;
     }
-public List<Permit> findPermitsByUserCode(UUID userCode) {
+
+    @Override
+    public List<Permit> findPermitsByUserCode(UUID userCode) {
 
         User user = userService.findByCode(userCode);
 

@@ -20,8 +20,6 @@ public class SaveTicketDTO {
     @UUID(message = "The Order code must be a valid UUID")
     private String tier;
 
-    @NotBlank(message = "The User Owner code is required")
-    @UUID(message = "The Order code must be a valid UUID")
     private String userOwner;
 
 }

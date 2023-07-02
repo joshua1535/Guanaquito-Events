@@ -111,15 +111,15 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public List<Ticket> findAllUserTickets(UUID userOwnerCode) {
-    
-        User user = userRepository.findByCode(userOwnerCode);
+    public List<Ticket> findAllUserTickets(User userOwnerCode) {
 
-        if(user == null) {
-            return null;
+        List<Ticket> tickets = userOwnerCode.getOrders().stream()
+            .flatMap(order -> order.getTickets().stream())
+            .toList();
+
+        if(tickets.isEmpty()) {
+            return userOwnerCode.getTickets();
         }
-
-        List<Ticket> tickets = user.getTickets();
 
         return tickets;
     

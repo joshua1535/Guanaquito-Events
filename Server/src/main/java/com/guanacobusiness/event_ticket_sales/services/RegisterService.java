@@ -7,6 +7,7 @@ import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeTransactionCodeD
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
+import com.guanacobusiness.event_ticket_sales.models.entities.User;
 
 public interface RegisterService {
     
@@ -19,5 +20,6 @@ public interface RegisterService {
     boolean delete(UUID ticketCode, String transacCode) throws Exception;
     Boolean isEnabled(UUID ticketCode);
     Register findByTransferenceCode(String transacCode);
+    Boolean isAvailable(Ticket ticket, User user);
 
 }

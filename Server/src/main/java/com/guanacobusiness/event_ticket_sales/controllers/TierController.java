@@ -30,6 +30,7 @@ import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.services.TierService;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -47,7 +48,12 @@ public class TierController {
     private EventService eventService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllTiers() {
+    public ResponseEntity<?> getAllTiers(HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Tier> tiers = tierService.findAllTiers();
 
         if(tiers == null || tiers.isEmpty()){
@@ -58,7 +64,11 @@ public class TierController {
     }
 
     @GetMapping("/event/{code}")
-    public ResponseEntity<?> getAllTiersByEventCode(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> getAllTiersByEventCode(@PathVariable(name = "code") String code, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         UUID uuid = stringToUUID.convert(code);
 
@@ -76,7 +86,11 @@ public class TierController {
     }
     
     @GetMapping("/{code}")
-    public ResponseEntity<?> findTierByCode(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> findTierByCode(@PathVariable(name = "code") String code, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         UUID uuid = stringToUUID.convert(code);
 
@@ -94,7 +108,11 @@ public class TierController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> saveTier(@Valid @RequestBody SaveTierDTO info) {
+    public ResponseEntity<?> saveTier(@Valid @RequestBody SaveTierDTO info, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         UUID uuid = stringToUUID.convert(info.getEventCode());
 
@@ -117,8 +135,13 @@ public class TierController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<?> updateTier(@Valid @RequestBody UpdateTierDTO info) {
+    public ResponseEntity<?> updateTier(@Valid @RequestBody UpdateTierDTO info, HttpServletRequest request) {
         try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
             Boolean statusUpdate = tierService.update(info);
 
             if(!statusUpdate){
@@ -132,7 +155,11 @@ public class TierController {
     }
 
     @DeleteMapping("/{code}")
-    public ResponseEntity<?> deleteTier(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> deleteTier(@PathVariable(name = "code") String code, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
 
         UUID uuid = stringToUUID.convert(code);
 

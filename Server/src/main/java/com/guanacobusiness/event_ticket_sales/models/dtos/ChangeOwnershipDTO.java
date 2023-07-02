@@ -12,12 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChangeOwnershipDTO {
 
-    @NotBlank(message = "The New User Owner code is required")
-    @UUID(message = "User code must be a valid UUID")
     private String newUserOwnerCode;
 
     @NotBlank(message = "The Transfer code is required")
-    @UUID(message = "Transference code must be a valid UUID")
+    //@UUID(message = "Transference code must be a valid UUID")
     private String transferCode;
 
 }

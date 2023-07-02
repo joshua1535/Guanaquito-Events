@@ -94,9 +94,14 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(rollbackOn = Exception.class)
     public boolean updatePassword(PasswordUpdateDTO userUpdateDTO, String newPassword) throws Exception {
+
         User foundUser = userRepository.findByCode(UUID.fromString(userUpdateDTO.getUserCode()));
 
         if(foundUser == null){
+            return false;
+        }
+
+        if(!passwordEncoder.matches(userUpdateDTO.getPassword(), foundUser.getPassword())){
             return false;
         }
 

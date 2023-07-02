@@ -25,6 +25,7 @@ import com.guanacobusiness.event_ticket_sales.models.dtos.SaveCategoryDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,13 +37,23 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> findAllCategories() {
+    public ResponseEntity<?> findAllCategories(HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
         List<Category> categories = categoryService.findAllCategories();
         return new ResponseEntity<>(categories,HttpStatus.OK);
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<?> findCategoryByCode(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> findCategoryByCode(@PathVariable(name = "code") String code, HttpServletRequest request) {
+    
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+    
         Category category = categoryService.findCategoryByCode(code);
 
         if (category == null) {
@@ -53,8 +64,13 @@ public class CategoryController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> saveCategory(@Valid @RequestBody SaveCategoryDTO info ) {
+    public ResponseEntity<?> saveCategory(@Valid @RequestBody SaveCategoryDTO info, HttpServletRequest request ) {
         try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
             boolean saved = categoryService.save(info);
             if (saved) {
                 return new ResponseEntity<>("Category Created successfully",HttpStatus.CREATED);
@@ -67,8 +83,13 @@ public class CategoryController {
 
 
     @PatchMapping("/update")
-    public ResponseEntity<?> updateCategory(@Valid @RequestBody SaveCategoryDTO info) {
+    public ResponseEntity<?> updateCategory(@Valid @RequestBody SaveCategoryDTO info, HttpServletRequest request) {
         try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
             Category categoryFound = categoryService.findCategoryByCode(info.getCode());
             if (categoryFound == null) {
                 return new ResponseEntity<>("Category Not Found",HttpStatus.NOT_FOUND);
@@ -84,8 +105,13 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{code}")
-    public ResponseEntity<?> deleteCategory(@PathVariable(name = "code") String code) {
+    public ResponseEntity<?> deleteCategory(@PathVariable(name = "code") String code, HttpServletRequest request ) {
         try {
+
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+                return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+            }
+
             Boolean statusDelete = categoryService.delete(code);
 
             if (statusDelete == false) {
