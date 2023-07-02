@@ -4,13 +4,20 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
+import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.models.entities.UserXPermit;
 import com.guanacobusiness.event_ticket_sales.repositories.UserXPermitRepository;
 import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
+import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
+import com.guanacobusiness.event_ticket_sales.utils.UserMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -19,6 +26,12 @@ public class UserXPermitServiceImpl implements UserXPermitService{
 
     @Autowired
     UserXPermitRepository userXPermitRepository;
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    PageDTOMapper pageDTOMapper;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -89,8 +102,22 @@ public class UserXPermitServiceImpl implements UserXPermitService{
         if(users.isEmpty()) {
             return null;
         }
-
         return users;
+    }
+
+    @Override
+    public PageDTO<FormatedUser> findUsersByPermitCode(UUID permitCode, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserXPermit> users = userXPermitRepository.findByPermitCode(permitCode, pageable);
+
+        if(users.isEmpty() || users == null) {
+            return null;
+        }
+        
+        List<FormatedUser> formatedUsers = userMapper.mapUserXPermit(users.getContent());
+        PageDTO<FormatedUser> usersList = pageDTOMapper.map(formatedUsers, users);
+
+        return usersList;
     }
 
 }

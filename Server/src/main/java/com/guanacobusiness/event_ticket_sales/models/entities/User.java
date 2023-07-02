@@ -1,5 +1,6 @@
 package com.guanacobusiness.event_ticket_sales.models.entities;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -46,6 +47,9 @@ public class User implements UserDetails{
 
     @Column(name = "active", insertable = false)
     private Boolean active;
+
+    @Column(name = "date_added",insertable = false, updatable = false)
+    private LocalDateTime dateAdded;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore

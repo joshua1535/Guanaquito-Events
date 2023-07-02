@@ -20,6 +20,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
+
 
 
 // profile menu component
@@ -188,29 +191,115 @@ function NavList() {
   );
 }
 
-const images = ["https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png", "https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png", "https://i.postimg.cc/3RGLQb8v/imagen-2023-06-04-161025997.png","https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg "];
-
-
-
-
 const EventsPage = () => {
   const categories = ["Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
   const [selectedCategory, setSelectedCategory] = useState('Todos');
 
-  const images1 = {
-    'Todos': ['https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png'
-      ,'https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png','https://kirbyandtheforgottenland.nintendo.com/assets/images/home/header.jpg',
-      'https://i.postimg.cc/3RGLQb8v/imagen-2023-06-04-161025997.png','https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg',
-      'https://assets-prd.ignimgs.com/2022/09/14/zelda-tears-of-the-kingdom-button-2k-1663127818777.jpg'],
-    'Cine': ['https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png'],
-    'Conciertos': ['https://i.postimg.cc/3RGLQb8v/imagen-2023-06-04-161025997.png'],
-    'Obras de teatro': ['https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png','https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg'],
-    'Deportes': ['https://assets-prd.ignimgs.com/2022/09/14/zelda-tears-of-the-kingdom-button-2k-1663127818777.jpg'],
-  };
-
-
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+
+  const [events, setEvents] = useState({
+    'Todos':[],
+    'Cine': [],
+    'Conciertos': [],
+    'Obras de teatro': [],
+    'Deportes': []
+  });
+  const { user, token} = useUserContext();
+
+  console.log('mi token es:',token);
+
+  useEffect(() => {
+    if(token){
+      eventService.getAllEvents(token)
+          .then((data) => {
+            setEvents(prevEvents => ({...prevEvents, Todos: data}));          
+              console.log('Los eventos obtenidas:', events.Todos);
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      }
+  }, [token]); 
+
+
+  useEffect(() => {
+    if(token){
+      eventService.getEventsByCategory('Cine01',token)
+          .then((data) => {
+            if(data===undefined)
+            {
+
+            }
+            else{
+            setEvents(prevEvents => ({...prevEvents, Cine: data}));          
+              console.log('Los eventos cine obtenidas:', events.Cine);
+            }
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      }
+  }, ['Cine01',token]); 
+
+  useEffect(() => {
+    if(token){
+      eventService.getEventsByCategory('Conciertos01',token)
+          .then((data) => {
+            if(data===undefined)
+            {
+
+            }
+            else{
+            setEvents(prevEvents => ({...prevEvents, Conciertos: data}));          
+              console.log('Los eventos Conciertos obtenidas:', events.Conciertos);
+            }
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      }
+  }, ['Conciertos01',token]); 
+
+  useEffect(() => {
+    if(token){
+      eventService.getEventsByCategory('Obras de teatro01',token)
+          .then((data) => {
+            if(data===undefined)
+            {
+
+            }
+            else{
+            setEvents(prevEvents => ({...prevEvents, "Obras de teatro": data}));          
+              console.log('Los eventos teatro obtenidas:', events['Obras de teatro']);
+            }
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      }
+  }, ['Obras de teatro01',token]); 
+
+  useEffect(() => {
+    if(token){
+      eventService.getEventsByCategory('Deportes01',token)
+          .then((data) => {
+            if(data===undefined)
+            {
+
+            }
+            else{
+            setEvents(prevEvents => ({...prevEvents, Deportes: data}));          
+              console.log('Los eventos teatro obtenidas:', events.Deportes);
+            }
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      }
+  }, ['Deportes0101',token]); 
+
+  
 
 
   const navigate = useNavigate();
@@ -218,6 +307,7 @@ const EventsPage = () => {
   const viewBuyTicketsHandler = () => {
     navigate("/buytickets");
   };
+
 
   React.useEffect(() => {
     window.addEventListener(
@@ -325,11 +415,22 @@ const EventsPage = () => {
         </div>
         <div className="w-full bg-dark-blue sm:w-3/4 p-4 overflow-auto">
           <div className="flex  p-0 flex-wrap sm:space-x-4 justify-center">
-            {images1[selectedCategory].map((imgSrc, index)=> (
+          {events[selectedCategory].map((event, index) => (
               <div className=" p-4 rounded-lg m-2 sm:m-0" key={index}>
-                <img 
-                src={imgSrc} alt="Imagen de evento"
-                className=" w-40 h-56 object-cover mb-2 rounded"/>
+                <div className="w-40 h-56 overflow-hidden relative">
+                      {/* Imagen */}
+                      <img
+                        src={event.image}
+                        alt="Imagen de evento"
+                        className="w-full h-full object-cover mb-2 rounded transform transition-all duration-300 hover:opacity-5"
+                      />
+
+                      {/* Texto del hover */}
+                      <div style={ { fontFamily: "PoppinsLight" }} className="absolute inset-0 flex flex-col items-center justify-center opacity-0 bg-black bg-opacity-70 text-Orange font-bold transition-all duration-300 hover:opacity-100">
+                        <p className="text-xl">{event.title}</p>
+                        <p className="text-lg">{event.date}</p>
+                      </div>
+                    </div>
                 <button 
                 onClick={viewBuyTicketsHandler}
                 className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"

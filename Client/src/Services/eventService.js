@@ -16,5 +16,26 @@ export const eventService = {
         } catch (error) {
             console.log(error);
         }
-    }
-};
+    },
+    getEventsByCategory: async function (code, token) {
+
+        try {
+            
+            const response = await API.get(`/event/category/${code}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+            
+            console.log(response.data);
+
+            return response.data;
+
+        } catch (error) {
+            
+            console.log(error);
+
+        }
+    },
+}
