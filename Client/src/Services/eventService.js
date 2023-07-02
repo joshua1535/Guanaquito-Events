@@ -17,12 +17,16 @@ export const eventService = {
             console.log(error);
         }
     },
-    getEventsByCategory: async function (code, token) {
+    getEventsByCategory: async function (code, page = 0, size = 10,token) {
 
         try {
             
             const response = await API.get(`/event/category/${code}`,
                 {
+                    params: {
+                        page: page,
+                        size: size
+                    },
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
