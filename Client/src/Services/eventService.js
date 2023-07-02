@@ -42,4 +42,45 @@ export const eventService = {
 
         }
     },
+
+    getCurrentEvents : async function (page = 0, size = 10,token) {
+            
+            try {
+                
+                const response = await API.get(`/event/current`,
+                    {
+                        params: {
+                            page: page,
+                            size: size
+                        },
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                
+                console.log(response.data);
+    
+                return response.data;
+    
+            } catch (error) {
+                
+                console.log(error);
+    
+            }
+        },
+
+    getEventById: async function (id,token) {
+        try {
+            const response = await API.get(`/event/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

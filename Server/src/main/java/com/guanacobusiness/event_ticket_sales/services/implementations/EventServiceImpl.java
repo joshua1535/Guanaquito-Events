@@ -87,7 +87,7 @@ public class EventServiceImpl implements EventService{
         LocalDate currentDate = LocalDate.now();
 
         List<Event> eventList = eventRepository.findAll();
-
+        
         return eventList.stream().filter(event -> event.getDate().equals(currentDate) || event.getDate().isAfter(currentDate)).collect(Collectors.toList());
     }
 

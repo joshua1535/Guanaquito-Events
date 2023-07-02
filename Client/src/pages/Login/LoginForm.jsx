@@ -11,6 +11,11 @@ const LoginForm = () => {
 
     const navigate = useNavigate();
 
+    const { login, token } = useUserContext();
+    if (token) {
+        return navigate('/home')
+    }
+
     const signinHandler = () => {
         navigate('/home');
     };
@@ -19,12 +24,13 @@ const LoginForm = () => {
         navigate('/emailconfirmation');
     };
 
-    const { login, token } = useUserContext();
-
+    
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
 
     const [error, setError] = useState(false);
+
+    
 
     const onChange = (e, save) => {
         save(e.target.value);
@@ -42,10 +48,7 @@ const LoginForm = () => {
         setPassword("");
 
     }
-
-    if (token) {
-        return navigate('/home')
-    }
+    
 
     const registerHandler = (e) => {
         

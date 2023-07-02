@@ -4,7 +4,6 @@ import logo from '../../assets/logo.png';
 import classes from './BuyTicketPage.module.css';
 import {
   Navbar,
-  MobileNav,
   Typography,
   Button,
   Menu,
@@ -13,13 +12,17 @@ import {
   MenuItem,
   Avatar,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import {
   ChevronDownIcon,
   Bars2Icon,
 } from "@heroicons/react/24/outline";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
+import { tierService } from '../../Services/tierService';
 
 
 // profile menu component
@@ -208,6 +211,10 @@ function NavList() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const [activeButton, setActiveButton] = useState(1);
+    const {user, token} = useUserContext();
+    const { code } = useParams(); // Obtiene el código de la URL
+    const [event, setEvent] = useState(null);
+    const [tiers, setTiers] = useState([]);
 
     const [showDetails, setShowDetails] = useState(false);
 
@@ -230,7 +237,15 @@ function NavList() {
       navigate("/mytickets");
     };
 
-      
+
+    useEffect(() => {
+      if(token) {
+        eventService.
+        getEventById(code, token).then((event) => setEvent(event));
+
+        tierService.getTiersbyEvent(code, token).then((tiers) => setTiers(tiers));
+      }
+    }, [token, code]);
         
 
 
@@ -270,19 +285,35 @@ function NavList() {
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
-      </MobileNav>
+      </Collapse>
 
       </Navbar>
     </header>
         <div className={[classes["generalContainer"]]}>
-            <div className="flex w-3/4 h-3/4 shadow-md overflow-hidden">
+            <div className="flex w-3/4 h-full overflow-auto">
+                <div className="flex flex-col h-full overflow-hidden">
                 <img 
                     className={[classes["imgContainer"]]}
-                    src="https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png" 
+                    src={event?.image}
                     alt="Event"
                 />
+                <Typography 
+                    className={[classes["titleContainer"]]}
+                    color="white"
+                    style={{ fontFamily: "PoppinsLight" } }
+                >
+                    {event?.title}
+                </Typography>
+                <Typography
+                    className={[classes["capacityContainer"]]}
+                    color="white"
+                    style={{ fontFamily: "PoppinsLight" } }
+                >
+                    126 {event?.capacity} boletos disponibles
+                </Typography>
+                </div>
                 <div 
                     className={[classes["infoContainer"]]}
                     style={{ backgroundImage: 'url(https://i.postimg.cc/d3MywV5s/imagen-2023-06-05-090157807.png)' }} 
@@ -314,10 +345,10 @@ function NavList() {
 
                     {showDetails ? (
       // Si showDetails es true, mostramos la información del evento
-                        <div className="">
+                        <div className="mt-4">
                           <h1
                           className={[classes["titleH1"]]}
-                          >{eventDetails.title}
+                          >{event?.title}
                           </h1>
 
                           <p className={[classes["pData"]]}>
@@ -326,27 +357,29 @@ function NavList() {
                               >Fecha: </span> 
                               <span 
                               className={[classes["contentSpan"]]}
-                              >{eventDetails.date}</span>
+                              >{event?.date}</span>
                           </p>
                           <p className={[classes["pData"]]}>
                               <span className={[classes["titleSpan"]]}>Hora: </span> 
-                              <span className={[classes["contentSpan"]]}>{eventDetails.time}</span>
+                              <span className={[classes["contentSpan"]]}>{event?.time}</span>
                           </p>
                           <p className={[classes["pData"]]}>
                               <span className={[classes["titleSpan"]]}>Participantes: </span> 
-                              <span className={[classes["contentSpan"]]}>{eventDetails.participants.join(', ')}</span>
+                              <span className={[classes["contentSpan"]]}>{event?.involvedPeople}</span>
                           </p>
                           <p className={[classes["pData"]]}>
                               <span className={[classes["titleSpan"]]}>Patrocinadores: </span> 
-                              <span className={[classes["contentSpan"]]}>{eventDetails.sponsors.join(', ')}</span>
+                              <span className={[classes["contentSpan"]]}>{event?.sponsors}</span>
                           </p>
                           <p className={[classes["pData"]]}>
                               <span className={[classes["titleSpan"]]}>Categoría: </span> 
-                              <span className={[classes["contentSpan"]]}>{eventDetails.category}</span>
+                              <span className={[classes["contentSpan"]]}>{event?.category.name}</span>
                           </p>
                         </div>
                       ) : (  
-                        <>             
+                        <> 
+                          
+                             { tiers.map((tier) => (       
                     <div className=" 
                     PC-1280*720:ml-3 PC-1280*720:mt-3
                     PC-800*600:ml-3 PC-800*600:mt-2  
@@ -355,9 +388,9 @@ function NavList() {
                         <div>
                             <h2 
                               className={[classes["ticketText"]]}
-                             >Ticket Zona Lateral</h2>
+                             >{tier?.name}</h2>
                             <p className={[classes["ticketPrice2"]]}>Precio: <span className={[classes["ticketPrice"]]}>
-                                {eventDetails.price}
+                                ${tier.price}
                               </span>
                             </p>
                         </div>
@@ -370,25 +403,9 @@ function NavList() {
                             <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
                         </div>
                         </div>
-                        <div className="
-                        PC-1280*720:ml-3 PC-1280*720:mt-3
-                        PC-800*600:ml-3 PC-800*600:mt-4
-                         PC-640*480:ml-1 flex items-center w-fit text-Orange ml-14 mt-5" style={{ fontFamily: "Poppins" }}>
-                        <div>
-                            <h2 className={[classes["ticketText"]]}>Ticket VIP</h2>
-                            <p className={[classes["ticketPrice2"]]} >Precio: <span className={[classes["ticketPrice"]]}>$100</span></p>
-                        </div>
-                        <div className="ml-3">
-                            <select className={[classes["dropboxContainer"]]}>
-                            {[...Array(11)].map((_, i) => 
-                                <option key={i} value={i}>{i}</option>
-                            )}
-                            </select>
-                            <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
-                        </div>
-                    </div>
-                    </>
-    )}
+                    ))}
+                        </>
+                      )}
                     {/* Botones de Volver y Pagar */}                    
                     <div className={[classes["botbuttonsContainer"]]}>
                         <button 
@@ -410,11 +427,11 @@ function NavList() {
             </div>
         </div>
         <div className="sm:hidden flex flex-col items-center h-72 w-full bg-cover"
-             style={{ backgroundImage: `url(https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png)` }}
+             style = {{backgroundImage: `url(${event?.image})`}}
         >
             <img 
                 className=" w-3/5 object-cover mt-6 mb-6" 
-                src='https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png'
+                src = {event?.image}
                 alt="Event"
             />
 
