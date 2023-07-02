@@ -32,4 +32,14 @@ public class PageDTOMapper {
         return pageDTO;
     }
 
+    public <T> PageDTO<T> map(List<T> customList, int page, int size, long totalElements, int totalPages) {
+        PageDTO<T> pageDTO = new PageDTO<T>(
+            customList,
+            page,
+            size,
+            totalElements,
+            totalPages
+        );
+        return pageDTO;
+    }
 }

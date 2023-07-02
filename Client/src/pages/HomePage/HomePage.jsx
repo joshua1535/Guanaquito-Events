@@ -2,7 +2,7 @@ import './HomePage.module.css';
 import classes from './HomePage.module.css';
 import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import {
   Carousel,
@@ -21,12 +21,18 @@ import {
 import {
   ChevronDownIcon,
   Bars2Icon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowLongRightIcon,
+  ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
 
 const listEvents = [
   {
@@ -53,92 +59,23 @@ const listEvents = [
     date: "04/01/2019",
     img: "https://www.cultura.gob.sv/wp-content/uploads/2022/02/Ballet-naciola-105.png",
   },
-];
-
-//obtener los 3 eventos mas recientes en base a la fecha, necesito sacar la imagen
-const getImg = (listEvents) => {
-  // Ordenar los eventos por fecha de forma descendente
-  const sortedEvents = [...listEvents].sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateB - dateA;
-  });
-
-  // Obtener las imágenes de los 3 eventos más recientes
-  const recentImages = sortedEvents.slice(0, 3).map(event => event.img);
-  
-  return recentImages;
-};
-
-const movieEvents = [
   {
-    title: "Mario",
-    description: "Descripcion del evento 1",
-    date: "01/01/2021",
-    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
-    precio: "10.00",
-  },
-  {
-    title: "Pink Floyd",
-    description: "Descripcion del evento 2",
-    date: "02/02/2022",
-    img: "https://i0.wp.com/mixturapop.com/wp-content/uploads/2019/06/camacu%C3%A1.jpg?fit=700%2C390&ssl=1",
-    precio: "10.00",
-  },
-  {
-    title: "Fas vs Dragon",
-    description: "Descripcion del evento 3",
-    date: "03/03/2021",
-    img: "https://futbolcentroamerica.com/__export/1667069866944/sites/futbolcentroamerica/img/2022/10/28/fas-dragon.jpg_242310155.jpg",
-    precio: "10.00",
+    title: "Ballet Nacional",
+    description: "Descripcion del evento 5",
+    date: "04/01/2019",
+    img: "https://www.cultura.gob.sv/wp-content/uploads/2022/02/Ballet-naciola-105.png",
   },
   {
     title: "Ballet Nacional",
-    description: "Descripcion del evento 4",
+    description: "Descripcion del evento 6",
     date: "04/01/2019",
     img: "https://www.cultura.gob.sv/wp-content/uploads/2022/02/Ballet-naciola-105.png",
-    precio: "10.00",
-  },
-  {
-    title: "Mario",
-    description: "Descripcion del evento 1",
-    date: "01/01/2021",
-    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
-    precio: "10.00",
-  },
-  {
-    title: "Mario",
-    description: "Descripcion del evento 1",
-    date: "01/01/2021",
-    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
-    precio: "10.00",
-  },
-  {
-    title: "Mario",
-    description: "Descripcion del evento 1",
-    date: "01/01/2021",
-    img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
-    precio: "10.00",
   },
 ];
 
-const getMovieImg = (movieEvents) => {
-  // Ordenar los eventos por fecha de forma descendente
-  const sortedEvents = [...movieEvents].sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateB - dateA;
-  });
-
-  // Obtener las imágenes de los 3 eventos más recientes
-  const recentImages = sortedEvents.slice(0, 3).map(event => event.img);
-
-  return recentImages;
-};
-
 
 const cardData = [
-  { id: 1, title: 'CINE', imageUrl: 'https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg' },
+  { id: 1, title: 'CINE', imageUrl: 'https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2023/03/palomitas-sala-cine-2992264.jpg?tf=3840x' },
   { id: 2, title: 'CONCIERTO', imageUrl: 'https://thumbs.dreamstime.com/b/muchedumbre-del-concierto-10447765.jpg' },
   { id: 3, title: 'TEATRO', imageUrl: 'https://www.hoyesarte.com/wp-content/uploads/2009/08/teatro-2.jpg' },
   { id: 4, title: 'DEPORTES', imageUrl: 'https://i.ytimg.com/vi/uGU1IztR5rg/maxresdefault.jpg' },
@@ -174,6 +111,12 @@ const SliderCards = () => {
       },
     ],
   };
+  const navigate = useNavigate();
+
+  const viewEventsHandler = () => {
+    navigate("/events");
+  };
+  
 
   return (
     <div className={[classes["sliderMobileContainer"]]}>
@@ -194,7 +137,9 @@ const SliderCards = () => {
           </div>
         ))}
       </Slider>
-      <button className={classes["viewMoreButtonMobile"]}>Ver todos</button>
+      <button 
+      onClick={viewEventsHandler}
+      className={classes["viewMoreButtonMobile"]}>Ver todos</button>
     </div>
   );
 };
@@ -378,6 +323,13 @@ export default function HomePage() {
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const [recentEventImages, setRecentEventImages] = React.useState([]);
   const [recentMovieImages, setRecentMovieImages] = React.useState([]);
+  const { user, token} = useUserContext();
+  const [events, setEvents] = useState([]);
+  const [recentEvents, setRecentEvents] = useState([]); // Para guardar los eventos recientes
+  const [page, setPage] = useState(0); // Para controlar la página actual
+  const [size] = useState(6); // Para controlar el tamaño de la página
+
+
 
   const navigate = useNavigate();
 
@@ -388,6 +340,29 @@ export default function HomePage() {
   const viewEventsHandler = () => {
     navigate("/events");
   };
+  
+
+  useEffect(() => {
+    //ordenar por fecha mas reciente y asignar los 3 primeros a recentEvents
+     const sortedEvents = events.sort((a, b) => {
+       return new Date(b.date) - new Date(a.date);
+     });
+     const recentEvents = sortedEvents.slice(0, 3);
+     setRecentEvents(recentEvents);
+    }, [events]);
+   
+  
+  useEffect(() => {
+    if(token){
+      eventService.getAllEvents(token)
+          .then((data) => {
+            setEvents(data);
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      }
+  }, [token]); 
  
   React.useEffect(() => {
     window.addEventListener(
@@ -395,19 +370,8 @@ export default function HomePage() {
       () => window.innerWidth >= 960 && setIsNavOpen(false)
     );
   }, []);
- 
-  useEffect(() => {
-    // Obtener las imágenes de los 3 eventos más recientes
-    const recentImages = getImg(listEvents);
-    setRecentEventImages(recentImages);
-  }, []);
 
-  useEffect(() => {
-    // Obtener las imágenes de las 3 películas más recientes
-    const recentImages = getMovieImg(movieEvents);
-    setRecentMovieImages(recentImages);
-  }, []);
-  
+
   return (
     <div className={[classes["generalContainer"]]}>
       <header className={[classes["headerContainer"]]}>
@@ -440,8 +404,9 @@ export default function HomePage() {
       </Collapse>
       </Navbar>
     </header>
-      <Carousel className={classes["carouselContainer"]}>
-  {recentEventImages.map((image, index) => (
+      <Carousel
+      className={classes["carouselContainer"]}>
+    {recentEvents.map(({ image }, index) => (
     <div className={classes["imgContainer"]} key={index}>
       <img src={image} alt={`image ${index + 1}`} className={classes["imgCarouselFormat"]} />
       <div className={classes["imgBackgroundContainer"]}>
@@ -465,7 +430,7 @@ export default function HomePage() {
           <div className={classes["eventsContainer"]}>
         <div className={classes["leftColumn"]}>
           {/* Imagen representativa */}
-          <img src="https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg"
+          <img src="https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2023/03/palomitas-sala-cine-2992264.jpg?tf=3840x"
            alt="Cine" className={classes["categoryImage"]} />
 
           {/* Botón "Ver más eventos de esta categoría" */}
@@ -475,72 +440,159 @@ export default function HomePage() {
         </div>
 
         <div className={classes["rightColumn"]}>
-          {/* Tarjetas de eventos más pequeñas */}
-          {movieEvents.slice(0, 6).map((event, index) => (
-          
+        {/* Tarjetas de eventos más pequeñas */}
+        {events.filter((event ) => event.category.name === "Cine").length > 0 ? (
+          events
+            .filter((event) => event.category.name === "Cine")
+            .map((event, index) => (
+              <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+                <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />
+                <div className={classes["cardContent"]}>
+                  <h3 className={classes["eventTitle"]}>{event.title}</h3>
+                  <p className={classes["eventTitle"]}> {event.date}</p>
+                </div>
+              </Card>
+            ))
+        ) : (
+          // Tarjetas por defecto
+          listEvents.map((event, index) => (
             <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
-              <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
-              <div className={classes["cardContent"]}>
-                <h3 className={classes["eventTitle"]}>{event.title}</h3>
-                <p className={classes["eventTitle"]}> ${event.precio}</p>
-              </div>
-            </Card>
-          ))}
-        </div>
+            <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
+            <div className={classes["cardContent"]}>
+              <h3 className={classes["eventTitle"]}>{event.title}</h3>
+              <p className={classes["eventTitle"]}> {event.date}</p>
+            </div>
+          </Card>
+          ))
+        )}
+      </div>
 </div>
 <div className={[classes["eventsTitle"]]}>
-          <h1>Cine</h1></div>     
+          <h1>Conciertos</h1></div>     
           <div className={classes["eventsContainer"]}>
         <div className={classes["leftColumn"]}>
           {/* Imagen representativa */}
-          <img src="https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg"
-           alt="Cine" className={classes["categoryImage"]} />
+          <img src="https://thumbs.dreamstime.com/b/muchedumbre-del-concierto-10447765.jpg"
+           alt="Música" className={classes["categoryImage"]} />
 
           {/* Botón "Ver más eventos de esta categoría" */}
-          <button className={classes["viewMoreButton"]}>Ver más</button>
+          <button 
+          onClick={viewEventsHandler}
+          className={classes["viewMoreButton"]}>Ver más</button>
         </div>
 
         <div className={classes["rightColumn"]}>
-          {/* Tarjetas de eventos más pequeñas */}
-          {movieEvents.slice(0, 6).map((event, index) => (
-          
+        {/* Tarjetas de eventos más pequeñas */}
+        {events.filter((event ) => event.category.name === "Música").length > 0 ? (
+          events
+            .filter((event) => event.category.name === "Música")
+            .map((event, index) => (
+              <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+                <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />
+                <div className={classes["cardContent"]}>
+                  <h3 className={classes["eventTitle"]}>{event.title}</h3>
+                  <p className={classes["eventTitle"]}> {event.date}</p>
+                </div>
+              </Card>
+            ))
+        ) : (
+          // Tarjetas por defecto
+          listEvents.map((event, index) => (
             <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
-              <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
-              <div className={classes["cardContent"]}>
-                <h3 className={classes["eventTitle"]}>{event.title}</h3>
-                <p className={classes["eventTitle"]}> ${event.precio}</p>
-              </div>
-            </Card>
-
-          ))}
-        </div>
+            <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
+            <div className={classes["cardContent"]}>
+              <h3 className={classes["eventTitle"]}>{event.title}</h3>
+              <p className={classes["eventTitle"]}> {event.date}</p>
+            </div>
+          </Card>
+          ))
+        )}
+      </div>
 </div>
 <div className={[classes["eventsTitle"]]}>
-          <h1>Cine</h1></div>     
+          <h1>Deportes</h1></div>     
           <div className={classes["eventsContainer"]}>
         <div className={classes["leftColumn"]}>
           {/* Imagen representativa */}
-          <img src="https://c8.alamy.com/compes/2h0cj74/composicion-con-palomitas-de-maiz-y-carrete-de-cine-sobre-la-mesa-sobre-fondo-de-color-espacio-para-texto-2h0cj74.jpg"
-           alt="Cine" className={classes["categoryImage"]} />
+          <img src="https://i.ytimg.com/vi/uGU1IztR5rg/maxresdefault.jpg"
+           alt="Deportes" className={classes["categoryImage"]} />
 
           {/* Botón "Ver más eventos de esta categoría" */}
-          <button className={classes["viewMoreButton"]}>Ver más</button>
+          <button 
+          onClick={viewEventsHandler}
+          className={classes["viewMoreButton"]}>Ver más</button>
         </div>
 
         <div className={classes["rightColumn"]}>
-          {/* Tarjetas de eventos más pequeñas */}
-          {movieEvents.slice(0, 6).map((event, index) => (
-          
+        {/* Tarjetas de eventos más pequeñas */}
+        {events.filter((event ) => event.category.name === "Deportes").length > 0 ? (
+          events
+            .filter((event) => event.category.name === "Deportes")
+            .map((event, index) => (
+              <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+                <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />
+                <div className={classes["cardContent"]}>
+                  <h3 className={classes["eventTitle"]}>{event.title}</h3>
+                  <p className={classes["eventTitle"]}> {event.date}</p>
+                </div>
+              </Card>
+            ))
+        ) : (
+          // Tarjetas por defecto
+          listEvents.map((event, index) => (
             <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
-              <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
-              <div className={classes["cardContent"]}>
-                <h3 className={classes["eventTitle"]}>{event.title}</h3>
-                <p className={classes["eventTitle"]}> ${event.precio}</p>
-              </div>
-            </Card>
-        
-          ))}
+            <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
+            <div className={classes["cardContent"]}>
+              <h3 className={classes["eventTitle"]}>{event.title}</h3>
+              <p className={classes["eventTitle"]}> {event.date}</p>
+            </div>
+          </Card>
+          ))
+        )}
+      </div>
+
+</div>
+<div className={[classes["eventsTitle"]]}>
+          <h1>Obras de teatro</h1></div>     
+          <div className={classes["eventsContainer"]}>
+        <div className={classes["leftColumn"]}>
+          {/* Imagen representativa */}
+          <img src="https://www.hoyesarte.com/wp-content/uploads/2009/08/teatro-2.jpg"
+           alt="Obras de teatro" className={classes["categoryImage"]} />
+
+          {/* Botón "Ver más eventos de esta categoría" */}
+          <button 
+          onClick={viewEventsHandler}
+          className={classes["viewMoreButton"]}>Ver más</button>
         </div>
+
+        <div className={classes["rightColumn"]}>
+        {/* Tarjetas de eventos más pequeñas */}
+        {events.filter((event ) => event.category.name === "Obras de teatro").length > 0 ? (
+          events
+            .filter((event) => event.category.name === "Obras de teatro")
+            .map((event, index) => (
+              <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+                <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />
+                <div className={classes["cardContent"]}>
+                  <h3 className={classes["eventTitle"]}>{event.title}</h3>
+                  <p className={classes["eventTitle"]}> {event.date}</p>
+                </div>
+              </Card>
+            ))
+        ) : (
+          // Tarjetas por defecto
+          listEvents.map((event, index) => (
+            <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+            <img src={event.img} alt={event.title} className={classes["smallCardImage"]} />
+            <div className={classes["cardContent"]}>
+              <h3 className={classes["eventTitle"]}>{event.title}</h3>
+              <p className={classes["eventTitle"]}> {event.date}</p>
+            </div>
+          </Card>
+          ))
+        )}
+      </div>
 
 </div>
 <SliderCards/>

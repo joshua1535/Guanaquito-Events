@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Category;
@@ -30,6 +33,7 @@ import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
+import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,20 +59,25 @@ public class EventController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllEvents(HttpServletRequest request) {
+    @Autowired
+    private PageDTOMapper pageDTOMapper;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+  
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
+  
+        Page<Event> events = eventService.findAllEvents(page, size);
 
-        List<Event> events = eventService.findAllEvents();
 
         if(events == null || events.isEmpty()){
             return new ResponseEntity<>("No Events Found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(events,HttpStatus.OK);
+        PageDTO<Event> response = pageDTOMapper.map(events); 
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
     
     @GetMapping("/{code}")
@@ -94,89 +103,92 @@ public class EventController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<?> getAllActiveEvents(HttpServletRequest request) {
-
+    public ResponseEntity<?> getAllActiveEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
 
-        List<Event> events = eventService.findAllActiveEvents();
+        Page<Event> events = eventService.findAllActiveEvents(page, size);
 
-        if (events.isEmpty()) {
+        if (events.isEmpty() || events == null) {
             return new ResponseEntity<>("No Active Events Found",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(events,HttpStatus.OK);
+        PageDTO<Event> response = pageDTOMapper.map(events);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/inactive")
-    public ResponseEntity<?> getAllInactiveEvents(HttpServletRequest request) {
 
+    public ResponseEntity<?> getAllInactiveEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
+        
+        Page<Event> events = eventService.findAllInactiveEvents(page, size);
 
-        List<Event> events = eventService.findAllInactiveEvents();
-
-        if (events.isEmpty()) {
+        if (events.isEmpty() || events == null) {
             return new ResponseEntity<>("No Inactive Events Found",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(events,HttpStatus.OK);
+        PageDTO<Event> response = pageDTOMapper.map(events);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/current")
-    public ResponseEntity<?> getAllCurrentEvents(HttpServletRequest request) {
-
+    public ResponseEntity<?> getAllCurrentAndActiveEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
-        }
-
-        List<Event> events = eventService.findAllCurrentEvents();
-
-        if (events.isEmpty()) {
+        }  
+      
+        //Page<Event> events = eventService.findAllCurrentEvents(page, size);
+        PageDTO<Event> response = eventService.findAllCurrentEvents(page, size);
+        if (response == null) {
             return new ResponseEntity<>("No Current Events found",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(events,HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/archived")
-    public ResponseEntity<?> getAllArchivedEvents(HttpServletRequest request) {
-
+    public ResponseEntity<?> getAllArchivedEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
-        }
+        }  
+      
+        PageDTO<Event> response = eventService.findAllArchivedEvents(page, size);
 
-        List<Event> events = eventService.findAllArchivedEvents();
-
-        if (events.isEmpty()) {
+        if (response == null) {
             return new ResponseEntity<>("No Archived Events Found",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(events,HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/category/{code}")
-    public ResponseEntity<?> findAllEventsByCategory(@PathVariable(name = "code") String code, HttpServletRequest request) {
-
+    public ResponseEntity<?> findAllEventsByCategory(@PathVariable(name = "code") String code, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
-
+      
         Category category = categoryService.findCategoryByCode(code);
 
         if (category == null) {
             return new ResponseEntity<>("Category Not Found",HttpStatus.NOT_FOUND);
         }
 
-        List<Event> events = category.getEvents();
+        PageDTO<Event> response = eventService.findAllByCategory(code, page, size);
 
-        if (events.isEmpty() || events == null) {
+        if (response == null) {
             return new ResponseEntity<>("No Events Found",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(events,HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/user/{code}")
@@ -224,7 +236,7 @@ public class EventController {
             System.out.println(info);
             System.out.println(category);
             eventService.save(info, category);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>("Event created successfully",HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

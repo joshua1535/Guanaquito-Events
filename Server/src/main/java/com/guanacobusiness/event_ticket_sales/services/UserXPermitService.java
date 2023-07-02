@@ -3,7 +3,6 @@ package com.guanacobusiness.event_ticket_sales.services;
 import java.util.List;
 import java.util.UUID;
 
-
 import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Permit;

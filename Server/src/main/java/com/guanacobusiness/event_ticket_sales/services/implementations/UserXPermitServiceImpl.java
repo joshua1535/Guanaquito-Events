@@ -18,6 +18,7 @@ import com.guanacobusiness.event_ticket_sales.repositories.UserXPermitRepository
 import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.UserMapper;
+import com.guanacobusiness.event_ticket_sales.services.UserService;
 
 import jakarta.transaction.Transactional;
 
@@ -26,6 +27,9 @@ public class UserXPermitServiceImpl implements UserXPermitService{
 
     @Autowired
     UserXPermitRepository userXPermitRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     UserMapper userMapper;
