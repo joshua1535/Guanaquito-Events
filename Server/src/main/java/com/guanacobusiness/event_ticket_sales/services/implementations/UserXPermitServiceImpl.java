@@ -19,6 +19,7 @@ import com.guanacobusiness.event_ticket_sales.repositories.UserXPermitRepository
 import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.UserMapper;
+import com.guanacobusiness.event_ticket_sales.services.UserService;
 
 import jakarta.transaction.Transactional;
 
@@ -27,6 +28,9 @@ public class UserXPermitServiceImpl implements UserXPermitService{
 
     @Autowired
     UserXPermitRepository userXPermitRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     UserMapper userMapper;
@@ -79,12 +83,17 @@ public class UserXPermitServiceImpl implements UserXPermitService{
 
         return true;
     }
+public List<Permit> findPermitsByUserCode(UUID userCode) {
 
-    @Override
-    public List<Permit> findPermitsByUserCode(UUID userCode) {
-        List<Permit> permits = userXPermitRepository.findPermitsByUserCode(userCode);
+        User user = userService.findByCode(userCode);
 
-        if(permits.isEmpty()) {
+        if(user == null) {
+            return null;
+        }
+
+        List<Permit> permits = user.getUserXPermits().stream().map(UserXPermit::getPermit).toList();
+
+        if(permits == null) {
             return null;
         }
 
