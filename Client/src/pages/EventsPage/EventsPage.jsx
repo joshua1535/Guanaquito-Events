@@ -225,7 +225,7 @@ const EventsPage = () => {
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('C',page,size,token,)
+      eventService.getEventsByCategory('CI',page,size,token,)
           .then((data) => {
             if(data===undefined)
             {
@@ -240,13 +240,13 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['C',page,size,token]); 
+  }, ['CI',page,size,token]); 
 
   
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('M',page,size,token)
+      eventService.getEventsByCategory('MU',page,size,token)
           .then((data) => {
             if(data===undefined)
             {
@@ -261,11 +261,11 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['M',page,size,token]); 
+  }, ['MU',page,size,token]); 
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('O',token)
+      eventService.getEventsByCategory('OB',page,size,token,)
           .then((data) => {
             if(data===undefined)
             {
@@ -280,11 +280,11 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['O',token]); 
+  }, ['OB',token]); 
 
   useEffect(() => {
     if(token){
-      eventService.getEventsByCategory('D',token)
+      eventService.getEventsByCategory('DE',page,size,token)
           .then((data) => {
             if(data===undefined)
             {
@@ -299,7 +299,7 @@ const EventsPage = () => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, ['D',token]); 
+  }, ['DE',token]); 
 
   
 

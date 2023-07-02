@@ -37,8 +37,6 @@ public class UserXPermitServiceImpl implements UserXPermitService{
     @Autowired
     PageDTOMapper pageDTOMapper;
 
-    @Autowired
-    UserServiceImpl userService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
