@@ -41,8 +41,8 @@
 {
     font-family: 'PoppinsLight';
     @apply text-white
-    PC-1920*1080:text-3xl
-    PC-1600*900:text-2.5xl
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl
     PC-800*600:text-base
     PC-640*480:text-sm
 
@@ -51,9 +51,9 @@
 .contentSpan
 {
     font-family: 'PoppinsLight';
-    @apply text-Orange
-    PC-1920*1080:text-2.5xl
-    PC-1600*900:text-2.5xl
+    @apply text-Orange font-bold ml-4
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl
     PC-800*600:text-base
     PC-640*480:text-sm
 }
@@ -92,8 +92,8 @@
 .ticketText
 {
     @apply 
-    PC-1920*1080:text-3xl
-    PC-1600*900:text-2.5xl
+    PC-1920*1080:text-2xl
+    PC-1600*900:text-2xl
     PC-1280*720:text-xl
     PC-800*600:text-sm PC-800*600:w-max
     PC-640*480:text-xs  PC-640*480:w-max
@@ -102,9 +102,9 @@
 .ticketPrice
 {
     @apply text-white
-    PC-1920*1080:text-2.5xl PC-1920*1080:text-white
-    PC-1600*900:text-2.5xl PC-1600*900:text-white
-    PC-1280*720:text-2xl
+    PC-1920*1080:text-2xl PC-1920*1080:text-white
+    PC-1600*900:text-2xl PC-1600*900:text-white
+    PC-1280*720:text-xl
     PC-800*600:text-base
     PC-640*480:text-sm
 }
@@ -112,8 +112,8 @@
 .ticketPrice2
 {
     @apply 
-    PC-1920*1080:text-2.5xl
-    PC-1600*900:text-2.5xl
+    PC-1920*1080:text-xl
+    PC-1600*900:text-xl
     PC-1280*720:text-xl
     PC-800*600:text-sm
     PC-640*480:text-xs 
@@ -121,11 +121,13 @@
 
 .dropboxContainer
 {
-    @apply rounded border mr-2 mt-4
-    PC-1920*1080:h-12 PC-1920*1080:w-12
-    PC-1600*900:h-10 PC-1600*900:w-12
-    PC-800*600:h-6 PC-800*600:w-8
-    PC-640*480:h-6 PC-640*480:w-8
+    @apply rounded-lg border-opacity-25
+    PC-1920*1080:h-auto PC-1920*1080:w-auto
+    PC-1600*900:h-auto PC-1600*900:w-auto
+    PC-800*600:h-auto PC-800*600:w-auto
+    PC-640*480:h-auto PC-640*480:w-auto
+    Mobile-390*844:h-auto Mobile-390*844:w-auto
+    Mobile-280:h-auto Mobile-280:w-auto
 }
 
 .botbuttonsContainer

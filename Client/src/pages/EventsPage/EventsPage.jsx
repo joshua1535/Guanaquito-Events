@@ -306,8 +306,8 @@ const EventsPage = () => {
 
   const navigate = useNavigate();
 
-  const viewBuyTicketsHandler = () => {
-    navigate("/buytickets");
+  const viewBuyTicketsHandler = (code) => {
+    navigate(`/buytickets/${code}`);
   };
 
 
@@ -434,7 +434,7 @@ const EventsPage = () => {
                       </div>
                     </div>
                 <button 
-                onClick={viewBuyTicketsHandler}
+                onClick={() => viewBuyTicketsHandler(event.code)}
                 className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
                 style={ { fontFamily: "PoppinsLight" }}
                 >Comprar boleto
