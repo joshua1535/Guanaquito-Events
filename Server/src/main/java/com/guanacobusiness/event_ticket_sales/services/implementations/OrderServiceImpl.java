@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.CreateOrderDTO;
@@ -74,13 +78,25 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<Order> findAllOrdersByUserBuyerCode(UUID userBuyerCode) {
+
         User user = userRepository.findByCode(userBuyerCode);
 
-        if(user == null) {
-            return null;
-        }
+        List<Order> orders = user.getOrders();
 
-        return user.getOrders();
+        return orders;
+    }
+
+    @Override
+    public Page<Order> findAllOrdersByUserBuyerCode(UUID userBuyerCode, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size,Sort.by("purchaseDate"));
+        Page<Order> orders = orderRepository.findByUserBuyerCode(userBuyerCode, pageable);
+        return orders;
+    }
+
+    @Override
+    public Order findOrderByCode(UUID orderCode) {
+        Order order = orderRepository.findOneByCode(orderCode);
+        return order;
     }
 
 }

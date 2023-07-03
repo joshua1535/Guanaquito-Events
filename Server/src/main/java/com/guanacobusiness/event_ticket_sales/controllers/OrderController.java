@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,16 +16,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.CreateOrderDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.DateRangeDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedOrderDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
+import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Order;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.OrderService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
+import com.guanacobusiness.event_ticket_sales.utils.OrderMapper;
+import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -42,6 +49,12 @@ public class OrderController {
 
     @Autowired
     JWTTools jwtUtil;
+
+    @Autowired
+    OrderMapper orderMapper;
+
+    @Autowired
+    PageDTOMapper pageDTOMapper;
 
     @PostMapping("/")
     public ResponseEntity<?> saveOrder(@Valid @RequestBody CreateOrderDTO info, HttpServletRequest request) throws Exception {
@@ -71,7 +84,7 @@ public class OrderController {
     }
 
     @GetMapping("/user-orders")
-    public ResponseEntity<?> findAllOrdersByUserBuyerCode(HttpServletRequest request) {
+    public ResponseEntity<?> findAllOrdersByUserBuyer(HttpServletRequest request, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")int size ) {
     
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
@@ -82,18 +95,21 @@ public class OrderController {
 
         User user = userService.findByEmail(userEmail);
 
-        List<Order> orders = orderService.findAllOrdersByUserBuyerCode(user.getCode());
+        Page<Order> orders = orderService.findAllOrdersByUserBuyerCode(user.getCode(), page, size);
 
         if(orders == null) {
             return new ResponseEntity<>("Orders not found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    
-    }
+        List<FormatedOrderDTO> formatedOrders = orderMapper.map(orders.getContent());
+        PageDTO<FormatedOrderDTO> response = pageDTOMapper.map(formatedOrders, orders);
 
-    @GetMapping("/byDateRange")
-    public ResponseEntity<?> findAllOrdersByDateRange(@Valid @RequestBody DateRangeDTO info, HttpServletRequest request ){
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    
+    }   
+
+    /* @GetMapping("/date-range")
+    public ResponseEntity<?> findAllOrdersByDateRange(HttpServletRequest request,@Valid @RequestBody DateRangeDTO info,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")int size){
     
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
@@ -107,7 +123,7 @@ public class OrderController {
     
         return new ResponseEntity<>(orders, HttpStatus.OK);
     
-    }
+    } */
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
