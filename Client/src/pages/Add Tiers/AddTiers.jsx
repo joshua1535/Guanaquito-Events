@@ -126,7 +126,8 @@ function ProfileMenu() {
     const [tierPrice, setTierPrice] = useState('');
     const [tierCapacity, setTierCapacity] = useState('');
     const { user, token} = useUserContext();
-
+    
+    console.log(eventCode);
   
   
       // Crea una función para manejar el cambio de cada campo

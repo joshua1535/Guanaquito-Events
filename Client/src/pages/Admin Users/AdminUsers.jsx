@@ -41,6 +41,7 @@ import { permitService } from "../../Services/permitService";
 import { useUserContext } from "../../Context/userContext";
 
 
+
 const TABS = [
   {
     label: "Todos",
@@ -60,7 +61,14 @@ const TABS = [
 const TABLE_HEAD = ["Usuario", "Roles", "Estado", "Registrado desde", ""];
  
 
-function UserTable({users}) {
+function UserTable({users,navigate}) {
+
+
+  const handleEdit = (code) => {
+    const userCode = code;
+    navigate(`/admin-users/permits-user/${userCode}`);
+
+  };
 
   const TABLE_ROWS = users.map((user) => ({
     code: user.code,
@@ -164,8 +172,8 @@ function UserTable({users}) {
                   </td>
                   <td className={classes}>
                     <Tooltip content="Edit User">
-                      <IconButton variant="text" className="text-yellowCapas">
-                        <PencilIcon className="h-6 w-6" />
+                      <IconButton  variant="text" className="text-yellowCapas">
+                        <PencilIcon onClick={() =>handleEdit(code)}  className="h-6 w-6" />
                       </IconButton>
                     </Tooltip>
                   </td>
@@ -379,7 +387,7 @@ export default function AdminUsers() {
           </div>
         </div>
       </CardHeader>
-          <UserTable users={users} />
+          <UserTable users={users} navigate={navigate} />
          {/*  <div className={classes["usersInEventContainer"]}>
             {users.map((user) => (
                 <div key={user.email} className={classes["userInEvent"]}>
