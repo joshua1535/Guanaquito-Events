@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.EventAndTiersInfoDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
@@ -48,7 +50,7 @@ public class TierController {
     private EventService eventService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllTiers(HttpServletRequest request) {
+    public ResponseEntity<?> getAllTiers(HttpServletRequest request,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
@@ -76,13 +78,19 @@ public class TierController {
             return new ResponseEntity<>("Invalid Code", HttpStatus.BAD_REQUEST);
         }
 
-        List<Tier> tiers = tierService.findAllTiersByEventCode(uuid);
+        Event event = eventService.findEventByCode(uuid);
 
-        if(tiers == null || tiers.isEmpty()){
+        if(event == null){
+            return new ResponseEntity<>("Event Not Found", HttpStatus.NOT_FOUND);
+        }
+
+        EventAndTiersInfoDTO info = tierService.findAllTiersByEvent(event);
+
+        if(info == null){
             return new ResponseEntity<>("No Tiers Found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(tiers,HttpStatus.OK);
+        return new ResponseEntity<>(info,HttpStatus.OK);
     }
     
     @GetMapping("/{code}")
@@ -108,7 +116,7 @@ public class TierController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> saveTier(@Valid @RequestBody SaveTierDTO info, HttpServletRequest request) {
+    public ResponseEntity<?> saveTier(HttpServletRequest request, @Valid @RequestBody SaveTierDTO info ) {
 
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
