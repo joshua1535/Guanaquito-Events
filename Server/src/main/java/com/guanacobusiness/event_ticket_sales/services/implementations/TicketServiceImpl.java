@@ -15,6 +15,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Tier;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.repositories.TicketRepository;
 import com.guanacobusiness.event_ticket_sales.repositories.UserRepository;
+import com.guanacobusiness.event_ticket_sales.services.OrderService;
 import com.guanacobusiness.event_ticket_sales.services.RegisterService;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
 import com.guanacobusiness.event_ticket_sales.services.TierService;
@@ -31,6 +32,9 @@ public class TicketServiceImpl implements TicketService{
     UserRepository userRepository;
 
     @Autowired
+    OrderService orderService;
+
+    @Autowired
     RegisterService registerService;
 
     @Autowired
@@ -43,15 +47,16 @@ public class TicketServiceImpl implements TicketService{
         User userBuyer = userRepository.findByCode(UUID.fromString(saveTicketDTO.get(0).getUserOwner()));
 
         if(userBuyer == null) {
+            System.out.println("User not found");
             return false;
         }
 
-        Order currentOrder = userBuyer.getOrders().stream()
-            .filter(order -> order.getCode().equals(UUID.fromString(saveTicketDTO.get(0).getOrder())))
-            .findFirst()
-            .orElse(null);
+        UUID uuid = UUID.fromString(saveTicketDTO.get(0).getOrder());
+
+        Order currentOrder = orderService.findOrderByCode(uuid);
 
         if(currentOrder == null) {
+            System.out.println("Order not found");
             return false;
         }
 
@@ -68,6 +73,8 @@ public class TicketServiceImpl implements TicketService{
                 Ticket ticket = new Ticket(currentOrder, tier, userBuyer);
 
                 ticketRepository.save(ticket);
+
+                System.out.println("Ticket saved");
 
             }
 
