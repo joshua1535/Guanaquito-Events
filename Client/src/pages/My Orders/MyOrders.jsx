@@ -1,73 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './MyOrders.module.css';
 import classes from './MyOrders.module.css';
 import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
 import { useEffect } from "react";
 import {
-    Carousel,
     Navbar,
-    MobileNav,
     Menu,
     MenuHandler,
     MenuList,
     MenuItem,
     IconButton,
-    Chip,
     Card,
     CardHeader,
     Typography,
     Button,
     CardBody,
-    CardFooter,
     Avatar,
-    Tooltip,
-    Input,
+    Collapse,
   } from "@material-tailwind/react";
   import {
     ChevronDownIcon,
     Bars2Icon,
+    ChevronDoubleRightIcon,
+    ChevronRightIcon,
+    ChevronLeftIcon,
+    ChevronDoubleLeftIcon,
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useUserContext } from '../../Context/userContext';
+import { orderService } from '../../Services/orderService';
 
 
 
 const TABLE_HEAD = ["Evento", "Fecha", "Localidad", "Precio", "Total"];
 
-const orders = [
-  {
-    numeroOrden: 8526205849,
-    fecha: '2023-03-03',
-    tickets: [
-      { evento: 'Marito bros', fecha: '2023-06-10', localidad: 'VIP', precio: 50.05, img: 'https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg' },
-      { evento: 'Marito bros', fecha: '2023-06-10', localidad: 'VIP', precio: 40.00, img: 'https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg' },
-    ],
-  },
-  { 
-    numeroOrden: 2659933140,
-    fecha: '2023-05-05',
-    tickets: [
-      { evento: 'Deje Capas', fecha: '2023-06-20', localidad: 'Ultra VIP', precio: 59.99, img: 'https://static.13.cl/7/sites/default/files/esports/articulos/field-image/maxresdefault.jpg' },
-    ],
-  },
-];
 
-orders.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+function OrderTable( { orders }) {
 
-const TABLE_ROWS = orders.map((order, index) => ({
-  numeroOrden: order.numeroOrden,
-  fechaOrden: order.fecha,
-  tickets: order.tickets.map(ticket => ({
-    evento: ticket.evento,
-    fecha: ticket.fecha,
-    localidad: ticket.localidad,
-    precio: ticket.precio,
-    img: ticket.img,
-  })),
-}));
+  const TABLE_ROWS = orders.map((order, index) => ({
+    numeroOrden: order.orderCode,
+    fechaOrden: order.orderDate,
+    total : order.totalOrder,
+    tickets: order.tickets.map(ticket => ({
+      evento: ticket.eventTitle,
+      fecha: ticket.eventDate,
+      hora: ticket.eventTime,
+      localidad: ticket.ticketTier,
+      precio: ticket.ticketPrice,
+      img: ticket.eventPicture,
+    })),
+  }));
 
-function OrderTable() {
     return (
       <>
         {TABLE_ROWS.map((order, index) => {
@@ -326,6 +311,56 @@ export default function MyOrders(){
 
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const { user, token} = useUserContext();
+    const [orders, setOrders] = useState([]);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(5);
+    const [lastPage, setLastPage] = useState(false);
+    const [totalElements, setTotalElements] = useState(0);
+
+    const handleNextPage = () => {
+      if(page < lastPage-1) {
+        setPage(page + 1);
+      }
+    }
+
+    const handlePreviousPage = () => {
+      if(page > 0) {
+        setPage(page - 1);
+      }
+    }
+
+    const handleFirstPage = () => {
+      setPage(0);
+    }
+
+    const handleLastPage = () => {
+      setPage(lastPage-1);
+    }
+
+
+    useEffect(() => {
+      if(token) {
+
+        orderService.getOrdersByUser(token, size, page)
+        .then((response) => {
+          setOrders(response.content);
+          setTotalElements(response.total_elements);
+          setLastPage(response.total_pages);
+        }
+        )
+        .catch((error) => console.log(error));
+      }
+
+    }, [token, page, size]);
+
+    useEffect(() => {
+      console.log (orders);
+      console.log (lastPage);
+      console.log (totalElements);
+
+    }, [orders, lastPage, totalElements]);
+
 
     React.useEffect(() => {
         window.addEventListener(
@@ -366,16 +401,51 @@ export default function MyOrders(){
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
-      </MobileNav>
+      </Collapse>
     </Navbar>
       </header>
         <div className={[classes["bodyContainer"]]}>
         <h1 className={[classes["title"]]}>Mis Ordenes</h1>
         <div className={[classes["tableContainer"]]}>
-            <OrderTable/>
+            <OrderTable orders = {orders}/>
         </div>
+        <div className="flex justify-center items-center my-12">
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleFirstPage}
+        >
+          <ChevronDoubleLeftIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handlePreviousPage}
+        >
+          <ChevronLeftIcon className="h-6 w-6" />
+        </Button>
+        <Typography children={page + 1} className="mx-8 text-white" />
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleNextPage}
+        >
+          <ChevronRightIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleLastPage}
+        >
+          <ChevronDoubleRightIcon className="h-6 w-6" />
+        </Button>
+          </div>
             </div>
       <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
 
