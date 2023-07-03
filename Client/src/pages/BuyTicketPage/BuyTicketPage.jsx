@@ -23,6 +23,8 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
 import { tierService } from '../../Services/tierService';
+import { orderService } from '../../Services/orderService';
+import { ticketService } from '../../Services/ticketService';
 
 
 // profile menu component
@@ -143,6 +145,7 @@ function NavListMenu() {
     onMouseLeave: () => setIsMenuOpen(false),
   };
 }
+
  
   
  
@@ -195,17 +198,44 @@ function NavList() {
     </ul>
   );
 }
-  
-  const eventDetails = {
-    title: 'ColdPlay Tour',
-    date: '2023-06-04',
-    time: '20:15',
-    participants: ['Mi Primo', 'Mi tio', 'Ronaldinho'],
-    sponsors: ['Nayb Bukele', 'Elon Musk', 'Bill Gates  '],
-    category: 'Conciertos',
-    price: '$100',
+const DropBoxContainer = ({ tier, onSelectTier }) => {
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
+
+  const handleDecrease = () => {
+    if (selectedQuantity > 0) {
+      setSelectedQuantity(selectedQuantity - 1);
+    }
   };
 
+  const handleIncrease = () => {
+    setSelectedQuantity(selectedQuantity + 1);
+  };
+
+  useEffect(() => {
+    onSelectTier(tier, selectedQuantity);
+  }, [selectedQuantity, tier]);
+
+
+  return (
+    <div className={[classes["dropboxContainer"]]}>
+      <button 
+      className='mr-4 text-white font-bold bg-red-500 rounded-full w-8 h-8 mt-auto
+      Mobile-390*844:w-7 Mobile-390*844:h-7
+      Mobile-280:w-6 Mobile-280:h-6
+      '
+      onClick={handleDecrease}>-</button>
+      <span
+      className='text-white font-bold w-auto h-auto mt-auto mb-auto'
+      >{selectedQuantity}</span>
+      <button
+      className='ml-4 text-white font-bold bg-green-500 rounded-full w-8 h-8
+      Mobile-390*844:w-7 Mobile-390*844:h-7
+      Mobile-280:w-6 Mobile-280:h-6
+      '
+      onClick={handleIncrease}>+</button>
+    </div>
+  );
+};
 
   const BuyTicket = () => {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
@@ -215,9 +245,33 @@ function NavList() {
     const { code } = useParams(); // Obtiene el código de la URL
     const [event, setEvent] = useState(null);
     const [tiers, setTiers] = useState([]);
-
+    const [moreLowTier, setMoreLowTier] = useState(null);
+    const [selectedQuantity, setSelectedQuantity] = useState(0);
+    const [selectedTiers, setSelectedTiers] = useState([]);
+    const [tiersToBuy, setTiersToBuy] = useState([]);
+    const [orderId, setOrderId] = useState(null);
     const [showDetails, setShowDetails] = useState(false);
+    const [finalTiers, setFinalTiers] = useState([]);
 
+    const handleSelectTier = (tier, quantity) => {
+      setTiersToBuy((prevTiers) => {
+        const existingTier = prevTiers.find((t) => t.name === tier.name);
+        if (quantity > 0) {
+          if (existingTier) {
+            // Si el tier ya existe en la lista, se actualiza la cantidad
+            return prevTiers.map((t) =>
+              t.name === tier.name ? { ...t, quantity } : t
+            );
+          } else {
+            // Si el tier no existe en la lista, se agrega
+            return [...prevTiers, { id: tier.code, name: tier.name, quantity }];
+          }
+        } else {
+          // Si la cantidad es 0, se elimina el tier de la lista
+          return prevTiers.filter((t) => t.name !== tier.name);
+        }
+      });
+    };
 
     const navigate = useNavigate();
     const handleButtonClick = () => {
@@ -233,9 +287,6 @@ function NavList() {
       navigate(-1);
     };
 
-    const handleBuyButton = () => {
-      navigate("/mytickets");
-    };
 
 
     useEffect(() => {
@@ -244,9 +295,54 @@ function NavList() {
         getEventById(code, token).then((event) => setEvent(event));
 
         tierService.getTiersbyEvent(code, token).then((tiers) => setTiers(tiers));
+
       }
     }, [token, code]);
         
+
+    useEffect(() => {
+      if (tiers.length > 0) {
+        //Setear el tier con el precio mas bajo
+        const moreLowTier = tiers.reduce((prev, current) => (prev.price < current.price) ? prev : current);
+        setMoreLowTier(moreLowTier);
+      }
+    }, [moreLowTier, tiers]);
+
+    useEffect(() => {
+      console.log (tiersToBuy);
+
+    }, [selectedTiers, selectedQuantity, tiersToBuy]);
+
+    const handleBuyTicket = async () => {
+      if (tiersToBuy.length > 0 && token) {
+        // Obtener fecha actual en formato YYYY-MM-DD
+        const date = new Date();
+        const currentDate = date.toISOString().split('T')[0];
+    
+        try {
+          // Crear la orden
+          const order = await orderService.createOrder(token, currentDate);
+          setOrderId(order);
+    
+          // Crear los tickets
+          const finalTiers = tiersToBuy.flatMap((tier) =>
+            Array.from({ length: tier.quantity }, () => ({
+              order: order,
+              tier: tier.id,
+            }))
+          );
+    
+          // Enviar la solicitud POST para comprar los tickets
+          await ticketService.createTicket(finalTiers, token);
+        } catch (error) {
+          console.error('Error comprando los tickets:', error);
+          // Manejar el error adecuadamente
+        }
+      }
+    };
+
+
+
 
 
     React.useEffect(() => {
@@ -378,7 +474,8 @@ function NavList() {
                         </div>
                       ) : (  
                         <> 
-                          
+                          <div className="grid grid-cols-2
+                          ">
                              { tiers.map((tier) => (       
                     <div className=" 
                     PC-1280*720:ml-3 PC-1280*720:mt-3
@@ -395,16 +492,16 @@ function NavList() {
                             </p>
                         </div>
                         <div className="PC-640*480:ml-1 ml-3">
-                            <select className={[classes["dropboxContainer"]]} >
-                            {[...Array(11)].map((_, i) => 
-                                <option key={i} value={i}>{i}</option>
-                            )}
-                            </select>
+                        <DropBoxContainer tier={tier}
+                        onSelectTier={handleSelectTier}
+                        />
                             <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
                         </div>
                         </div>
                     ))}
+                          </div>
                         </>
+
                       )}
                     {/* Botones de Volver y Pagar */}                    
                     <div className={[classes["botbuttonsContainer"]]}>
@@ -416,7 +513,7 @@ function NavList() {
                         PC-640*480:w-20 PC-640*480:h-7
                          mr-2 h-14 w-44 bg-dark-blue rounded-full text-white hover:bg-gray-900 ">Volver</button>
                         <button 
-                        onClick={handleBuyButton}
+                        onClick={handleBuyTicket}
                         className=" 
                         PC-1280*720:w-32 C-1280*720:h-12 
                         PC-800*600:w-24 PC-800*600:h-10 
@@ -426,39 +523,72 @@ function NavList() {
                 </div>
             </div>
         </div>
-        <div className="sm:hidden flex flex-col items-center h-72 w-full bg-cover"
-             style = {{backgroundImage: `url(${event?.image})`}}
-        >
+        <div className="sm:hidden flex flex-col items-center h-72 w-full bg-cover "
+        >   
+            <div className="flex flex-col items-center  text-white rounded">
             <img 
-                className=" w-3/5 object-cover mt-6 mb-6" 
+                className=" w-full h-full object-cover mb-6 opacity-20" 
                 src = {event?.image}
                 alt="Event"
             />
+            <img 
+                className=" w-5/6 h-full object-cover mb-6 -mt-32 shadow-xl" 
+                src = {event?.image}
+                alt="Event"
+            />
+            </div>
 
-            <h1 className="text-white  text-center text-2.5xl"
+            <h1 className="text-white  text-center text-2xl mt-8"
                 style={{ fontFamily: "PoppinsSemiBold" }}
             >
-                {eventDetails.title}
+                {event?.title}
             </h1>
 
-            <div className="flex flex-col items-center  text-white p-4 rounded">
-                <p className='text-xl'>
-                    <span className="font-light"  style={{ fontFamily: "PoppinsLight" }}>Fecha: </span>
-                    <span className="font-bold" style={{ fontFamily: "PoppinsLight" }}>{eventDetails.date}</span>
+            <div className="flex flex-col items-center text-white p-4 rounded mt-4">
+              <p className='text-base'>
+                    <span className="ml-2" style={{ fontFamily: "PoppinsLight" }}> Categoría: </span>
+                    <span className="font-bold" style={{ fontFamily: "PoppinsLight" }}>{event?.category.name} </span>
                 </p>
-                <p className='text-xl'>
-                    <span className="font-light" style={{ fontFamily: "PoppinsLight" }}>Hora: </span> 
-                    <span className="font-bold" style={{ fontFamily: "PoppinsLight" }}>{eventDetails.time}</span>
+                <p className='text-base'>
+                    <span className="ml-2" style={{ fontFamily: "PoppinsLight" }}> Fecha: </span>
+                    <span className="font-bold" style={{ fontFamily: "PoppinsLight" }}>{" "+event?.date} </span>
                 </p>
-                <p className='flex pt-2 text-3xl font-bold'>
-                    <span className=" text-2xl font-light mr-2" style={{ fontFamily: "PoppinsLight" }}>Precio: </span> 
-                    <span className="text-3xl text-Orange" style={{ fontFamily: "PoppinsBold" }}>{eventDetails.price}</span>
+                <p className='text-base'>
+                    <span className="ml-2" style={{ fontFamily: "PoppinsLight" }}> Hora: </span>
+                    <span className=" font-bold" style={{ fontFamily: "PoppinsLight" }}>{" "+event?.time}</span>
                 </p>
+                <p className='flex pt-2 text-3xl font-bold mt-8'>
+                    <span className=" text-2xl mr-2 font-bold" style={{ fontFamily: "PoppinsLight" }}>Entradas desde: </span> 
+                    <span className="text-3xl text-Orange font-bold" style={{ fontFamily: "PoppinsBold" }}>${moreLowTier?.price}</span>
+                </p>
+                <div className="grid grid-cols-1 border-2 border-Orange mb-4">
+                             { tiers.map((tier) => (       
+                    <div className=" 
+                    flex items-center w-fit text-Orange mx-4 my-7" style={{ fontFamily: "Poppins" }}>
+                        <div>
+                            <h2 
+                              className={[classes["ticketText"]]}
+                             >{tier?.name}</h2>
+                            <p className={[classes["ticketPrice2"]]}>Precio: <span className={[classes["ticketPrice"]]}>
+                                ${tier.price}
+                              </span>
+                            </p>
+                        </div>
+                        <div className="PC-640*480:ml-1 ml-3">
+                        <DropBoxContainer tier={tier}
+                        onSelectTier={handleSelectTier}
+                        />
+                            <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
+                        </div>
+                        </div>
+                    ))}
+                          </div>
 
                 <button className="bg-Orange h-14 w-full  rounded-full text-white text-xl"
+                onClick={handleBuyTicket}
                     style={{ fontFamily: "Poppins" }}
             >
-                Comprar Tickets
+                  Comprar tickets
             </button>
             </div>
         </div>
