@@ -30,6 +30,9 @@ import {
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { useUserContext } from '../../Context/userContext';
+import { tierService } from '../../Services/tierService';
 
 // profile menu component
 const profileMenuItems = [
@@ -118,11 +121,48 @@ function ProfileMenu() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const [showPopup, setShowPopup] = useState(false);
+    const { eventCode } = useParams();
+    const [tierName, setTierName] = useState('');
+    const [tierPrice, setTierPrice] = useState('');
+    const [tierCapacity, setTierCapacity] = useState('');
+    const { user, token} = useUserContext();
+
+  
+  
+      // Crea una función para manejar el cambio de cada campo
+    const handleTierNameChange = (event) => {
+      setTierName(event.target.value);
+    };
+
+    const handleTierPriceChange = (event) => {
+      setTierPrice(event.target.value);
+    };
+
+    const handleTierCapacityChange = (event) => {
+      setTierCapacity(event.target.value);
+    };
 
     const navigate = useNavigate();
 
     const handleSaveClick = () => {
-        setShowPopup(true);
+        const tierInfo = {
+          name: tierName,
+          price: parseFloat(tierPrice),
+          capacity: parseInt(tierCapacity),
+          eventCode: eventCode
+        };
+      
+        tierService.saveTier(tierInfo, token)
+          .then(response => {
+            console.log('Tier creado con éxito:', response);
+            setShowPopup(true);
+            // Navega a otra ruta o haz algo más después de guardar el tier
+          })
+          .catch(error => {
+            console.error('Hubo un error al crear el tier:', error);
+            // Muestra un mensaje de error o maneja el error de otra manera
+          });
+      
       };
     
       const handlePopupClose = () => {
@@ -183,6 +223,8 @@ function ProfileMenu() {
               size="lg"
               color='white'
               placeholder="Ingrese el nombre de la localidad"
+              value={tierName}
+              onChange={handleTierNameChange}
             />
           </div>
           <div className="space-y-2">
@@ -195,6 +237,22 @@ function ProfileMenu() {
               size="lg"
               color='white'
               placeholder="Precio de la localidad"
+              value={tierPrice}
+              onChange={handleTierPriceChange}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="eventName" className={[classes["titleInputs"]]}>
+              Capacidad
+            </label>
+            <Input
+              id="price"
+              type="number"
+              size="lg"
+              color='white'
+              placeholder="Capacidad de la localidad"
+              value={tierCapacity}
+              onChange={handleTierCapacityChange}
             />
           </div>
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
