@@ -235,8 +235,9 @@ public class EventController {
             }
             System.out.println(info);
             System.out.println(category);
-            eventService.save(info, category);
-            return new ResponseEntity<>("Event created successfully",HttpStatus.CREATED);
+            Event createdEvent = eventService.save(info, category);
+           
+            return new ResponseEntity<>(createdEvent,HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

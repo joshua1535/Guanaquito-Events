@@ -169,7 +169,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void save(SaveEventDTO info, Category category) throws Exception {
+    public Event save(SaveEventDTO info, Category category) throws Exception {
         System.out.println(info);
         System.out.println(category + " " + category.getCode());
         Event newEvent = new Event();
@@ -186,7 +186,7 @@ public class EventServiceImpl implements EventService{
         System.out.println(newEvent);
         System.out.println(newEvent.getCategory());
         System.out.println(newEvent);
-        eventRepository.save(newEvent);   
+        return eventRepository.save(newEvent);   
     }
 
     @Override

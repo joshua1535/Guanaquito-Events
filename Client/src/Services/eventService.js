@@ -3,6 +3,23 @@ import API from '../API/Instance';
 export const eventService = {
     // ... otros métodos del servicio ...
 
+    saveEvent: async function (eventData, token) {
+        try {
+            const response = await API.post('/event/', eventData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;  // esta línea permitirá que puedas manejar el error en el lugar donde se llama a saveEvent
+        }
+    },
+
     getAllEvents: async function(token) {
         try {
             const response = await API.get('/event/all', {

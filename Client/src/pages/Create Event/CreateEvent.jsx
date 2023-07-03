@@ -29,6 +29,8 @@ import {
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
 
 
 
@@ -134,6 +136,61 @@ export default function CreateEvent() {
     const [sponsors, setSponsors] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
+    const { user, token} = useUserContext();
+    const [eventName, setEventName] = useState("");
+    const [category, setCategory] = useState("");
+    const [date, setDate] = useState();
+    const [time, setTime] = useState();
+    const [image, setImage] = useState("https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZXZlbnRvfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60");
+
+
+    const handleContinueClick2 = () => {
+      eventService.saveEvent({
+          title: eventName,
+          involvedPeople: participants.join(", "),
+          image: image,  // Reemplaza esto con el valor del campo "Foto del evento"
+          date: date,  // Reemplaza esto con el valor del campo "Fecha"
+          time: time,  // Reemplaza esto con el valor del campo "Hora"
+          duration: parseInt(duration),
+          sponsors: sponsors.join(", "),
+          categoryCode: category // Reemplaza esto con el valor del campo "Categoría"
+      }, token)
+          .then(response => {
+              console.log('Evento creado con éxito:', response);
+              // Guarda el código del evento en el almacenamiento local
+              const eventCode = response.code;
+              navigate(`/admin-event/addtiers/${eventCode}`);
+              // aquí puedes hacer cualquier otra cosa que necesites después de crear el evento
+          })
+          .catch(error => {
+              console.error('Hubo un error al crear el evento:', error);
+              // aquí puedes manejar el error, por ejemplo mostrando un mensaje al usuario
+          });
+  };
+  
+
+
+    /*
+    eventService.saveEvent({
+      title: 'Nuevo Evento', 
+      involvedPeople: 'Persona 1, Persona 2',
+      image: 'URL de la imagen',
+      date: '2023-06-01', 
+      time: '18:00', 
+      duration: 120, 
+      sponsors: 'Sponsor 1, Sponsor 2', 
+      categoryCode: 'CI'
+  }, token)
+      .then(response => {
+          console.log('Evento creado con éxito:', response);
+          // aquí puedes hacer cualquier otra cosa que necesites después de crear el evento
+      })
+      .catch(error => {
+          console.error('Hubo un error al crear el evento:', error);
+          // aquí puedes manejar el error, por ejemplo mostrando un mensaje al usuario
+      });
+      */  
+
 
     const navigate = useNavigate();
 
@@ -247,6 +304,8 @@ export default function CreateEvent() {
             document.title = "Create Event";
         }, []);
 
+        
+
     return (
         <div className={[classes["generalContainer"]]}>
         <header className={[classes["headerContainer"]]}>
@@ -281,6 +340,8 @@ export default function CreateEvent() {
               id="eventName"
               type="text"
               color='white'
+              value={eventName}
+              onChange={event => setEventName(event.target.value)}
               placeholder="Ingrese el nombre del evento"
             />
           </div>
@@ -339,11 +400,14 @@ export default function CreateEvent() {
                 Categoría
                 
               </label>
-                <Select className='text-white'>
-                    <Option>Cine</Option>
-                    <Option>Concierto</Option>
-                    <Option>Obras de teatro</Option>
-                    <Option>Deportes</Option>
+                <Select 
+                className='text-white'
+                onChange={value => setCategory(value)}
+                >
+                    <Option value="CI" >Cine</Option>
+                    <Option value="MU"> Musica</Option>
+                    <Option value="OB">Obras de teatro</Option>
+                    <Option value="DE">Deportes</Option>
                 </Select>
             </div>
             <div>
@@ -354,12 +418,14 @@ export default function CreateEvent() {
                 id="time"
                 type="time"
                 color='white'
+                value={time}
+                onChange={event => setTime(event.target.value)}
                 placeholder="Seleccione la hora"
               />
             </div>
             <div>
             <label htmlFor="duration" className={[classes["titleInputs"]]}>
-              Duración (segundos)
+              Duración (Hora)
             </label>
             <Input
               id="duration"
@@ -429,18 +495,21 @@ export default function CreateEvent() {
               id="date"
               type="date"
               color='white'
+              value={date}
+              onChange={event => setDate(event.target.value)}
               placeholder="Seleccione la fecha"
             />
           </div>
           <div className="space-y-2">
             <label htmlFor="eventPhoto" className={[classes["titleInputs"]]}>
-              Foto del evento
+              Foto del evento (opcional)
             </label>
             <Input
               id="eventPhoto"
-              type="file"
+              type="text"
               color='white'
               placeholder="Seleccione una foto"
+              onChange={event => setImage(event.target.value)}
             />
           </div>
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
@@ -448,7 +517,7 @@ export default function CreateEvent() {
               Cancelar
             </Button>
             <Button
-            onClick={handleContinueClick}
+            onClick={handleContinueClick2}
             className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
               Continuar
             </Button>

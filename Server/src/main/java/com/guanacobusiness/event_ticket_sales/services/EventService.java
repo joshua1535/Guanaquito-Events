@@ -24,7 +24,7 @@ public interface EventService {
     PageDTO<Event>findAllArchivedEvents(int page, int size);
     PageDTO<Event> findAllByCategory(String code, int page, int size);
     Event findEventByCode(UUID code);
-    void save(SaveEventDTO info, Category category) throws Exception;
+    Event save(SaveEventDTO info, Category category) throws Exception;
     boolean update(UpdateEventDTO info) throws Exception;
     boolean changeEventStatus(UUID code) throws Exception;
 }
