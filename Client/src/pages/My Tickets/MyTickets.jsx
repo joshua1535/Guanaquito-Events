@@ -2,7 +2,7 @@ import './MyTickets.module.css';
 import classes from './MyTickets.module.css';
 import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import {
     Carousel,
@@ -23,80 +23,18 @@ import {
   import {
     ChevronDownIcon,
     Bars2Icon,
+    ChevronDoubleRightIcon,
+    ChevronLeftIcon,
+    ChevronDoubleLeftIcon,
+    ChevronRightIcon,
   } from "@heroicons/react/24/outline";
   import { useNavigate } from 'react-router-dom';
   import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
-
-  const Tickets = [
-    {
-      id: 1,
-      name: "Mario Bros Películasadasdasdasdsadassdasdadasds",
-      date: "2023-06-05",
-      time: "12:00",
-      location: "VIP",
-      price: "100",
-      img: "https://es.web.img3.acsta.net/img/33/23/3323b2b747cf67abb82016922a56fe7c.jpg",
-      canjeado: false,
-    },
-    {
-      id: 2,
-      name: "Pink Floyd",
-      date: "2023-06-02",
-      time: "18:00",
-      location: "General",
-      price: "100",
-      img: "https://i0.wp.com/mixturapop.com/wp-content/uploads/2019/06/camacu%C3%A1.jpg?fit=700%2C390&ssl=1",
-      canjeado: true,
-    },
-    {
-        id: 3,
-        name: "Fas vs Dragon, Fecha 15",
-        date: "2023-06-02",
-        time: "12:00",
-        location: "Platea",
-        price: "100",
-        img: "https://futbolcentroamerica.com/__export/1667069866944/sites/futbolcentroamerica/img/2022/10/28/fas-dragon.jpg_242310155.jpg",
-        canjeado: true,
-        },
-    {
-        id: 4,
-        name: "Doctor Extraño 2",
-        date: "2023-06-02",
-        time: "12:00",
-        location: "Asiento H11",
-        price: "100",
-        img: "https://sm.ign.com/ign_es/movie/d/doctor-str/doctor-strange-in-the-multiverse-of-madness_4pjr.jpg",
-        canjeado: true,
-        },
-    {
-        id: 5,
-        name: "Ballet Nacional",
-        date: "2023-06-02",
-        time: "12:00",
-        location: "2da planta",
-        price: "100",
-        img: "https://www.cultura.gob.sv/wp-content/uploads/2022/02/Ballet-naciola-105.png",
-        canjeado: true,
-        },
-    {
-        id: 6,
-        name: "Rapidos y Furiosos 50",
-        date: "2023-06-05",
-        time: "14:00",
-        location: "VIP",
-        price: "100",
-        img: "https://scontent.fsal1-1.fna.fbcdn.net/v/t1.6435-9/83985608_2698845866837972_8598443248630890496_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=Z2DnxlcifAQAX_cvnU1&_nc_ht=scontent.fsal1-1.fna&oh=00_AfDC6kkN8jI_wPcv_qgM1kCqubpKI_tZh-YSsTLuGVG93Q&oe=64A4A88E",
-        canjeado: false,
-
-    },
-    // ...rest of the tickets
-  ];
-
-Tickets.sort((a, b) => new Date(b.date) - new Date(a.date));
-
+import { useUserContext } from '../../Context/userContext';
+import { ticketService } from '../../Services/ticketService';
 
 function TicketItem({ ticket }) {
-    const { name, date, time, location, img, canjeado } = ticket;
+    const { eventTitle, eventPicture, eventDate, ticketTier, available, time } = ticket;
 
     const navigate = useNavigate();
 
@@ -111,7 +49,7 @@ function TicketItem({ ticket }) {
     return (
       <div className={[classes["cardTicketContainer"]]}>
          <div >
-            {canjeado ? (
+            {!available ? (
               <Chip variant='ghost' color="red" value='Canjeado' className="m-auto p-2 font-text">
               </Chip>
             ) : (
@@ -121,30 +59,34 @@ function TicketItem({ ticket }) {
           </div>
         <Card className="shadow-none p-2">
          
-          <img src={img} alt={name} className={[classes["cardImg"]]} />
+          <img src={eventPicture} alt={eventTitle} className={[classes["cardImg"]]} />
           <div className="p-4">
             <div className={[classes["textCardContainer"]]}>
-              <Typography className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+              <Typography 
+              className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text
                 break-words hover:break-all overflow-auto
                 ">
                 Fecha:
               </Typography>
-              <Typography className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+              <Typography 
+              className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text
                 break-words hover:break-all overflow-auto
                 ">
-                {date}
+                {eventDate}
               </Typography>
             </div>
             <div className={[classes["textCardContainer"]]}>
-            <Typography className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+            <Typography 
+            className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text
                 break-words hover:break-all overflow-auto
                 ">
                 Hora:
               </Typography>
-              <Typography className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+              <Typography
+              className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text
                 break-words hover:break-all overflow-auto
                 ">
@@ -152,37 +94,41 @@ function TicketItem({ ticket }) {
               </Typography>
             </div>
             <div className={[classes["textCardContainer"]]}>
-            <Typography className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+            <Typography
+            className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text
                 break-words hover:break-all overflow-auto
                 ">
                 Evento:
               </Typography>
-              <Typography className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+              <Typography 
+              className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text break-words
                 hover:break-all w-36 h-7 overflow-auto">
-                {name}
+                {eventTitle}
               </Typography>
             </div>
             <div className={[classes["textCardContainer"]]}>
-            <Typography className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+            <Typography 
+            className="font-bold text-black PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text
                 break-words hover:break-all overflow-auto
                 ">
                 Ubicación:
               </Typography>
-              <Typography className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
+              <Typography
+              className="text-yellow-800 m-1 PC-1920*1080:text-xl PC-1600*900:text-xl PC-1366*768:text-lg PC-1280*720:text-sm
                 PC-1024*768:text-sm PC-768*1024:text-sm PC-360*640:text-sm PC-375*812:text-sm PC-414*896:text-sm PC-320*568:text-sm font-text
                 break-words hover:break-all overflow-auto
                 ">
-                {location}
+                {ticketTier}
               </Typography>
             </div>
             <div className="flex items-center justify-between mt-4">
-              {!canjeado && (
+              {available && (
                 <Button
                     onClick={() => redeemTicketHandler()}
-                    variant="contained"
+                    variant="filled"
                     color="amber"
                     className="font-text"
                 >
@@ -190,11 +136,11 @@ function TicketItem({ ticket }) {
                 </Button>
 
               )}
-                {!canjeado && (
+                {available && (
                 <Button
                     onClick={() => transferTicketHandler()}
                     variant="outlined"
-                    color="primary"
+                    color="blue"
                     className="font-text ml-2 w-auto h-auto"
                 >
                     Transferir
@@ -208,6 +154,7 @@ function TicketItem({ ticket }) {
       </div>
     );
   }
+
 
 // profile menu component
 const profileMenuItems = [
@@ -303,7 +250,6 @@ function ProfileMenu() {
             >
               <Typography
                 as="span"
-                variant="lg"
                 className="font-normal"
                 color={isLastItem ? "red" : "inherit"}
               >
@@ -340,11 +286,6 @@ const navListItems = [
   },
 ];
  
-
-
-  
-
-
 function NavList() {
   const navigate = useNavigate();
   
@@ -365,7 +306,6 @@ function NavList() {
           key={label}
           as="a"
           href="#"
-          variant="lg"
           color="white"
           className="font-normal"
         >
@@ -384,6 +324,52 @@ export default function MyTickets(){
 
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const { user, token} = useUserContext();
+    const [tickets, setTickets] = useState([]);
+    const [page, setPage] = useState(0);
+    const [lastPage, setLastPage] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [size, setSize] = useState(6);
+
+    useEffect(() => {
+        if(token) {
+          ticketService.getTicketsByUser(token, size, page)
+          .then((res) => {
+            setTickets(res.content);
+            setLastPage(res.total_pages);
+            setTotalElements(res.total_elements);
+          }
+          )
+          .catch((err) => console.log(err));
+        }
+      }, [token, page, size]);
+
+      useEffect(() => {
+        console.log(totalElements);
+        console.log (lastPage);
+      }, [totalElements, lastPage]);
+
+      const handleNextPage = () => {
+        if (page < lastPage - 1) {
+          setPage((cur) => cur + 1);
+        }
+      };
+
+      const handlePrevPage = () => {
+        if (page > 0) {
+          setPage((cur) => cur - 1);
+        }
+      };
+
+      const handleFirstPage = () => {
+        setPage(0);
+      };
+
+      const handleLastPage = () => {
+        setPage(lastPage - 1);
+      };
+
+
 
     React.useEffect(() => {
         window.addEventListener(
@@ -404,6 +390,7 @@ export default function MyTickets(){
       <div className={[classes["headerTypography"]]}>
         <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
         <Typography
+        children="Guanaco Business"
           as="a"
           href="#"
           className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
@@ -433,17 +420,52 @@ export default function MyTickets(){
             <h1 className={[classes["title"]]}>Mis Tickets</h1>
 
             <div className={[classes["cardContainer"]]}>
-            {Tickets.map((ticket, index) => (
+            {tickets.map((ticket, index) => (
           <TicketItem key={ticket.id} ticket={ticket} />
         ))}
       </div>
-      
-            </div>
+      <div className="flex justify-center items-center my-12">
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleFirstPage}
+        >
+          <ChevronDoubleLeftIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handlePrevPage}
+        >
+          <ChevronLeftIcon className="h-6 w-6" />
+        </Button>
+        <Typography children={page + 1} className="mx-8 text-white" />
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleNextPage}
+        >
+          <ChevronRightIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleLastPage}
+        >
+          <ChevronDoubleRightIcon className="h-6 w-6" />
+        </Button>
+          </div>
+        </div>
              <footer className=" bg-bluefooter text-white mt-5 py-4 px-6 text-center">
 
         <div className='relative mx-auto flex mb-5 items-center text-white'>        
           <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
           <Typography
+          children="Guanaco Business"
             as="a"
             href="#"
             className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"

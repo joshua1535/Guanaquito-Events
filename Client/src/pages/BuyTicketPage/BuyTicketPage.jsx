@@ -220,6 +220,8 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
     <div className={[classes["dropboxContainer"]]}>
       <button 
       className='mr-4 text-white font-bold bg-red-500 rounded-full w-8 h-8 mt-auto
+      PC-800*600:w-5 PC-800*600:h-5 PC-800*600:mr-2
+      PC-640*480:w-6 PC-640*480:h-6 PC-640*480:mr-2
       Mobile-390*844:w-7 Mobile-390*844:h-7
       Mobile-280:w-6 Mobile-280:h-6
       '
@@ -229,6 +231,8 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
       >{selectedQuantity}</span>
       <button
       className='ml-4 text-white font-bold bg-green-500 rounded-full w-8 h-8
+      PC-800*600:w-5 PC-800*600:h-5 PC-800*600:ml-2
+      PC-640*480:w-5 PC-640*480:h-5 PC-640*480:ml-2
       Mobile-390*844:w-7 Mobile-390*844:h-7
       Mobile-280:w-6 Mobile-280:h-6
       '
@@ -252,6 +256,8 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
     const [orderId, setOrderId] = useState(null);
     const [showDetails, setShowDetails] = useState(false);
     const [finalTiers, setFinalTiers] = useState([]);
+    const [eventCapacity, setEventCapacity] = useState(0);
+    const [eventRemainingCapacity, setEventRemainingCapacity] = useState(0);
 
     const handleSelectTier = (tier, quantity) => {
       setTiersToBuy((prevTiers) => {
@@ -294,8 +300,14 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
         eventService.
         getEventById(code, token).then((event) => setEvent(event));
 
-        tierService.getTiersbyEvent(code, token).then((tiers) => setTiers(tiers));
+        tierService.getTiersbyEvent(code, token).then((tiers) => setTiers(tiers.tiers)
+        );
 
+        tierService.getTiersbyEvent(code, token).then((tiers) => setEventCapacity(tiers.eventCapacity)
+        );
+
+        tierService.getTiersbyEvent(code, token).then((tiers) => setEventRemainingCapacity(tiers.eventRemainingCapacity)
+        );
       }
     }, [token, code]);
         
@@ -341,9 +353,10 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
       }
     };
 
-
-
-
+    useEffect(() => {
+      console.log(eventCapacity);
+      console.log(eventRemainingCapacity);
+    }, [eventCapacity, eventRemainingCapacity]);
 
     React.useEffect(() => {
       window.addEventListener(
@@ -407,12 +420,11 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
                     color="white"
                     style={{ fontFamily: "PoppinsLight" } }
                 >
-                    126 {event?.capacity} boletos disponibles
+                    {eventRemainingCapacity} boletos disponibles
                 </Typography>
                 </div>
                 <div 
                     className={[classes["infoContainer"]]}
-                    style={{ backgroundImage: 'url(https://i.postimg.cc/d3MywV5s/imagen-2023-06-05-090157807.png)' }} 
                     >
                     {/* Zona superior con dos columnas de botones */}
 
@@ -471,6 +483,10 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
                               <span className={[classes["titleSpan"]]}>Categoría: </span> 
                               <span className={[classes["contentSpan"]]}>{event?.category.name}</span>
                           </p>
+                          <p className={[classes["pData"]]}>
+                              <span className={[classes["titleSpan"]]}>Capacidad: </span> 
+                              <span className={[classes["contentSpan"]]}>{eventCapacity} entradas</span>
+                          </p>
                         </div>
                       ) : (  
                         <> 
@@ -495,7 +511,7 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
                         <DropBoxContainer tier={tier}
                         onSelectTier={handleSelectTier}
                         />
-                            <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
+                            <p className={[classes["ticketPrice2"]]}>restantes: {tier.remainingCapacity}</p>
                         </div>
                         </div>
                     ))}
@@ -505,13 +521,13 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
                       )}
                     {/* Botones de Volver y Pagar */}                    
                     <div className={[classes["botbuttonsContainer"]]}>
-                        <button 
+                       {/*  <button 
                         onClick={handleBackButton}
                         className=" 
                         PC-1280*720:w-32 C-1280*720:h-12                        
                         PC-800*600:w-24 PC-800*600:h-10
                         PC-640*480:w-20 PC-640*480:h-7
-                         mr-2 h-14 w-44 bg-dark-blue rounded-full text-white hover:bg-gray-900 ">Volver</button>
+                         mr-2 h-14 w-44 bg-blue-gray-900 rounded-full text-white hover:bg-gray-900 ">Volver</button> */}
                         <button 
                         onClick={handleBuyTicket}
                         className=" 
@@ -527,7 +543,7 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
         >   
             <div className="flex flex-col items-center  text-white rounded">
             <img 
-                className=" w-full h-full object-cover mb-6 opacity-20" 
+                className=" w-full h-full object-cover mb-6 opacity-20 shadow-xl" 
                 src = {event?.image}
                 alt="Event"
             />
@@ -578,7 +594,7 @@ const DropBoxContainer = ({ tier, onSelectTier }) => {
                         <DropBoxContainer tier={tier}
                         onSelectTier={handleSelectTier}
                         />
-                            <p className={[classes["ticketPrice2"]]}>restantes: 10</p>
+                            <p className={[classes["ticketPrice2"]]}>restantes: {tier.remainingCapacity}</p>
                         </div>
                         </div>
                     ))}
