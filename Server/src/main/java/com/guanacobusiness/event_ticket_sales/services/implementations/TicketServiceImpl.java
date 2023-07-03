@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeOwnershipDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedTicketDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Order;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
@@ -16,8 +21,10 @@ import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.repositories.TicketRepository;
 import com.guanacobusiness.event_ticket_sales.repositories.UserRepository;
 import com.guanacobusiness.event_ticket_sales.services.RegisterService;
+import com.guanacobusiness.event_ticket_sales.services.TicketMapper;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
 import com.guanacobusiness.event_ticket_sales.services.TierService;
+import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -35,6 +42,12 @@ public class TicketServiceImpl implements TicketService{
 
     @Autowired
     TierService tierService;
+
+    @Autowired
+    PageDTOMapper pageDTOMapper;
+
+    @Autowired
+    TicketMapper ticketMapper;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -124,17 +137,21 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public List<Ticket> findAllUserTickets(User userOwnerCode) {
+    public PageDTO<FormatedTicketDTO> findAllUserTickets(User userOwner, int page, int size) {
 
-        List<Ticket> tickets = userOwnerCode.getOrders().stream()
-            .flatMap(order -> order.getTickets().stream())
-            .toList();
+        Pageable pageable = PageRequest.of(page, size);
 
-        if(tickets.isEmpty()) {
-            return userOwnerCode.getTickets();
+        Page<Ticket> ticketsPage = ticketRepository.findAllByUserOwnerCode(userOwner.getCode(), pageable);
+
+        if(ticketsPage.isEmpty() || ticketsPage == null) {
+            return null;
         }
 
-        return tickets;
+        List<FormatedTicketDTO> tickets = ticketMapper.listToCustomTicketDTO(ticketsPage.getContent(), userOwner);
+
+        PageDTO<FormatedTicketDTO> result = pageDTOMapper.map(tickets, page, size, ticketsPage.getTotalElements(), ticketsPage.getTotalPages());
+
+        return result;
     
     }
 

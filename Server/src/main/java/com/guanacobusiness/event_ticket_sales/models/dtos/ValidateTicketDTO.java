@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ValidateTicketDTO {
 
     @NotBlank(message = "Code is required")
-    @UUID(message = "Code is not valid")
+    //@UUID(message = "Code is not valid")
     private String transactionCode;
 
 }

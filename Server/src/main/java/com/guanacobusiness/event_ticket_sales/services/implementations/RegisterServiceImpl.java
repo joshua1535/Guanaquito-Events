@@ -60,6 +60,7 @@ public class RegisterServiceImpl implements RegisterService {
 
         //Si encuentra un registro validado no se puede crear un registro nuevo
         if(validatedRegister != null) {
+            System.out.println("Registro validado" + validatedRegister);
             return false;
         }
 
@@ -67,6 +68,7 @@ public class RegisterServiceImpl implements RegisterService {
         
         //Si se encuentra un registro vacio no se puede crear uno nuevo
         if(registerToUpdate != null) {
+            System.out.println("Registro vacio" + registerToUpdate);
             return false;
         }
 
@@ -126,6 +128,7 @@ public class RegisterServiceImpl implements RegisterService {
         LocalDateTime validationTime = currentDateTime.now();
 
         foundRegister.setValidationTime(validationTime);
+        //foundRegister.setTransferenceTime(null);
         registerRepository.save(foundRegister);
 
         return true;
@@ -228,6 +231,8 @@ public class RegisterServiceImpl implements RegisterService {
 
         System.out.println("comprador: " + ticket.getOrder().getUserBuyer().getEmail() + " usuario: " + user.getEmail());
         Register transferedRegister = registers.stream().filter(register -> (register.getTransferenceTime() != null && ticket.getOrder().getUserBuyer().getEmail() == user.getEmail())).findFirst().orElse(null);
+
+        System.out.println("transferedRegister: " + transferedRegister);
 
         if(transferedRegister != null) {
             System.out.println("entro aqui?");

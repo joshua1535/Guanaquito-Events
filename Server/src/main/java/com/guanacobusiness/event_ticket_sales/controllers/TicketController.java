@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeOwnershipDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedTicketDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
@@ -114,13 +117,14 @@ public class TicketController {
 
             return new ResponseEntity<>("Ticket transfered successfully!", HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e.getMessage() + " " + e.getCause());
             return new ResponseEntity<>("Ticket transfer failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     @GetMapping("/user-tickets")
-    public ResponseEntity<?> getAllTicketsByUser(HttpServletRequest request){
+    public ResponseEntity<?> getAllTicketsByUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request){
     
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
@@ -135,14 +139,13 @@ public class TicketController {
             return new ResponseEntity<>("User not found!", HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println("Antes del service");
-        List<Ticket> tickets = ticketService.findAllUserTickets(user);
+        PageDTO<FormatedTicketDTO> response = ticketService.findAllUserTickets(user, page, size);
         
-        if(tickets.isEmpty()) {
+        if(response == null) {
             return new ResponseEntity<>("No tickets found!", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(ticketMapper.listToCustomTicketDTO(tickets, user), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     
     }
 

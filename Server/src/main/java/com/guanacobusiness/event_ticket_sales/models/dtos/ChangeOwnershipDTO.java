@@ -1,6 +1,5 @@
 package com.guanacobusiness.event_ticket_sales.models.dtos;
 
-import org.hibernate.validator.constraints.UUID;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
