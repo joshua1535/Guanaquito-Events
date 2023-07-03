@@ -6,10 +6,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AmountOfTicketsSoldDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.EventAndTiersInfoDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.TierInfoDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.TierMoneyCollectedDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
@@ -34,12 +39,41 @@ public class TierServiceImpl implements TierService{
     }
 
     @Override
-    public List<Tier> findAllTiersByEventCode(UUID eventCode) {
-        Event eventFound = eventService.findEventByCode(eventCode);
+    public Page<Tier> findAllTiers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size); 
+        return tierRepository.findAll(pageable);
+    }
 
-        if(eventFound == null) return null;
+    @Override
+    public EventAndTiersInfoDTO findAllTiersByEvent(Event eventFound) {
+        List<Tier> tiers = eventFound.getTiers();
 
-        return eventFound.getTiers();
+        if(tiers.isEmpty()) return null;
+
+        Integer eventCapacity = 0;
+        Integer remainingEventCapacity = 0;
+
+        for(Tier tier : tiers){
+            eventCapacity += tier.getCapacity();
+            remainingEventCapacity += (tier.getCapacity() - tier.getTickets().size());
+        }
+
+        List<TierInfoDTO> tierInfoList = tiers.stream()
+        .map(tier -> new TierInfoDTO(
+            tier.getCode(),
+            tier.getName(),
+            tier.getPrice(),
+            tier.getCapacity(),
+            tier.getCapacity() - tier.getTickets().size()))
+            .collect(Collectors.toList());
+
+        EventAndTiersInfoDTO eventAndTiersInfo = new EventAndTiersInfoDTO(
+            eventCapacity,
+            remainingEventCapacity,
+            tierInfoList
+        );
+
+        return eventAndTiersInfo;
     }
 
     @Override
