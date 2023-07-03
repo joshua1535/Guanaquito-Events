@@ -1,12 +1,9 @@
 package com.guanacobusiness.event_ticket_sales.models.dtos;
 
-import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.UUID;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

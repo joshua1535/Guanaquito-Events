@@ -1,7 +1,6 @@
 package com.guanacobusiness.event_ticket_sales.repositories;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
