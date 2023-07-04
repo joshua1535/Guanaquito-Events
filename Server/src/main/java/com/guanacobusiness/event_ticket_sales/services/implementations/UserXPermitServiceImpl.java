@@ -79,9 +79,20 @@ public class UserXPermitServiceImpl implements UserXPermitService{
             return false;
         }
 
-        userXPermitRepository.deleteByUserCodeAndPermitCode(userCode, permitCode);
+        UserXPermit userXPermit = userXPermitRepository.findOneByUserCodeAndPermitCode(userCode, permitCode);
 
-        return true;
+        try {
+            userXPermitRepository.delete(userXPermit);
+
+            return true;
+        
+        } catch (Exception e) {
+        
+            System.out.println(e.getMessage());
+            return false;
+        
+        }
+
     }
 
     @Override
