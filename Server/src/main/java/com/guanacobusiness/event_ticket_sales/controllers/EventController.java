@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,11 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.AddUserToEventDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.ModifyPermitDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
+import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
@@ -217,6 +221,95 @@ public class EventController {
         }
 
         return new ResponseEntity<>(events,HttpStatus.OK);
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<?> AddUserToEvent (@Valid @RequestBody AddUserToEventDTO info, HttpServletRequest request) throws Exception{
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+        System.out.println("Token"+request.getHeader("Authorization").substring(7));
+
+        UUID uuid = UUID.fromString(info.getUserCode());
+
+        if(uuid == null) {
+            return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userService.findByCode(uuid);
+
+        if(user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        UUID eventCode = UUID.fromString(info.getEventCode());
+
+        if(eventCode == null) {
+            return new ResponseEntity<>("Invalid event code", HttpStatus.BAD_REQUEST);
+        }
+
+        Event event = eventService.findEventByCode(eventCode);
+
+        if(event == null) {
+            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+        }
+
+        Boolean granted = userXEventService.save(user, event);
+
+        if(!granted) {
+            return new ResponseEntity<>("User already added to the event",HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>("User added to the event successfully",HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> revokePermitToUser( @Valid @RequestBody AddUserToEventDTO info, HttpServletRequest request) throws Exception{
+
+        try{
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
+        UUID uuid = UUID.fromString(info.getUserCode());
+        System.out.println("Token"+request.getHeader("Authorization").substring(7));
+
+        if(uuid == null) {
+            return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userService.findByCode(uuid);
+
+        if(user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        UUID permitCode = UUID.fromString(info.getEventCode());
+
+        if(permitCode == null) {
+            return new ResponseEntity<>("Invalid Event code", HttpStatus.BAD_REQUEST);
+        }
+
+        Event event = eventService.findEventByCode(permitCode);
+
+        if(event == null) {
+            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+        }
+
+        Boolean revoked = userXEventService.delete(user.getCode(), event.getCode());
+
+        if(!revoked) {
+            return new ResponseEntity<>("User already removed from event",HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>("User removed successfully",HttpStatus.OK);
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>("Error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 

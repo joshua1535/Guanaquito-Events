@@ -12,6 +12,8 @@ import com.guanacobusiness.event_ticket_sales.models.entities.UserXEvent;
 import com.guanacobusiness.event_ticket_sales.repositories.UserXEventRepository;
 import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserXEventServiceImpl implements UserXEventService{
 
@@ -35,14 +37,16 @@ public class UserXEventServiceImpl implements UserXEventService{
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean save(User user, Event event) throws Exception {
-        UserXEvent newUserXEvent = new UserXEvent(event, user);
 
         UserXEvent foundUserXEvent = userXEventRepository.findByUserCodeAndEventCode(user.getCode(), event.getCode());
 
-        if(foundUserXEvent != null) {
+        if(foundUserXEvent == null) {
             return false;
         }
+
+        UserXEvent newUserXEvent = new UserXEvent(event, user);
 
         userXEventRepository.save(newUserXEvent);
 
@@ -50,6 +54,7 @@ public class UserXEventServiceImpl implements UserXEventService{
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean delete(UUID userCode, UUID eventCode) throws Exception {
         UserXEvent foundUserXEvent = userXEventRepository.findByUserCodeAndEventCode(userCode, eventCode);
 
