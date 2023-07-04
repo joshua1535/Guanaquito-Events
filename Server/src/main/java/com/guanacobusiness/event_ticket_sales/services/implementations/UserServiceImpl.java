@@ -87,6 +87,11 @@ public class UserServiceImpl implements UserService{
         }
 
         userRepository.save(newUser);
+
+        Permit defaultPermit = permitService.findPermitByName("Client");
+
+        userXPermitService.save(newUser, defaultPermit);
+
         return true;
 
     }
@@ -249,7 +254,9 @@ public class UserServiceImpl implements UserService{
             return null;
         }
 
-        return new UserFoundDTO(foundUser.getEmail(), foundUser.getProfilePicture());
+        List<Permit> permits = userXPermitService.findPermitsByUserCode(foundUser.getCode());
+
+        return new UserFoundDTO(foundUser.getEmail(), foundUser.getProfilePicture(), permits);
     
     }
 
