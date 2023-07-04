@@ -47,11 +47,11 @@ function App() {
           <Route path="/mytickets" element={<MyTickets />} />
           <Route path="/buytickets/:code" element={<BuyTicket />} />
           <Route path="/admin-event/createevent" element={<CreateEvent />} />
-          <Route path="/admin-event/modifyevent" element={<ModifyEvent />} />
+          <Route path="/admin-event/modifyevent/:eventCode" element={<ModifyEvent />} />
           <Route path="/admin-event/addtiers/:eventCode" element={<AddTiers />} />
           <Route path="/admin-event/" element={<AdminEvents />} />
           <Route path="/admin-event/modifyevent/addtier" element={<AddTiers />} />
-          <Route path="/admin-event/eventpermit" element={<EventsPermit />} />
+          <Route path="/admin-event/eventpermit/:eventCode" element={<EventsPermit />} />
           <Route path="/admin-event/modifystaff" element={<ModifyStaff />} />
           <Route path="/qr" element={<QRPage />} />
           <Route path="/transferticket" element={<TransferTicket />} />  

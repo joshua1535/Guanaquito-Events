@@ -34,6 +34,62 @@ export const eventService = {
             console.log(error);
         }
     },
+    getAllCurrentEvents: async function(token) {
+        try {
+            const response = await API.get('/event/active', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    updateEvent: async function(event,token) {
+        try {
+            const response = await API.patch('/event/update',event,
+             {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    changeEventStatus: async function(eventCode, token) {
+        try {
+            const response = await fetch(`http://localhost:8080/event/status/${eventCode}`, {
+                method: 'PATCH',
+                headers: {                    
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            return response.data;
+        } catch (error) {
+          if (error.response) {
+              // La solicitud se hizo y el servidor respondió con un estado de error
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+          } else if (error.request) {
+              // La solicitud se hizo pero no se recibió ninguna respuesta
+              console.log(error.request);
+          } else {
+              // Algo sucedió en la configuración de la solicitud que desencadenó un Error
+              console.log('Error', error.message);
+          }
+          throw error; 
+        }
+    },
     getEventsByCategory: async function (code, page = 0, size = 10,token) {
 
         try {

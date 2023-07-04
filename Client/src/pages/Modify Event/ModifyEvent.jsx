@@ -29,6 +29,9 @@ import {
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
 
 
   const categoryOptions = [
@@ -126,12 +129,36 @@ export default function ModifyEvent() {
     const [duration, setDuration] = useState("");
     const [participant, setParticipant] = useState("");
     const [participants, setParticipants] = useState([]);
-    const [sponsor, setSponsor] = useState("");
-    const [sponsors, setSponsors] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [modifyTier, setModifyTier] = useState(false);
     const [AddTiers, setAddTiers] = useState(false);
+    const { eventCode } = useParams();
+    const { user,token } = useUserContext();
+    const [event, setEvent] = useState([]);
+    const [image, setImage] = useState("https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZXZlbnRvfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60");
+    const [category, setCategory] = useState("");
+    const [eventName, setEventName] = useState("");
+    const [date, setDate] = useState();
+    const [time, setTime] = useState();
+
+
+    useEffect(() => {
+      if(token){
+        eventService.getEventById(eventCode,token)
+            .then((data) => {
+              setEvent(data);          
+                console.log('evento obtenido:', event);
+            })
+            .catch((error) => {
+                console.error('Hubo un error al obtener las eventos:', error);
+            });
+        }
+    }, [token]); 
+
+
+    const [sponsor, setSponsor] = useState(event.sponsors);
+    const [sponsors, setSponsors] = useState([]);
 
 
     const navigate = useNavigate();
@@ -147,6 +174,29 @@ export default function ModifyEvent() {
       { name: "Localidad 8", price: 200 },
       { name: "Localidad 9", price: 300 },
     ]);
+
+    const handlesaveClick2 = () => {
+      eventService.updateEvent({
+          code: eventCode,
+          title: eventName,
+          involvedPeople: participants.join(", "),
+          image: image,  // Reemplaza esto con el valor del campo "Foto del evento"
+          date: date,  // Reemplaza esto con el valor del campo "Fecha"
+          time: time,  // Reemplaza esto con el valor del campo "Hora"
+          duration: parseInt(duration),
+          sponsors: sponsors.join(", "),
+          categoryCode: category// Reemplaza esto con el valor del campo "Categoría"
+      }, token)
+          .then(response => {
+              console.log('Evento modificado con éxito:', response);
+              navigate(`/admin-event/eventpermit/${eventCode}`);
+
+          })
+          .catch(error => {
+              console.error('Hubo un error al crear el evento:', error);
+              // aquí puedes manejar el error, por ejemplo mostrando un mensaje al usuario
+          });
+  };
 
 
     const handlesaveClick = () => {
@@ -396,6 +446,8 @@ export default function ModifyEvent() {
               id="eventName"
               type="text"
               color='white'
+              value={eventName}
+              onChange={event => setEventName(event.target.value)}
               placeholder="Ingrese el nombre del evento"
             />
           </div>
@@ -454,11 +506,13 @@ export default function ModifyEvent() {
                 Categoría
                 
               </label>
-                <Select className='text-white'>
-                    <Option>Cine</Option>
-                    <Option>Concierto</Option>
-                    <Option>Obras de teatro</Option>
-                    <Option>Deportes</Option>
+                <Select
+                 onChange={value => setCategory(value)}
+                className='text-white'>
+                    <Option value="CI">Cine</Option>
+                    <Option value="MU">Musica</Option>
+                    <Option value="OB">Obras de teatro</Option>
+                    <Option value="DE">Deportes</Option>
                 </Select>
             </div>
             <div>
@@ -469,6 +523,8 @@ export default function ModifyEvent() {
                 id="time"
                 type="time"
                 color='white'
+                value={time}
+                onChange={event => setTime(event.target.value)}
                 placeholder="Seleccione la hora"
               />
             </div>
@@ -544,6 +600,8 @@ export default function ModifyEvent() {
               id="date"
               type="date"
               color='white'
+              value={date}
+              onChange={event => setDate(event.target.value)}
               placeholder="Seleccione la fecha"
             />
           </div>
@@ -553,9 +611,10 @@ export default function ModifyEvent() {
             </label>
             <Input
               id="eventPhoto"
-              type="file"
+              type="text"
               color='white'
               placeholder="Seleccione una foto"
+              onChange={event => setImage(event.target.value)}
             />
           </div>
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
@@ -565,7 +624,7 @@ export default function ModifyEvent() {
               Cancelar
             </Button>
             <Button 
-            onClick={handlesaveClick}
+            onClick={handlesaveClick2}
             className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
               Guardar
             </Button>
