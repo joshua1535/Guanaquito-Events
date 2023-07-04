@@ -330,7 +330,7 @@ export default function HomePage() {
   const { user, token} = useUserContext();
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(0); // Para controlar la página actual
-  const [size] = useState(4); // Para controlar el tamaño de la página
+  const [size] = useState(7); // Para controlar el tamaño de la página
 
 
 
@@ -348,7 +348,7 @@ export default function HomePage() {
   
   useEffect(() => {
     if(token){
-      eventService.getCurrentEvents(0, size, token)
+      eventService.getCurrentEvents( page, size, token)
           .then((data) => {
             setEvents(data.content);
           })

@@ -10,6 +10,16 @@
 .headerTypography{
     @apply relative mx-auto flex items-center text-white
 }
+.buttonGreen
+{
+    background-color: greenyellow;
+}
+
+.buttonRed
+{
+    background-color: rgb(209, 58, 58);
+}
+
 
 .bodyContainer {
     @apply grid grid-cols-2
@@ -145,7 +155,7 @@
 }
 
 .buttonDisableContainer {
-    @apply flex flex-row justify-start h-auto w-fit gap-4 p-4 font-text text-white bg-red-500 rounded-md my-4 
+    @apply flex flex-row justify-start h-auto w-fit gap-4 p-4 font-text text-white  rounded-md my-4 
     PC-1920*1080:text-xl
     PC-1600*900:text-xl
     PC-1366*768:text-xl

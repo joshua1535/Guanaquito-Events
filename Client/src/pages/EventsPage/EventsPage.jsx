@@ -209,7 +209,7 @@ const EventsPage = () => {
 
   useEffect(() => {
     if(token){
-      eventService.getAllEvents(token)
+      eventService.getAllCurrentEvents(token)
           .then((data) => {
             setEvents(prevEvents => ({...prevEvents, Todos: data.content}));          
               console.log('Los eventos obtenidas:', events.Todos);

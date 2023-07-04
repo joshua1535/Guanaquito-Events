@@ -194,6 +194,10 @@ export default function CreateEvent() {
 
     const navigate = useNavigate();
 
+    const handleCancelClick2 = () => {
+      navigate('/admin-event');
+    }
+
     const handleAddSponsor = () => {
         // Agregar el sponsor al array de sponsors
         setSponsors((prevSponsors) => [...prevSponsors, sponsor]);
@@ -513,7 +517,7 @@ export default function CreateEvent() {
             />
           </div>
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
-            <Button className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+            <Button onClick={ handleCancelClick2} className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
               Cancelar
             </Button>
             <Button

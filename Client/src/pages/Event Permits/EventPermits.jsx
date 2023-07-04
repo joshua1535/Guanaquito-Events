@@ -30,6 +30,9 @@ import {
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
 
 
 
@@ -117,6 +120,46 @@ function ProfileMenu() {
 export default function EventsPermit() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const { eventCode } = useParams();
+    const { user,token } = useUserContext();
+    const [event, setEvent] = useState([]);
+
+    const editEventClick = (eventCode) => {
+      navigate(`/admin-event/modifyevent/${eventCode}`);
+    }
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      if(token){
+        setLoading(true);
+        eventService.getEventById(eventCode,token)
+            .then((data) => {
+              setEvent(data);          
+                console.log('evento obtenido:', event);
+            })
+            .catch((error) => {
+                console.error('Hubo un error al obtener las eventos:', error);
+            });
+        }
+    }, [token]);
+
+    const [eventIsActive, setEventIsActive] = useState(event.active); 
+
+
+    
+    const editstatusEventClick = () => {
+    eventService.changeEventStatus(eventCode, token)
+    .then(response => {
+        console.log('El estado del evento ha cambiado con éxito:', response);
+        event.active = !event.active;
+        setEventIsActive(!eventIsActive);
+    })
+    .catch(error => {
+        console.error('Hubo un error al cambiar el estado del evento:', error);
+    });
+    };
+
+    let buttonText = event.active ?  "Deshabilitar evento":"Habilitar evento" ;
 
     const navigate = useNavigate();
 
@@ -174,35 +217,36 @@ export default function EventsPermit() {
             <div className="flex flex-col min-h-screen"> 
         <div className={[classes["bodyContainer"]]}>
             <div className={[classes["imgContainer"]]}>
-            <img src="https://www.coldplay.com/wp/wp-content/uploads/2023/05/cannot-wait.jpg"
+            <img src={event.image}
              alt="eventImg" className={[classes["imgEvent"]]}/>
             </div>
-            <div className={[classes["infoEventContainer"]]}>
-            <div className={[classes["textContainer"]]}>
+            
+            <div className={[classes["infoEventContainer"]]}>           
+            <div className={[classes["textContainer"]]}>               
                 <div className={[classes["titleContainer"]]}>
-                <h1 className={[classes["eventTitle"]]}> ColdPlay Tour </h1>
+                <h1 className={[classes["eventTitle"]]}> {event.title} </h1>
                 </div>
                 <div className={[classes["titleContainer"]]}>
                 <p className={[classes["title1"]]}>Fecha:</p>
-                <p className={[classes["title2"]]}>6 de abril</p>
+                <p className={[classes["title2"]]}>{event.date}</p>
                 </div>
                 <div className={[classes["titleContainer"]]}>
                 <p className={[classes["title1"]]}>Hora:</p>
-                <p className={[classes["title2"]]}>20:15</p>
+                <p className={[classes["title2"]]}>{event.time}</p>
                 </div>
                 <div className={[classes["titleContainer"]]}>
                 <p className={[classes["title1"]]}>Participantes:</p>
-                <p className={[classes["title2"]]}>Mi primo</p>
+                <p className={[classes["title2"]]}>{event.involvedPeople}</p>
                 </div>
                 <div className={[classes["titleContainer"]]}>
                 <p className={[classes["title1"]]}>Patrocinadores:</p>
-                <p className={[classes["title2"]]}>Nayib Bukele</p>
+                <p className={[classes["title2"]]}>{event.sponsors}</p>
                 </div>
                 </div>
                 <div className={[classes["buttonContainer"]]}>
                 <div className={[classes["buttonmodifyContainer"]]}>
                 <button 
-                onClick={handleModifyEventClick}
+                onClick={() =>editEventClick(event.code)}
                 className={[classes["modifyEventButton"]]}>Modificar datos del evento</button>
             </div>
                 <div className={[classes["buttonmodifyStaffContainer"]]}>
@@ -213,8 +257,12 @@ export default function EventsPermit() {
                 </div>
                 <div className={[classes["buttonDisableContainer"]]}>
                 <button 
-                onClick={handleDisableEventClick}
-                className={[classes["disableButton"]]}>Deshabilitar evento</button>
+                    onClick={editstatusEventClick}
+                    style={{ backgroundColor: event.active ? 'red' : 'green' }}
+                    className={[classes["buttonDisableContainer"]]}
+                    >
+                    {buttonText}
+                </button>
                 </div>
             </div>
             
