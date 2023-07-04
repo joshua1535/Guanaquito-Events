@@ -57,7 +57,7 @@ function App() {
           <Route path="/transferticket" element={<TransferTicket />} />  
           <Route path="/ticketvalidation" element={<TicketValidationPage />} />
           <Route path="/admin-users" element={<AdminUsers />} />
-          <Route path="/admin-users/permits-user" element={<EditPermitUsers />} />
+          <Route path="/admin-users/permits-user/:userCode" element={<EditPermitUsers />} />
           <Route path="/admin-graphs" element={<AdminGraphs />} />
           <Route path="/admin-scanner" element={<TicketValidationPage />} />
           <Route path="/admin-graphs/graph" element={<StatsPage/>} />

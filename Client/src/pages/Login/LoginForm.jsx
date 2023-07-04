@@ -6,15 +6,19 @@ import { useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '../../Context/userContext';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const LoginForm = () => {
 
     const navigate = useNavigate();
 
     const { login, token } = useUserContext();
-    if (token) {
-        return navigate('/home')
-    }
+
+    useEffect(() => {
+        if (token) {
+            return navigate('/home')
+        }
+    });
 
     const signinHandler = () => {
         navigate('/home');

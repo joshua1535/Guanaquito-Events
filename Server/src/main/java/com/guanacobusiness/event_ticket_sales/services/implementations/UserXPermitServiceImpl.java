@@ -74,14 +74,26 @@ public class UserXPermitServiceImpl implements UserXPermitService{
     @Transactional(rollbackOn = Exception.class)
     public Boolean deleteByUserCodeAndPermitCode(UUID userCode, UUID permitCode) throws Exception {
         UserXPermit permit = userXPermitRepository.findOneByUserCodeAndPermitCode(userCode, permitCode);
-
+        System.out.println(permit);
         if(permit == null) {
             return false;
         }
 
-        userXPermitRepository.deleteByUserCodeAndPermitCode(userCode, permitCode);
+        UserXPermit userXPermit = userXPermitRepository.findOneByUserCodeAndPermitCode(userCode, permitCode);
+        System.out.println(userXPermit);
+        try {
+            userXPermitRepository.delete(userXPermit);
+            System.out.println("Deleted");
 
-        return true;
+            return true;
+        
+        } catch (Exception e) {
+        
+            System.out.println(e.getMessage());
+            return false;
+        
+        }
+
     }
 
     @Override

@@ -85,14 +85,15 @@ public class PermitController {
 
     }
 
-    @PostMapping("/{code}")
-    public ResponseEntity<?> grantPermitToUser(@PathVariable(name = "code") String code,@Valid @RequestBody ModifyPermitDTO info, HttpServletRequest request) throws Exception{
+    @PostMapping("/")
+    public ResponseEntity<?> grantPermitToUser(@Valid @RequestBody ModifyPermitDTO info, HttpServletRequest request) throws Exception{
 
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
+        System.out.println("Token"+request.getHeader("Authorization").substring(7));
 
-        UUID uuid = UUID.fromString(code);
+        UUID uuid = UUID.fromString(info.getUserCode());
 
         if(uuid == null) {
             return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
@@ -125,15 +126,17 @@ public class PermitController {
         return new ResponseEntity<>("Permit granted successfully",HttpStatus.OK);
     }
     
+    
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> revokePermitToUser( @Valid @RequestBody ModifyPermitDTO info, HttpServletRequest request) throws Exception{
 
-    @DeleteMapping("/{code}")
-    public ResponseEntity<?> revokePermitToUser(@PathVariable(name = "code") String code, @Valid @RequestBody ModifyPermitDTO info, HttpServletRequest request) throws Exception{
-
-        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+        try{
+            if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }
 
-        UUID uuid = UUID.fromString(code);
+        UUID uuid = UUID.fromString(info.getUserCode());
+        System.out.println("Token"+request.getHeader("Authorization").substring(7));
 
         if(uuid == null) {
             return new ResponseEntity<>("Invalid code", HttpStatus.BAD_REQUEST);
@@ -164,6 +167,12 @@ public class PermitController {
         }
 
         return new ResponseEntity<>("Permit revoked successfully",HttpStatus.OK);
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>("Error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
