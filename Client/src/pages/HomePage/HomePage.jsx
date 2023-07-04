@@ -169,11 +169,13 @@ const profileMenuItems = [
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
+  const { logout } = useUserContext();
 
   const navigate = useNavigate();
   const handleMenu = (label) => {
     if (label === "Sign Out") {
       closeMenu();
+      logout();
       navigate("/");
       
     }

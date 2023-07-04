@@ -27,7 +27,7 @@ import EventsPermit from './pages/Event Permits/EventPermits';
 import AdminGraphs from './pages/Admin Graphs/AdminGraphs';
 import StatsPage from './pages/Stats/Stats';
 import MyEvents from './pages/My Events/MyEvents';
-
+import Private from './Components/Private/Private';
 
 
 function App() {
@@ -37,32 +37,31 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
-          <Route path="/emailconfirmation" element={<EmailConfirmationForm />} />
+          <Route path="/emailconfirmation" element={<Private role="Client"> <EmailConfirmationForm /> </Private>} />
           <Route path="/emailregister" element={<EmailConfirmationFormRegister />} />
-          <Route path="/passwordconfirmation" element={<PasswordConfirmationForm />} />
-          <Route path="/updatepassword" element={<UpdatePasswordForm />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/myorders" element={<MyOrders />} />
-          <Route path="/mytickets" element={<MyTickets />} />
-          <Route path="/buytickets/:code" element={<BuyTicket />} />
-          <Route path="/admin-event/createevent" element={<CreateEvent />} />
-          <Route path="/admin-event/modifyevent" element={<ModifyEvent />} />
-          <Route path="/admin-event/addtiers/:eventCode" element={<AddTiers />} />
-          <Route path="/admin-event/" element={<AdminEvents />} />
-          <Route path="/admin-event/modifyevent/addtier" element={<AddTiers />} />
-          <Route path="/admin-event/eventpermit" element={<EventsPermit />} />
-          <Route path="/admin-event/modifystaff" element={<ModifyStaff />} />
-          <Route path="/qr" element={<QRPage />} />
-          <Route path="/transferticket" element={<TransferTicket />} />  
-          <Route path="/ticketvalidation" element={<TicketValidationPage />} />
-          <Route path="/admin-users" element={<AdminUsers />} />
-          <Route path="/admin-users/permits-user/:userCode" element={<EditPermitUsers />} />
-          <Route path="/admin-graphs" element={<AdminGraphs />} />
-          <Route path="/admin-scanner" element={<TicketValidationPage />} />
-          <Route path="/admin-graphs/graph" element={<StatsPage/>} />
-          <Route path="/historyevents" element={<MyEvents />} />
-          <Route path="/permits-user" element={<EditPermitUsers />} />
+          <Route path="/passwordconfirmation" element={<Private role="Client"> <PasswordConfirmationForm /> </Private>} />
+          <Route path="/updatepassword" element={<Private role="Client">  <UpdatePasswordForm /> </Private>} />
+          <Route path="/home" element={<Private role="Client">  <HomePage /> </Private>} />
+          <Route path="/events" element={<Private role="Client">  <EventsPage /> </Private>} />
+          <Route path="/myorders" element={<Private role="Client"> <MyOrders /> </Private>} />
+          <Route path="/mytickets" element={<Private role="Client"> <MyTickets /> </Private>} />
+          <Route path="/buytickets/:code" element={<Private role="Client"> <BuyTicket /> </Private>} />
+          <Route path="/admin-event/createevent" element={<Private role="Event Administrator"> <CreateEvent /> </Private>} />
+          <Route path="/admin-event/modifyevent" element={<Private role="Event Administrator"> <ModifyEvent /> </Private>} />
+          <Route path="/admin-event/addtiers/:eventCode" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
+          <Route path="/admin-event/" element={<Private role="Event Administrator"> <AdminEvents /> </Private>} />
+          <Route path="/admin-event/modifyevent/addtier" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
+          <Route path="/admin-event/eventpermit" element={<Private role="Admin"> <EventsPermit /> </Private>} />
+          <Route path="/admin-event/modifystaff" element={<Private role="Admin"> <ModifyStaff /> </Private>} />
+          <Route path="/qr" element={<Private role="Client"> <QRPage /> </Private>} />
+          <Route path="/transferticket" element={<Private role="Client"><TransferTicket /> </Private>} />  
+          <Route path="/admin-users" element={<Private role="Admin"> <AdminUsers /> </Private>} />
+          <Route path="/admin-users/permits-user/:userCode" element={<Private role="Admin"> <EditPermitUsers /> </Private>} />
+          <Route path="/admin-graphs" element={<Private role="Stadistics"> <AdminGraphs /> </Private>} />
+          <Route path="/admin-scanner" element={<Private role="Ticket Validator"> <TicketValidationPage /> </Private>} />
+          <Route path="/admin-graphs/graph" element={<Private role="Stadistics"> <StatsPage/> </Private>} />
+          <Route path="/historyevents" element={<Private role="Client"> <MyEvents /> </Private>} />
+          <Route path="/permits-user" element={<Private role="Admin"> <EditPermitUsers /> </Private>} />
           <Route path="*" element={<Error404Form />} />
         </Routes>
       </Router>
