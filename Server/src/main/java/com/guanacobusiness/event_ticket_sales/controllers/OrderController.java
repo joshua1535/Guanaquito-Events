@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.CreateOrderDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.DateRangeDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedOrderDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Order;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
