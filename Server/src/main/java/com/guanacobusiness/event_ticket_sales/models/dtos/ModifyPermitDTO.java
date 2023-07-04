@@ -14,4 +14,8 @@ public class ModifyPermitDTO {
     @org.hibernate.validator.constraints.UUID(message = "User code must be a valid UUID")
     private String permitCode;
 
+    @NotEmpty(message = "Permit code cannot be empty")
+    @org.hibernate.validator.constraints.UUID(message = "User code must be a valid UUID")
+    private String userCode;
+
 }

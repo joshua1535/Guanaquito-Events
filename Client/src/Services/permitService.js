@@ -17,9 +17,10 @@ export const permitService = {
   },
   grantPermitToUser: async function(userCode, permitCode, token) {
     try {
-      const response = await API.post(`/permit/${userCode}`, 
+      const response = await API.post(`/permit/`, 
         {
-          permitCode: permitCode
+          permitCode: permitCode,
+          userCode: userCode
         }, 
         {
           headers: {
@@ -37,9 +38,10 @@ export const permitService = {
   
   revokePermitToUser: async function(userCode, permitCode, token) {
     try {
-      const response = await API.delete(`/permit/${userCode}`, 
+      const response = await API.delete(`/permit/delete`, 
         {
-          permitCode: permitCode
+          permitCode: permitCode,
+          userCode: userCode
         }, 
         {
           headers: {
@@ -50,7 +52,18 @@ export const permitService = {
 
       return response.data;
     } catch (error) {
-      console.error('Error al quitar permiso al usuario:', error);
+      if (error.response) {
+          // La solicitud se hizo y el servidor respondió con un estado de error
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+      } else if (error.request) {
+          // La solicitud se hizo pero no se recibió ninguna respuesta
+          console.log(error.request);
+      } else {
+          // Algo sucedió en la configuración de la solicitud que desencadenó un Error
+          console.log('Error', error.message);
+      }
       throw error; 
     }
   },
