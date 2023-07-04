@@ -32,6 +32,8 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
+import { tierService } from '../../Services/tierService';
+
 
 
   const categoryOptions = [
@@ -133,15 +135,22 @@ export default function ModifyEvent() {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [modifyTier, setModifyTier] = useState(false);
     const [AddTiers, setAddTiers] = useState(false);
+
+    //para eventos
     const { eventCode } = useParams();
     const { user,token } = useUserContext();
     const [event, setEvent] = useState([]);
+    const [tier, setTier] = useState([]);
     const [image, setImage] = useState("https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZXZlbnRvfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60");
-    const [category, setCategory] = useState("");
-    const [eventName, setEventName] = useState("");
+    const [category, setCategory] = useState();
+    const [eventName, setEventName] = useState();
     const [date, setDate] = useState();
     const [time, setTime] = useState();
 
+    //para tiers
+    const [tierName, setTierName] = useState();
+    const [tierPrice, setTierPrice] = useState();
+    const [tierCapacity, setTierCapacity] = useState();
 
     useEffect(() => {
       if(token){
@@ -156,24 +165,24 @@ export default function ModifyEvent() {
         }
     }, [token]); 
 
+    useEffect(() => {
+      if(token){
+        tierService.getTiersbyEvent(eventCode,token)
+            .then((data) => {
+              setTier(data.tiers);          
+                console.log('tiers obtenidos:', tier.tiers);
+            })
+            .catch((error) => {
+                console.error('Hubo un error al obtener los tiers:', error);
+            });
+        }
+    }, [token]); 
 
-    const [sponsor, setSponsor] = useState(event.sponsors);
-    const [sponsors, setSponsors] = useState([]);
+    const [sponsor, setSponsor] = useState();
+    const [sponsors, setSponsors] = useState([null]);
 
 
     const navigate = useNavigate();
-
-    const [locations, setLocations] = useState([
-      { name: "Localidad 1", price: 100 },
-      { name: "Localidad 2", price: 200 },
-      { name: "Localidad 3", price: 300 },
-      { name: "Localidad 4", price: 100 },
-      { name: "Localidad 5", price: 200 },
-      { name: "Localidad 6", price: 300 },
-      { name: "Localidad 7", price: 100 },
-      { name: "Localidad 8", price: 200 },
-      { name: "Localidad 9", price: 300 },
-    ]);
 
     const handlesaveClick2 = () => {
       eventService.updateEvent({
@@ -211,10 +220,39 @@ export default function ModifyEvent() {
       navigate(-1);
     };
 
-    const handleupdateTierClick = () => {
-      // Guardar los datos en la base de datos
-      console.log("Datos guardados");
-      window.location.reload();
+    const [locations, setLocations] = useState([tier]); // Ahora, locations es tu estado principal.
+    console.log("hola"+locations);
+
+    const handleInputChange = (code, event) => {
+        const values = [...tier];
+        const locationToUpdate = values.find(location => location.code === code);
+        if (locationToUpdate) {
+            locationToUpdate[event.target.name] = event.target.value;
+
+            setLocations(values);
+        } else {
+            console.error(`Location with code ${code} not found`);
+            console.log("hola"+tier);
+        }
+    };
+
+    const handleupdateTierClick = (tierCode) => {
+      const tierToUpdate = tier.find(location => location.code === tierCode);
+
+      tierService.updateTier({
+        code: tierCode,
+        name: tierToUpdate.name,
+        price: tierToUpdate.price,
+        capacity: tierToUpdate.capacity,
+    }, token)
+        .then(response => {
+            console.log('Evento modificado con éxito:', response);
+
+        })
+        .catch(error => {
+            console.error('Hubo un error al crear el evento:', error);
+            // aquí puedes manejar el error, por ejemplo mostrando un mensaje al usuario
+        });
      
     };
 
@@ -305,6 +343,7 @@ export default function ModifyEvent() {
     };
 
 
+
     const handleAddLocation = () => {
       // Agregar una nueva localidad al array de localidades
       setLocations((prevLocations) => [
@@ -325,6 +364,8 @@ export default function ModifyEvent() {
         useEffect(() => {
             document.title = "Create Event";
         }, []);
+
+        
 
     return (
         <div className={[classes["generalContainer"]]}>
@@ -387,42 +428,56 @@ export default function ModifyEvent() {
      </div>
      <div className={classes["tierContainer"]}>
       <div className={classes["formTierContainer"]}>
-          {locations.map((location, index) => (
-            <div key={index} className={classes["formTier"]}>
+          {tier.map((location,index) => (
+            <div key={index}    className={classes["formTier"]}>
               <form className="space-y-6">
                 <div className="space-y-2">
                   <label
-                    htmlFor={`locationName${index}`}
                     className={classes["titleInputs"]}
                   >
                     Nombre de la localidad:
                   </label>
                   <Input
-                    id={`locationName${index}`}
                     type="text"
+                    name="name"  // Asegúrate de darle un nombre al input, que corresponde a la propiedad que quieres cambiar
                     color="white"
-                    placeholder="Ingrese el nombre de la localidad"
-                    defaultValue={location.name}
-                  />
+                    onChange={(event) => handleInputChange(location.code, event)}
+                    placeholder={location.name}
+                />
                 </div>
                 <div className="space-y-2">
                   <label
-                    htmlFor={`locationPrice${index}`}
                     className={classes["titleInputs"]}
                   >
                     Precio
                   </label>
                   <Input
-                    id={`locationPrice${index}`}
                     type="number"
                     color="white"
                     placeholder="Precio de la localidad"
+                    name="price"
+                    onChange={(event) => handleInputChange(location.code, event)}
                     defaultValue={location.price}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label
+                    className={classes["titleInputs"]}
+                  >
+                    Capacidad
+                  </label>
+                  <Input
+                    type="number"
+                    color="white"
+                    placeholder="Capacidad de la localidad"
+                    name="capacity"
+                    onChange={(event) => handleInputChange(location.code, event)}
+                    defaultValue={location.capacity}
                   />
                 </div>
                 <div className="flex space-x-4 justify-end Mobile-280:justify-center">
                   <Button className="bg-yellowCapas Mobile-280:text-ButtonCarouselMobile-390*844"
-                  onClick={handleupdateTierClick}
+                  onClick={()=>handleupdateTierClick(location.code)}
                   >
                     Actualizar
                   </Button>

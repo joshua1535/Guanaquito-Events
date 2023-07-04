@@ -38,5 +38,20 @@ export const tierService = {
             console.error(`Error obteniendo los tiers: `, error);
             throw error;
         }
-    }
+    },
+    updateTier: async function(tier,token) {
+        try {
+            const response = await API.patch('/tier/update',tier,
+             {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
 }
