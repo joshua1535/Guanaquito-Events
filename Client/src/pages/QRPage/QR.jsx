@@ -146,34 +146,16 @@ const profileMenuItems = [
       </ul>
     );
   }
-  
-  const eventDetails = {
-    title: 'ColdPlay Tour',
-    date: '2023-06-04',
-    time: '20:15',
-    participants: ['Mi Primo', 'Mi tio', 'Ronaldinho'],
-    sponsors: ['Nayb Bukele', 'Elon Musk', 'Bill Gates  '],
-    category: 'Conciertos',
-    price: '$100',
-  };
 
 
   const QRPage = () => {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const { user, token} = useUserContext();
-    const { eventCode, ticketCode, ticketTier } = useParams();
+    const { eventCode, ticketCode, ticketTier, uuid } = useParams();
     const [event, setEvent] = useState(null);
     const [ticket, setTicket] = useState(null);
-    const [qrCodeValue, setQRCodeValue] = useState('');
 
-    const eventDetails = {
-        qrCode: 'https://t3.gstatic.com/licensed-image?q=tbn:ANd9GcSh-wrQu254qFaRcoYktJ5QmUhmuUedlbeMaQeaozAVD4lh4ICsGdBNubZ8UlMvWjKC',
-        qrText: 'Qwrsjnrkwnoinchesoyamacboijaoisdipjasopfj',
-        title: 'ColdPlay Tour',
-        ticketType: 'Ticket VIP'
-    }
-    
     useEffect(() => {
       if(token) {
         eventService.
@@ -181,11 +163,6 @@ const profileMenuItems = [
       }
 
     }, [token, eventCode]);
-
-    useEffect(() => {
-      const uuid = uuidv4();
-      setQRCodeValue(uuid);
-    }, []);    
 
     useEffect(() => {
       console.log(event);
@@ -244,7 +221,7 @@ const profileMenuItems = [
     </header>
     <div className="flex flex-col items-center justify-center px-4 sm:px-0">
             <QRCode
-              value={qrCodeValue}
+              value={uuid}
               size={300}
               bgColor={"#ffffff"}
               fgColor={"#000000"}
@@ -254,7 +231,7 @@ const profileMenuItems = [
               className='mt-32 mb-10'
             >
             </QRCode>
-            <p className={[classes["codeText"]]}>{qrCodeValue}</p>
+            <p className={[classes["codeText"]]}>{uuid}</p>
             <p className={[classes["titleEventText"]]}>{event?.title}</p>
             <p className={[classes["ticketEventText"]]}>{ticketTier}</p>
             <p className={[classes["titleTimeText"]]}>Tiempo de expiración:</p>

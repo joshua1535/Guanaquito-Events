@@ -53,7 +53,7 @@ function App() {
           <Route path="/admin-event/modifyevent/addtier" element={<AddTiers />} />
           <Route path="/admin-event/eventpermit" element={<EventsPermit />} />
           <Route path="/admin-event/modifystaff" element={<ModifyStaff />} />
-          <Route path="/qr/:eventCode/:ticketCode/tier/:ticketTier" element={<QRPage />} />
+          <Route path="/qr/:eventCode/:ticketCode/tier/:ticketTier/register/:uuid" element={<QRPage />} />
           <Route path="/transferticket" element={<TransferTicket />} />  
           <Route path="/ticketvalidation" element={<TicketValidationPage />} />
           <Route path="/admin-users" element={<AdminUsers />} />
