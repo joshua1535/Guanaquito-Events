@@ -20,6 +20,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
 
 
 //profile menu component
@@ -110,18 +112,22 @@ function ProfileMenu() {
 const AdminEvents = () => {
   const categories = ["Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const { user, token} = useUserContext();
+  const [events, setEvents] = useState([]);
 
-  const images1 = {
-    'Todos': ['https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png'
-      ,'https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png','https://kirbyandtheforgottenland.nintendo.com/assets/images/home/header.jpg',
-      'https://i.postimg.cc/3RGLQb8v/imagen-2023-06-04-161025997.png','https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg',
-      'https://assets-prd.ignimgs.com/2022/09/14/zelda-tears-of-the-kingdom-button-2k-1663127818777.jpg'],
-    'Cine': ['https://i.postimg.cc/TwKzL9Rd/imagen-2023-06-04-160931135.png'],
-    'Conciertos': ['https://i.postimg.cc/3RGLQb8v/imagen-2023-06-04-161025997.png'],
-    'Obras de teatro': ['https://i.postimg.cc/jSYFqTwS/imagen-2023-06-04-160806457.png','https://m.media-amazon.com/images/I/719OZIZMTpL._AC_UF894,1000_QL80_.jpg'],
-    'Deportes': ['https://assets-prd.ignimgs.com/2022/09/14/zelda-tears-of-the-kingdom-button-2k-1663127818777.jpg'],
-  };
-
+  
+  useEffect(() => {
+    if(token){
+      eventService.getAllEvents(token)
+          .then((data) => {
+            setEvents(data.content);          
+              console.log('Los eventos obtenidas:', events);
+          })
+          .catch((error) => {
+              console.error('Hubo un error al obtener las eventos:', error);
+          });
+      }
+  }, [token]); 
 
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
@@ -132,8 +138,8 @@ const AdminEvents = () => {
     navigate('/admin-event/createevent');
   }
 
-  const editEventClick = () => {
-    navigate('/admin-event/eventpermit');
+  const editEventClick = (eventCode) => {
+    navigate(`/admin-event/eventpermit/${eventCode}`);
   }
 
   React.useEffect(() => {
@@ -192,17 +198,19 @@ const AdminEvents = () => {
           PC-1920*1080:pt-4
           PC-1600*900:space-x-7
            p-0 flex-wrap sm:space-x-4 justify-center">
-            {images1[selectedCategory].map((imgSrc, index)=> (
+            {events.map((event, index) => (
               <div className=" p-4 rounded-lg m-2 sm:m-0" key={index}>
                 <img 
-                src={imgSrc} alt="Imagen de evento"
+                src={event.image} alt="Imagen de evento"
                 className="
                   PC-1920*1080:w-56 PC-1920*1080:h-80
                   PC-1600*900:w-48 PC-1600*900:h-72
                  w-40 h-56 object-cover mb-2 rounded"/>
+                  <p style={ { fontFamily: "PoppinsLight" }} className=" text-white font-semibold text-xl">{event.title}</p>
+                  <p style={ { fontFamily: "PoppinsLight" }} className="text-Orange font-semibold text-lg">{event.date}</p>
                 <div className="flex justify-center">
                 <button 
-                onClick={editEventClick}
+                onClick={() =>editEventClick(event.code)}
                 className="border border-Orange  bg-transparent text-Orange px-14 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
                 style={ { fontFamily: "PoppinsLight" }}
                 >Editar
