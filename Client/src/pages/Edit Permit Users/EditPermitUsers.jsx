@@ -199,7 +199,7 @@ const handleGuardarClick = () => {
     });
   }
   if (permisoValidarTickets) {
-    permitService.grantPermitToUser(userCode, '689716ea-9338-4ca3-9c68-78169f5b7573', token)
+    permitService.grantPermitToUser(userCode, '5ff10358-482e-4c7f-869e-728f3bd1a7fa', token)
     .then(response => {
       console.log('Permisos actualizados con éxito:', response);
       navigate('/admin-users');
@@ -210,7 +210,7 @@ const handleGuardarClick = () => {
   }
   else
   {
-    permitService.revokePermitToUser(userCode, '689716ea-9338-4ca3-9c68-78169f5b7573', token)
+    permitService.revokePermitToUser(userCode, '5ff10358-482e-4c7f-869e-728f3bd1a7fa', token)
     .then(response => {
       console.log('Permisos actualizados con éxito:', response);
       navigate('/admin-users');

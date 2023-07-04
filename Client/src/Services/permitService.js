@@ -38,17 +38,17 @@ export const permitService = {
   
   revokePermitToUser: async function(userCode, permitCode, token) {
     try {
-      const response = await API.delete(`/permit/delete`, 
-        {
+      const response = await fetch('http://localhost:8080/permit/delete',{
+        "method": "DELETE",
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
           permitCode: permitCode,
           userCode: userCode
-        }, 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+        })
+      });
 
       return response.data;
     } catch (error) {
