@@ -30,4 +30,6 @@ public class FormatedTicketDTO {
 
     private String ticketTier;
 
+    private String eventCode;
+
 }

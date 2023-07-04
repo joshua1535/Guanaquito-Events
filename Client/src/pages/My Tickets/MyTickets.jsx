@@ -38,8 +38,8 @@ function TicketItem({ ticket }) {
 
     const navigate = useNavigate();
 
-    const redeemTicketHandler = () => {
-      navigate("/qr");
+    const redeemTicketHandler = (eventCode, ticketCode, ticketTier) => {
+      navigate(`/qr/${eventCode}/${ticketCode}/tier/${ticketTier}`);
     };
 
     const transferTicketHandler = () => {
@@ -127,7 +127,7 @@ function TicketItem({ ticket }) {
             <div className="flex items-center justify-between mt-4">
               {available && (
                 <Button
-                    onClick={() => redeemTicketHandler()}
+                    onClick={() => redeemTicketHandler(ticket.eventCode, ticket.ticketCode, ticketTier)}
                     variant="filled"
                     color="amber"
                     className="font-text"
