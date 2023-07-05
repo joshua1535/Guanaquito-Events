@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.models.entities;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -29,6 +30,9 @@ public class Register {
     @Column(name = "transaction_code")
     private String transactionCode;
 
+    @Column(name = "creation_time")
+    private LocalTime creationTime;
+
     @Column(name = "transference_date")
     private LocalDateTime transferenceTime;
 
@@ -39,9 +43,10 @@ public class Register {
     @JoinColumn(name = "ticket_code", nullable = false)
     private Ticket ticket;
 
-    public Register(String transactionCode, LocalDateTime transferenceTime, LocalDateTime validationTime, Ticket ticket) {
+    public Register(String transactionCode, LocalTime creation_time, LocalDateTime transferenceTime, LocalDateTime validationTime, Ticket ticket) {
         super();
         this.transactionCode = transactionCode;
+        this.creationTime = creation_time;
         this.transferenceTime = transferenceTime;
         this.validationTime = validationTime;
         this.ticket = ticket;
