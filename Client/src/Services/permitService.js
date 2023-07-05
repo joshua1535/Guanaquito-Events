@@ -1,6 +1,20 @@
 import API from '../API/Instance';
 
 export const permitService = {
+  getAllPermits: async function(token) {
+    try {
+        const response = await API.get('/permit/all', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+},
   getAllPermitsByUser: async function (userCode, token) {
     try {
       const response = await API.get(`/permit/all/user/${userCode}`, {

@@ -13,4 +13,6 @@ public interface UserXEventRepository extends JpaRepository<UserXEvent,UUID>{
     UserXEvent findByUserCodeAndEventCode(UUID userCode, UUID eventCode);
     List<User> findUsersByEventCode(UUID eventCode);
     List<Event> findEventsByUserCode(UUID userCode);
+    void deleteByUserCodeAndEventCode(UUID userCode, UUID eventCode) throws Exception;
+
 }
