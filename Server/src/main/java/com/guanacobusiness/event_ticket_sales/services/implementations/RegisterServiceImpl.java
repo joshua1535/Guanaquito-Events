@@ -1,6 +1,8 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeTransactionCodeDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
@@ -16,6 +19,7 @@ import com.guanacobusiness.event_ticket_sales.repositories.RegisterRepository;
 import com.guanacobusiness.event_ticket_sales.services.RegisterService;
 import com.guanacobusiness.event_ticket_sales.services.TicketService;
 import com.guanacobusiness.event_ticket_sales.utils.CurrentDateTime;
+import com.guanacobusiness.event_ticket_sales.utils.CurrentTime;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
 import jakarta.transaction.Transactional;
@@ -31,6 +35,9 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Autowired
     CurrentDateTime currentDateTime;
+
+    @Autowired
+    CurrentTime currentTime;
 
     @Autowired
     StringToUUID stringToUUID;
@@ -64,15 +71,17 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
-        Register registerToUpdate = registers.stream().filter(register -> (register.getTransferenceTime() == null && register.getValidationTime() == null )).findFirst().orElse(null);
+        Register emptyRegister = registers.stream().filter(register -> (register.getTransferenceTime() == null && register.getValidationTime() == null )).findFirst().orElse(null);
         
         //Si se encuentra un registro vacio no se puede crear uno nuevo
-        if(registerToUpdate != null) {
-            System.out.println("Registro vacio" + registerToUpdate);
+        if(emptyRegister != null) {
+            System.out.println("Registro vacio" + emptyRegister);
             return false;
         }
 
-        Register newRegister = new Register(info.getTransactionCode(),null,null, ticket);
+        LocalTime creationTime = currentTime.now();
+
+        Register newRegister = new Register(info.getTransactionCode(),creationTime,null,null, ticket);
         registerRepository.save(newRegister);
         return true;
 
@@ -88,6 +97,12 @@ public class RegisterServiceImpl implements RegisterService {
         if(foundTicket == null) {
             return false;
         }
+
+        //Register foundRegister = registerRepository.findByTicketCodeAndTransactionCode(ticketCode, info.getTransactionCode());
+
+        /* if(foundRegister == null) {
+            return false;
+        } */
 
         List<Register> registers = foundTicket.getRegisters();
 
@@ -110,8 +125,21 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
+        //Si registro ya fue validado no se puede actualizar la hora de validacion
+        /* if(foundRegister.getValidationTime() != null) {
+            return false;
+        }
+
+        //Si registro ya fue transferido no se puede actualizar la hora de validacion
+        if(foundRegister.getTransferenceTime() != null) {
+            return false;
+        } */
+        LocalTime updateTime = currentTime.now();
+
         registerToUpdate.setTransactionCode(info.getTransactionCode());
+        registerToUpdate.setCreationTime(updateTime);
         registerRepository.save(registerToUpdate);
+        System.out.println(info.getTransactionCode());
 
         return true;
     }
@@ -125,10 +153,27 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
+        //Si registro ya fue validado no se puede actualizar la hora de validacion
+        if(foundRegister.getValidationTime() != null) {
+            return false;
+        }
+
+        //Si registro ya fue transferido no se puede actualizar la hora de validacion
+        if(foundRegister.getTransferenceTime() != null) {
+            return false;
+        }
+
+        //Si el registro ya exedio el tiempo valido para transferir no se puede actualizar la hora de transferencia
+        LocalTime now = currentTime.now();
+        LocalTime referenceTime = foundRegister.getCreationTime().plusMinutes(10);
+
+        if(now.isAfter(referenceTime)) {
+            return false;
+        }
+
         LocalDateTime validationTime = currentDateTime.now();
 
         foundRegister.setValidationTime(validationTime);
-        //foundRegister.setTransferenceTime(null);
         registerRepository.save(foundRegister);
 
         return true;
@@ -161,6 +206,14 @@ public class RegisterServiceImpl implements RegisterService {
         
         //Si no encuentra un registro vacio no se puede actualizar la hora de transferencia
         if(registerToUpdate == null) {
+            return false;
+        }
+
+        //Si el registro ya exedio el tiempo valido para transferir no se puede actualizar la hora de transferencia
+        LocalTime now = currentTime.now();
+        LocalTime referenceTime = registerToUpdate.getCreationTime().plusMinutes(10);
+
+        if(now.isAfter(referenceTime)) {
             return false;
         }
 
@@ -241,6 +294,52 @@ public class RegisterServiceImpl implements RegisterService {
 
         return true;
 
+    }
+
+    @Override
+    public FormatedRegisterDTO status(Register register) {
+        LocalTime registerCreationTime = register.getCreationTime();
+        LocalTime referenceTime = registerCreationTime.plusMinutes(10);
+        LocalTime now = currentTime.now();
+
+        Duration duration = Duration.between(now, referenceTime);
+        long minutesRemaining = duration.toMinutes() % 60;
+        long secondsRemaining = duration.getSeconds() % 60;
+
+        if(minutesRemaining < 0 || secondsRemaining < 0) {
+            FormatedRegisterDTO formatedRegister = new FormatedRegisterDTO(
+                register.getCode(), 
+                register.getTransactionCode(), 
+                register.getCreationTime(), 
+                null, 
+                null, 
+                register.getTransferenceTime(), 
+                register.getValidationTime()
+                );
+            return formatedRegister;
+        }
+
+        FormatedRegisterDTO formatedRegister = new FormatedRegisterDTO(
+            register.getCode(), 
+            register.getTransactionCode(), 
+            register.getCreationTime(), 
+            (int) minutesRemaining, 
+            (int) secondsRemaining, 
+            register.getTransferenceTime(), 
+            register.getValidationTime()
+            );
+        return formatedRegister;
+    }
+
+    @Override
+    public Register findByTicketCodeAndTransacCode(UUID ticketCode, String transacCode) {
+        Register foundRegister = registerRepository.findByTicketCodeAndTransactionCode(ticketCode, transacCode);
+
+        if(foundRegister == null) {
+            return null;
+        }
+
+        return foundRegister;
     }
     
 }

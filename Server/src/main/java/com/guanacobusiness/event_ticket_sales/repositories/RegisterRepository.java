@@ -10,6 +10,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 public interface RegisterRepository extends JpaRepository<Register, UUID> {
     List<Register> findAllByTransferenceTimeIsNull();
     List<Register> findAllByValidationTimeIsNull();
+    Register findByTicketCodeAndTransactionCode(UUID ticketCode, String transactionCode);
     Register findByTicketCodeAndValidationTimeIsNotNull(UUID ticketCode);
     Register findByTicketCodeAndTransferenceTimeIsNotNull(UUID ticketCode);
     Register findByTicketCodeAndTransferenceTimeIsNullAndValidationTimeIsNull(UUID ticketCode);
