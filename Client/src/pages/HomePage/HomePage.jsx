@@ -552,7 +552,7 @@ export default function HomePage() {
           <div className={classes["eventsContainer"]}>
         <div className={classes["leftColumn"]}>
           {/* Imagen representativa */}
-          <img src="https://i.ytimg.com/vi/uGU1IztR5rg/maxresdefault.jpg"
+          <img src="https://st1.uvnimg.com/9d/c5/454987434d0d885858562ca1a8f9/el-salvador-concacaf-nations-league.jpg"
            alt="Deportes" className={classes["categoryImage"]} />
 
           {/* Botón "Ver más eventos de esta categoría" */}

@@ -44,7 +44,7 @@ function App() {
           <Route path="/home" element={<Private role="Client">  <HomePage /> </Private>} />
           <Route path="/events" element={<Private role="Client">  <EventsPage /> </Private>} />
           <Route path="/myorders" element={<Private role="Client"> <MyOrders /> </Private>} />
-          <Route path="/mytickets" element={<Private role="Client"> <MyTickets /> </Private>} />
+          <Route path="/mytickets" element={<MyTickets />} />
           <Route path="/buytickets/:code" element={<Private role="Client"> <BuyTicket /> </Private>} />
           <Route path="/admin-event/createevent" element={<Private role="Event Administrator"> <CreateEvent /> </Private>} />
           <Route path="/admin-event/modifyevent" element={<Private role="Event Administrator"> <ModifyEvent /> </Private>} />
@@ -53,12 +53,12 @@ function App() {
           <Route path="/admin-event/modifyevent/addtier" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
           <Route path="/admin-event/eventpermit" element={<Private role="Admin"> <EventsPermit /> </Private>} />
           <Route path="/admin-event/modifystaff" element={<Private role="Admin"> <ModifyStaff /> </Private>} />
-          <Route path="/qr" element={<Private role="Client"> <QRPage /> </Private>} />
+          <Route path="/qr/:eventCode/:ticketCode/tier/:ticketTier/register/:transactionCode" element={<QRPage />} />
           <Route path="/transferticket" element={<Private role="Client"><TransferTicket /> </Private>} />  
           <Route path="/admin-users" element={<Private role="Admin"> <AdminUsers /> </Private>} />
           <Route path="/admin-users/permits-user/:userCode" element={<Private role="Admin"> <EditPermitUsers /> </Private>} />
           <Route path="/admin-graphs" element={<Private role="Stadistics"> <AdminGraphs /> </Private>} />
-          <Route path="/admin-scanner" element={<Private role="Ticket Validator"> <TicketValidationPage /> </Private>} />
+          <Route path="/admin-scanner" element={<TicketValidationPage />} />
           <Route path="/admin-graphs/graph" element={<Private role="Stadistics"> <StatsPage/> </Private>} />
           <Route path="/historyevents" element={<Private role="Client"> <MyEvents /> </Private>} />
           <Route path="/permits-user" element={<Private role="Admin"> <EditPermitUsers /> </Private>} />

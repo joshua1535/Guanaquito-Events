@@ -165,7 +165,7 @@ public class RegisterServiceImpl implements RegisterService {
 
         //Si el registro ya exedio el tiempo valido para transferir no se puede actualizar la hora de transferencia
         LocalTime now = currentTime.now();
-        LocalTime referenceTime = foundRegister.getCreationTime().plusMinutes(10);
+        LocalTime referenceTime = foundRegister.getCreationTime().plusMinutes(2);
 
         if(now.isAfter(referenceTime)) {
             return false;
