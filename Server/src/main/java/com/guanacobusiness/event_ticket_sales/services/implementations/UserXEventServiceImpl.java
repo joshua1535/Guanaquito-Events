@@ -11,6 +11,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.models.entities.UserXEvent;
 import com.guanacobusiness.event_ticket_sales.repositories.UserXEventRepository;
+import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
 import com.guanacobusiness.event_ticket_sales.utils.UserMapper;
 
@@ -24,6 +25,9 @@ public class UserXEventServiceImpl implements UserXEventService{
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    EventService eventService;
 
     @Override
     public List<UserXEvent> findAll() {
@@ -85,7 +89,10 @@ public class UserXEventServiceImpl implements UserXEventService{
 
     @Override
     public List<FormatedUser> findUsersByEventCode(UUID eventCode) {
-        List<User> userList = userXEventRepository.findUsersByEventCode(eventCode);
+
+        Event foundEvent = eventService.findEventByCode(eventCode);
+
+        List<User> userList = foundEvent.getUserXEvents().stream().map(UserXEvent::getUser).toList();
 
         if(userList == null || userList.isEmpty()) {
             return null;

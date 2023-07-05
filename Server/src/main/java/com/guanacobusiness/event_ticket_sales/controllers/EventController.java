@@ -25,14 +25,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AddUserToEventDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
-import com.guanacobusiness.event_ticket_sales.models.dtos.ModifyPermitDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
-import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
@@ -216,34 +213,6 @@ public class EventController {
         }
 
         List<Event> events = userXEventService.findEventsByUserCode(uuid);
-
-        if (events.isEmpty() || events == null) {
-            return new ResponseEntity<>("User is not asigned to events",HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(events,HttpStatus.OK);
-    }
-
-    @GetMapping("/user/event/{code}")
-    public ResponseEntity<?> findAllUsersByEvent(@PathVariable(name = "code") String code, HttpServletRequest request) {
-
-        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
-            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
-        }
-
-        UUID uuid = stringToUUID.convert(code);
-
-        if (uuid == null) {
-            return new ResponseEntity<>("Invalid Code",HttpStatus.BAD_REQUEST);
-        }
-
-        Event event = eventService.findEventByCode(uuid);
-
-        if (event == null) {
-            return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
-        }
-
-        List<FormatedUser> events = userXEventService.findUsersByEventCode(uuid);
 
         if (events.isEmpty() || events == null) {
             return new ResponseEntity<>("User is not asigned to events",HttpStatus.NOT_FOUND);
