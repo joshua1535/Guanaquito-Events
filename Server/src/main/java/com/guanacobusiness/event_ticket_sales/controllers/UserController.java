@@ -125,7 +125,7 @@ public class UserController {
     
     }
 
-    @GetMapping("/all-by-permit")
+    @GetMapping("/all-by-permit/{code}")
     public ResponseEntity<?> getAllUsersByPermit(@PathVariable(name = "code") String code,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request){
 
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer")) {

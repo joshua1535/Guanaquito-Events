@@ -97,13 +97,14 @@ const profileMenuItems = [
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
-
+  const { logout } = useUserContext();
   const navigate = useNavigate();
 
   const handleMenuClick = (label) => {
   if (label === "Administrar usuarios") {
       navigate('/admin-users');
   } else if (label === "Sign Out") {
+      logout();
       navigate('/');
   }
   };

@@ -18,12 +18,41 @@ public class PermitServiceImpl implements PermitService{
 
     @Override
     public List<Permit> findAllPermits() {
-        return permitRepository.findAll();
+
+        List<Permit> permits = permitRepository.findAll();
+
+        if(permits.isEmpty()){
+            return null;
+        }
+
+        return permits;
+    
     }
 
     @Override
     public Permit findPermitByCode(UUID code) {
-        return permitRepository.findByCode(code);
+
+        Permit permitFound = permitRepository.findByCode(code);
+
+        if(permitFound == null){
+            return null;
+        }
+
+        return permitFound;
+    
+    }
+
+    @Override
+    public Permit findPermitByName(String name) {
+        
+        Permit permitFound = permitRepository.findByName(name);
+
+        if(permitFound == null){
+            return null;
+        }
+
+        return permitFound;
+
     }
 
 }

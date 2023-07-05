@@ -11,5 +11,6 @@ public interface PermitRepository extends JpaRepository<Permit, UUID>{
 
     public List<Permit> findAll();
     public Permit findByCode(UUID code);
+    public Permit findByName(String name);
 
 }

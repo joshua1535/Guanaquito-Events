@@ -9,5 +9,6 @@ public interface PermitService {
 
     List<Permit> findAllPermits();
     Permit findPermitByCode(UUID code);
+    Permit findPermitByName(String name);
 
 }

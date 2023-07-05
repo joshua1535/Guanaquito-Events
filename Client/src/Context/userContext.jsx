@@ -14,9 +14,9 @@ export const UserProvider = (props) => {
             const lsToken = getToken();
 
             if(lsToken && !tokenVerified) {
-                const { email, username } = await userService.verifyToken(lsToken);
-                if(email && username) {
-                    setUser({ email, username });
+                const { email, permits } = await userService.verifyToken(lsToken);
+                if(email && permits) {
+                    setUser({ email, permits });
                     setTokenAll(lsToken);
                 }
                 setTokenVerified(true);

@@ -6,11 +6,13 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
 import com.guanacobusiness.event_ticket_sales.models.entities.UserXEvent;
 import com.guanacobusiness.event_ticket_sales.repositories.UserXEventRepository;
 import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
+import com.guanacobusiness.event_ticket_sales.utils.UserMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -19,6 +21,9 @@ public class UserXEventServiceImpl implements UserXEventService{
 
     @Autowired
     UserXEventRepository userXEventRepository;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public List<UserXEvent> findAll() {
@@ -79,14 +84,16 @@ public class UserXEventServiceImpl implements UserXEventService{
     }
 
     @Override
-    public List<User> findUsersByEventCode(UUID eventCode) {
+    public List<FormatedUser> findUsersByEventCode(UUID eventCode) {
         List<User> userList = userXEventRepository.findUsersByEventCode(eventCode);
 
         if(userList == null || userList.isEmpty()) {
             return null;
         }
 
-        return userList;
+        List<FormatedUser> formatedUsers = userMapper.map(userList);
+
+        return formatedUsers;
     }
     
 }

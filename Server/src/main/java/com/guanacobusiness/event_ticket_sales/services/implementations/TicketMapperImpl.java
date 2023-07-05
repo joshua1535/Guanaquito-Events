@@ -39,7 +39,8 @@ public class TicketMapperImpl implements TicketMapper{
                 event.getDate(),
                 event.getTime(),
                 event.getTitle(),
-                ticket.getTier().getName()
+                ticket.getTier().getName(),
+                event.getCode().toString()
         );
 
         return formatedTicketDTO;

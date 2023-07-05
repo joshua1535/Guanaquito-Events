@@ -13,11 +13,19 @@ import {
   MenuItem,
   Avatar,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import {
   ChevronDownIcon,
   Bars2Icon,
 } from "@heroicons/react/24/outline";
+import QRCode from "react-qr-code";
+import { useParams } from 'react-router-dom';
+import { useUserContext } from '../../Context/userContext';
+import { eventService } from '../../Services/eventService';
+import { ticketService } from '../../Services/ticketService';
+import { v4 as uuidv4 } from 'uuid';
+
 
 // profile menu component
 const profileMenuItems = [
@@ -138,30 +146,28 @@ const profileMenuItems = [
       </ul>
     );
   }
-  
-  const eventDetails = {
-    title: 'ColdPlay Tour',
-    date: '2023-06-04',
-    time: '20:15',
-    participants: ['Mi Primo', 'Mi tio', 'Ronaldinho'],
-    sponsors: ['Nayb Bukele', 'Elon Musk', 'Bill Gates  '],
-    category: 'Conciertos',
-    price: '$100',
-  };
 
 
   const QRPage = () => {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const { user, token} = useUserContext();
+    const { eventCode, ticketCode, ticketTier, uuid } = useParams();
+    const [event, setEvent] = useState(null);
+    const [ticket, setTicket] = useState(null);
 
-    const eventDetails = {
-        qrCode: 'https://t3.gstatic.com/licensed-image?q=tbn:ANd9GcSh-wrQu254qFaRcoYktJ5QmUhmuUedlbeMaQeaozAVD4lh4ICsGdBNubZ8UlMvWjKC',
-        qrText: 'Qwrsjnrkwnoinchesoyamacboijaoisdipjasopfj',
-        title: 'ColdPlay Tour',
-        ticketType: 'Ticket VIP'
-    }
-    
+    useEffect(() => {
+      if(token) {
+        eventService.
+        getEventById(eventCode, token).then((event) => setEvent(event));
+      }
 
+    }, [token, eventCode]);
+
+    useEffect(() => {
+      console.log(event);
+      
+    }, [event]);
 
   
     React.useEffect(() => {
@@ -207,21 +213,27 @@ const profileMenuItems = [
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
-      </MobileNav>
+      </Collapse>
 
       </Navbar>
     </header>
     <div className="flex flex-col items-center justify-center px-4 sm:px-0">
-            <img 
-              className={[classes["qrContainer"]]} 
-                src={eventDetails.qrCode} 
-                alt="Event QR Code"
-            />
-            <p className={[classes["codeText"]]}>{eventDetails.qrText}</p>
-            <p className={[classes["titleEventText"]]}>{eventDetails.title}</p>
-            <p className={[classes["ticketEventText"]]}>{eventDetails.ticketType}</p>
+            <QRCode
+              value={uuid}
+              size={300}
+              bgColor={"#ffffff"}
+              fgColor={"#000000"}
+              level={"L"}
+              includeMargin={false}
+              renderAs={"svg"}
+              className='mt-32 mb-10'
+            >
+            </QRCode>
+            <p className={[classes["codeText"]]}>{uuid}</p>
+            <p className={[classes["titleEventText"]]}>{event?.title}</p>
+            <p className={[classes["ticketEventText"]]}>{ticketTier}</p>
             <p className={[classes["titleTimeText"]]}>Tiempo de expiración:</p>
             <p className={[classes["TimeText"]]}>10:00</p>
         </div>
