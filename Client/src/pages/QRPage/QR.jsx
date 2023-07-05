@@ -25,6 +25,7 @@ import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
 import { ticketService } from '../../Services/ticketService';
 import { v4 as uuidv4 } from 'uuid';
+import { registerService } from '../../Services/registerService';
 
 
 // profile menu component
@@ -152,22 +153,35 @@ const profileMenuItems = [
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const { user, token} = useUserContext();
-    const { eventCode, ticketCode, ticketTier, uuid } = useParams();
+    const { eventCode, ticketCode, ticketTier, transactionCode} = useParams();
     const [event, setEvent] = useState(null);
     const [ticket, setTicket] = useState(null);
+    const [register , setRegister] = useState(null);
 
     useEffect(() => {
       if(token) {
         eventService.
         getEventById(eventCode, token).then((event) => setEvent(event));
-      }
 
-    }, [token, eventCode]);
+        registerService.getRegisterByTicketCode(ticketCode, token).then((reg) => {
+        if (reg != null){
+
+          registerService.getStatus(token, ticketCode, transactionCode.toString()).then((status) => {
+            setRegister(status);
+        });
+      }
+      });
+      }
+    }, [token]);
 
     useEffect(() => {
       console.log(event);
+      console.log("Minutes")
+      console.log (register?.remainingMinutes);
+      console.log("Seconds")
+      console.log (register?.remainingSeconds);
       
-    }, [event]);
+    }, [event, register]);
 
   
     React.useEffect(() => {
@@ -221,7 +235,7 @@ const profileMenuItems = [
     </header>
     <div className="flex flex-col items-center justify-center px-4 sm:px-0">
             <QRCode
-              value={uuid}
+              value={transactionCode.toString()}
               size={300}
               bgColor={"#ffffff"}
               fgColor={"#000000"}
@@ -231,11 +245,14 @@ const profileMenuItems = [
               className='mt-32 mb-10'
             >
             </QRCode>
-            <p className={[classes["codeText"]]}>{uuid}</p>
+            <p className={[classes["codeText"]]}>{transactionCode.toString()}</p>
             <p className={[classes["titleEventText"]]}>{event?.title}</p>
             <p className={[classes["ticketEventText"]]}>{ticketTier}</p>
             <p className={[classes["titleTimeText"]]}>Tiempo de expiración:</p>
-            <p className={[classes["TimeText"]]}>10:00</p>
+            <div className="flex flex-row justify-center items-center gap-1">
+            <p className={[classes["TimeText"]]}>{register?.remainingMinutes}:</p>
+            <p className={[classes["TimeText"]]}>{register?.remainingSeconds}</p>
+            </div>
         </div>
 
         </>

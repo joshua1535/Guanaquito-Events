@@ -20,6 +20,9 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { useNavigate } from 'react-router-dom';
+import { QrReader } from 'react-qr-reader';
+import { registerService } from '../../Services/registerService';
+import { useUserContext } from '../../Context/userContext';
 
 //profile menu component
 const profileMenuItems = [
@@ -101,31 +104,47 @@ function ProfileMenu() {
   );
 }
   
-  const eventDetails = {
-    title: 'ColdPlay Tour',
-    date: '2023-06-04',
-    time: '20:15',
-    participants: ['Mi Primo', 'Mi tio', 'Ronaldinho'],
-    sponsors: ['Nayb Bukele', 'Elon Musk', 'Bill Gates  '],
-    category: 'Conciertos',
-    price: '$100',
-  };
-
 
   const TicketValidationPage = () => {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const [selected, setSelected] = useState("environment");
 
-    const eventDetails = {
-        qrCode: 'https://i.postimg.cc/nz0zDd1w/imagen-2023-06-07-092724064.png',
-        qrText: 'Qwrsjnrkwnoinchesoyamacboijaoisdipjasopfj',
-        title: 'ColdPlay Tour',
-        ticketType: 'Ticket VIP'
+    const {user, token} = useUserContext();
+    const [error, setError] = useState(false);
+    const [validated, setValidated] = useState(false);
+
+
+ 
+
+
+
+  const handleScan = async (scanData) => {
+    if (scanData && scanData !== "") {
+      console.log(`Code scanned:`, scanData.text);
+      
+      registerService.validateTicket(scanData.text, token).then
+      (res => {
+        console.log(res);
+        setValidated(true);
+        alert("Ticket validado con exito");
+      })
+      .catch(err => {
+        setError(true);
+        alert("Ticket invalido");
+
+        console.log(err);
+      }
+      )
     }
-    
+
+  };
+
+  const handleError = (err) => {
+    console.error(err);
+  };
 
 
-  
     React.useEffect(() => {
       window.addEventListener(
         "resize",
@@ -152,23 +171,48 @@ function ProfileMenu() {
         </Navbar>
         </header>
     <div className="flex flex-col items-center px-4 sm:px-0">
-            <img 
-              className={[classes["qrContainer"]]} 
-                src={eventDetails.qrCode} 
-                alt="Event QR Code"
-            />
-            <img 
-              className={[classes["qrContainerMobile"]]} 
-                src='https://i.postimg.cc/vTsyq5Zw/imagen-2023-06-07-094708099.png' 
-                alt="Event QR Code"
-            />
+                <div className='w-1/3 
+                PC-1920*1080:w-1/3
+                PC-1366*768:w-1/3
+                PC-1280*720:w-1/3
+                PC-1024*768:w-1/3
+                PC-800*600:w-1/3
+                PC-640*480:w-1/3
+                Mobile-390*844:w-4/5 
+                Mobile-280:w-4/5
+                
+
+                h-auto mt-12'>
+                    <>
+                      <select 
+                      style={ { fontFamily: "Poppins" }}
+                      className='w-40 h-10 px-8 rounded-lg text-white bg-Orange justify-center mx-auto flex items-center'
+                      onChange={(e) => setSelected(e.target.value)}>
+                        <option 
+                        value={"environment"}>TRASERA</option>
+                        <option value={"user"}>FRONTAL</option>
+                      </select>
+                      <div className='my-4 border-2 Mobile-390*844:my-20'>
+                      <QrReader
+                        facingMode={selected}
+                        delay={1000}
+                        onError={handleError}
+                        onResult={handleScan}
+                        style={{ width: "900px" }}
+                      />
+                      </div>
+                    </>
+                </div>
+                
+
             
             <div className={[classes["codeTicketContainer"]]}>
-              <p className={[classes["titleEventText"]]}>Codigo del Ticket</p>
+              <p className={[classes["titleEventText"]]}>Codigo del Ticket</p>  
               <input 
-                      placeholder='Codigo' 
-                      className='w-full md:w-full my-3  rounded-md p-2 bg-white'
-                  />
+                      placeholder={'Codigo'} 
+                      className='w-full md:w-full my-3  rounded-md p-2 bg-white' 
+                      type='text'                 
+                  /> 
                 <div className='flex justify-center'>
                 <button
                     style={ { fontFamily: "Poppins" }}
