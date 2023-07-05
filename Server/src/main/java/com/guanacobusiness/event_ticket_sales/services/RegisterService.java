@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeTransactionCodeDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
@@ -21,5 +22,7 @@ public interface RegisterService {
     Boolean isEnabled(UUID ticketCode);
     Register findByTransferenceCode(String transacCode);
     Boolean isAvailable(Ticket ticket, User user);
+    FormatedRegisterDTO status(Register register);
+    Register findByTicketCodeAndTransacCode(UUID ticketCode, String transacCode);
 
 }

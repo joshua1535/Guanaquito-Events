@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.ChangeTransactionCodeDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveRegisterDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.ValidateTicketDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
@@ -60,6 +62,56 @@ public class RegisterController {
         }
 
         return new ResponseEntity<>(registers, HttpStatus.OK);
+    }
+
+    @GetMapping("/one")
+    public ResponseEntity<?> getOneRegister(@RequestBody SaveRegisterDTO info,HttpServletRequest request){
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
+        Ticket foundTicket = ticketService.findTicketByCode(stringToUUID.convert(info.getTicketCode()));
+
+        if (foundTicket == null) {
+            return new ResponseEntity<>("Ticket Not Found",HttpStatus.NOT_FOUND);
+        }
+
+        Register register = registerService.findByTicketCodeAndTransacCode(foundTicket.getCode(), info.getTransactionCode());
+
+        if(register == null){
+            return new ResponseEntity<>("Register Not Found",HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(register, HttpStatus.OK);
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<?> getRegisterStatus(HttpServletRequest request, @RequestParam(defaultValue = "") String transactionCode, @RequestParam(defaultValue = "") String ticketCode){
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
+        if(transactionCode.isEmpty() || ticketCode.isEmpty()){
+            return new ResponseEntity<>("Invalid Parameters",HttpStatus.BAD_REQUEST);
+        }
+
+        Ticket foundTicket = ticketService.findTicketByCode(stringToUUID.convert(ticketCode));
+
+        if (foundTicket == null) {
+            return new ResponseEntity<>("Ticket Not Found",HttpStatus.NOT_FOUND);
+        }
+
+        Register register = registerService.findByTicketCodeAndTransacCode(foundTicket.getCode(), transactionCode);
+
+        if(register == null){
+            return new ResponseEntity<>("Register Not Found",HttpStatus.NOT_FOUND);
+        }
+
+        FormatedRegisterDTO response = registerService.status(register);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/ticket/{code}")
