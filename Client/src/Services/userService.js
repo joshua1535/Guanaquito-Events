@@ -96,6 +96,61 @@ export const userService = {
           console.error(`Error obteniendo los usuarios por permisos ${code}: `, error);
           throw error;
         }
-    }     
+    },
+    getAllUsersByPermit: async function(code, page = 0, size = 10, token) {
+        try {
+            const response = await API.get(`/user/all-by-permit/${code}`, 
+            {
+                params: {
+                    page: page,
+                    size: size
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            
+            return response.data;
+        } catch(error) {
+            console.error(`Error obteniendo los usuarios por permiso ${code}: `, error);
+            throw error;
+        }
+    },
+    findAllUsersByEvent: async function(code, token) {
+        try {
+            const response = await API.get(`/user/event/${code}`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            
+            return response.data;
+        } catch(error) {
+            console.error(`Error obteniendo los usuarios por evento ${code}: `, error);
+            throw error;
+        }
+    },
+    deleteUserFromEvent: async function(eventCode, userCode, token) {
+        try {
+            const response = await API.delete('/user/event/delete', 
+            { 
+                data: {
+                  eventCode: eventCode,
+                  userCode: userCode
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            
+            return response.data;
+        } catch(error) {
+            console.error(`Error eliminando el usuario ${userCode} del evento ${eventCode}: `, error);
+            throw error;
+        }
+    }
+    
+         
 
 };

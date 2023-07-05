@@ -47,7 +47,7 @@ function App() {
           <Route path="/mytickets" element={<MyTickets />} />
           <Route path="/buytickets/:code" element={<Private role="Client"> <BuyTicket /> </Private>} />
           <Route path="/admin-event/createevent" element={<Private role="Event Administrator"> <CreateEvent /> </Private>} />
-          <Route path="/admin-event/modifyevent" element={<Private role="Event Administrator"> <ModifyEvent /> </Private>} />
+          <Route path="/admin-event/modifyevent/:eventCode" element={<Private role="Event Administrator"> <ModifyEvent /> </Private>} />
           <Route path="/admin-event/addtiers/:eventCode" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
           <Route path="/admin-event/" element={<Private role="Event Administrator"> <AdminEvents /> </Private>} />
           <Route path="/admin-event/modifyevent/addtier" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
