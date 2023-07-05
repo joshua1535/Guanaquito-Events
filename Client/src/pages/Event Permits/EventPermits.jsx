@@ -144,8 +144,6 @@ export default function EventsPermit() {
     }, [token]);
 
     const [eventIsActive, setEventIsActive] = useState(event.active); 
-
-
     
     const editstatusEventClick = () => {
     eventService.changeEventStatus(eventCode, token)
@@ -167,8 +165,8 @@ export default function EventsPermit() {
         navigate('/admin-event/modifyevent');
     }
 
-    const handleModifyStaffClick = () => {
-        navigate('/admin-event/modifystaff');
+    const handleModifyStaffClick = (eventCode) => {
+        navigate(`/admin-event/modifystaff/${eventCode}`);
     }
 
     const handleDisableEventClick = () => {
@@ -251,7 +249,7 @@ export default function EventsPermit() {
             </div>
                 <div className={[classes["buttonmodifyStaffContainer"]]}>
                 <button 
-                onClick={handleModifyStaffClick}
+                onClick={() =>handleModifyStaffClick(event.code)}
                 className={[classes["modifyStaffButton"]]}>Asignar personal</button>
                 </div>
                 </div>

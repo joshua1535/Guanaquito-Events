@@ -155,5 +155,27 @@ export const eventService = {
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+    addUserToEvent: async function(eventCode, userCode , token) {
+        try {
+          const response = await API.post('/event/user', 
+            {              
+              eventCode: eventCode,
+              userCode: userCode,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          
+          return response.data;
+      
+        } catch(error) {
+          console.error(`Error agregando el usuario al evento: `, error);
+          throw error;
+        }
+      }
+      
 }

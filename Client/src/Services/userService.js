@@ -79,7 +79,7 @@ export const userService = {
     getAllUsersByPermit: async function(code , page = 0, size = 10, token) {
     
         try {
-          const response = await API.get(`user/all/${code}`, 
+          const response = await API.get(`/user/all-by-permit/${code}`, 
           {
             params: {
                 page: page,

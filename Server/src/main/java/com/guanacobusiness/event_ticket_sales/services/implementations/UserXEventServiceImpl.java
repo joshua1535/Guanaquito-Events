@@ -47,7 +47,7 @@ public class UserXEventServiceImpl implements UserXEventService{
 
         UserXEvent foundUserXEvent = userXEventRepository.findByUserCodeAndEventCode(user.getCode(), event.getCode());
 
-        if(foundUserXEvent == null) {
+        if(foundUserXEvent != null) {
             return false;
         }
 
