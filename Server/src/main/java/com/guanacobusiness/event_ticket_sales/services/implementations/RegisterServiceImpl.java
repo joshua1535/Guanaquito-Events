@@ -134,8 +134,10 @@ public class RegisterServiceImpl implements RegisterService {
         if(foundRegister.getTransferenceTime() != null) {
             return false;
         } */
+        LocalTime updateTime = currentTime.now();
 
         registerToUpdate.setTransactionCode(info.getTransactionCode());
+        registerToUpdate.setCreationTime(updateTime);
         registerRepository.save(registerToUpdate);
         System.out.println(info.getTransactionCode());
 
