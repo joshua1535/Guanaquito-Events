@@ -66,6 +66,7 @@ public class UserXEventServiceImpl implements UserXEventService{
     @Transactional(rollbackOn = Exception.class)
     public Boolean delete(UUID userCode, UUID eventCode) throws Exception {
         UserXEvent foundUserXEvent = userXEventRepository.findByUserCodeAndEventCode(userCode, eventCode);
+        System.out.println("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" + foundUserXEvent);
 
         if(foundUserXEvent == null) {
             return false;
@@ -102,5 +103,8 @@ public class UserXEventServiceImpl implements UserXEventService{
 
         return formatedUsers;
     }
+
+    
+    
     
 }

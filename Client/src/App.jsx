@@ -47,12 +47,12 @@ function App() {
           <Route path="/mytickets" element={<Private role="Client"> <MyTickets /> </Private>} />
           <Route path="/buytickets/:code" element={<Private role="Client"> <BuyTicket /> </Private>} />
           <Route path="/admin-event/createevent" element={<Private role="Event Administrator"> <CreateEvent /> </Private>} />
-          <Route path="/admin-event/modifyevent" element={<Private role="Event Administrator"> <ModifyEvent /> </Private>} />
+          <Route path="/admin-event/modifyevent/:eventCode" element={<Private role="Event Administrator"> <ModifyEvent /> </Private>} />
           <Route path="/admin-event/addtiers/:eventCode" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
           <Route path="/admin-event/" element={<Private role="Event Administrator"> <AdminEvents /> </Private>} />
           <Route path="/admin-event/modifyevent/addtier" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
-          <Route path="/admin-event/eventpermit" element={<Private role="Admin"> <EventsPermit /> </Private>} />
-          <Route path="/admin-event/modifystaff" element={<Private role="Admin"> <ModifyStaff /> </Private>} />
+          <Route path="/admin-event/eventpermit/:eventCode" element={<Private role="Event Administrator"> <EventsPermit /> </Private>} />
+          <Route path="/admin-event/modifystaff/:eventCode" element={<Private role="Event Administrator"> <ModifyStaff /> </Private>} />
           <Route path="/qr" element={<Private role="Client"> <QRPage /> </Private>} />
           <Route path="/transferticket" element={<Private role="Client"><TransferTicket /> </Private>} />  
           <Route path="/admin-users" element={<Private role="Admin"> <AdminUsers /> </Private>} />

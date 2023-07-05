@@ -176,6 +176,7 @@ export const eventService = {
           console.error(`Error agregando el usuario al evento: `, error);
           throw error;
         }
-      }
+      },
+    
       
 }

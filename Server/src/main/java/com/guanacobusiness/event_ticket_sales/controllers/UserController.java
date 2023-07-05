@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.AddUserToEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
@@ -190,5 +192,35 @@ public class UserController {
 
     
     }
+    @DeleteMapping("/event/delete")
+    public ResponseEntity<?> deleteUserFromEvent(@Valid @RequestBody AddUserToEventDTO info, HttpServletRequest request){
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
+        UUID eventCode = stringToUUID.convert(info.getEventCode());
+        UUID userCode = stringToUUID.convert(info.getUserCode());
+
+        if (eventCode == null || userCode == null) {
+            return new ResponseEntity<>("User or Event invalid Code",HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+
+            Boolean response = userXEventService.delete(userCode,eventCode);
+
+            if (!response) {
+                return new ResponseEntity<>("User is not asigned to events",HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>("User deleted",HttpStatus.OK);
+        } catch (Exception e) {
+        
+            System.out.println(e.getMessage() + " " + e.getCause());
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        
+        }
+    }
 
 }
+

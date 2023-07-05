@@ -40,8 +40,8 @@
 
 .emailContainer {
     @apply flex flex-col justify-start h-auto  gap-4 font-text my-8 break-words text-white
-    PC-1920*1080:w-auto PC-1920*1080:mx-auto PC-1920*1080:text-lg
-    PC-1600*900:w-full PC-1600*900:mx-auto
+    PC-1920*1080:w-auto PC-1920*1080:mx-auto PC-1920*1080:text-2.5xl
+    PC-1600*900:w-full PC-1600*900:mx-auto 
     PC-1366*768:w-full PC-1366*768:mx-auto
     PC-1280*720:w-full PC-1280*720:mx-auto PC-1280*720:my-3
     PC-800*600:w-full PC-800*600:mx-auto
