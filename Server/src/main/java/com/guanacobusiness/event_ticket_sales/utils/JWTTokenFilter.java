@@ -57,6 +57,7 @@ public class JWTTokenFilter extends OncePerRequestFilter{
 				Boolean tokenValidity = userService.isTokenValid(user, token);
 				
 				if(tokenValidity) {
+					System.out.println("Token is valid");
 					//Preparing the authentication token.
 					UsernamePasswordAuthenticationToken authToken 
 						= new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
