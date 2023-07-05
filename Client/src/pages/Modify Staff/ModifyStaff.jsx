@@ -214,6 +214,19 @@ export default function ModifyStaff() {
         }
     }, [token]);
 
+    useEffect(() => {
+      if(token){
+        userService.findAllUsersByEvent(eventCode,token)
+            .then((data) => {
+              setUsersInEvent(data);          
+                console.log('usuarios del evento obtenidos:', data);
+            })
+            .catch((error) => {
+                console.error('Hubo un error al obtener usuarios del evento:', error);
+            });
+        }
+    }, [eventCode,token]);
+
 
 
     useEffect(() => {
@@ -343,9 +356,26 @@ export default function ModifyStaff() {
     };
   
 
-      const handleRemoveUser = (email) => {
+      const handleRemoveUser = (email,code) => {
         const newUsersInEvent = usersInEvent.filter((user) => user.email !== email);
         setUsersInEvent(newUsersInEvent);
+
+        const userCode = code;
+        console.log('userCode:', userCode);
+        console.log('eventCode:', eventCode);
+        
+        userService.deleteUserFromEvent(eventCode,userCode, token)
+        .then(response => {
+            console.log('Usuario eliminado del evento con éxito:', response);
+            
+            // Aquí puedes manejar la respuesta, por ejemplo actualizando la lista de usuarios en tu estado de React para reflejar que el usuario ha sido eliminado.
+        })
+        .catch(error => {
+            console.error(`Error al eliminar el usuario ${userCode} del evento ${eventCode}: `, error);
+            // Aquí puedes manejar el error, por ejemplo mostrando un mensaje al usuario.
+        });
+
+
       }
 
 
@@ -384,7 +414,7 @@ export default function ModifyStaff() {
             {event.title}
           </Typography>
           <Typography as="h2" className={[classes["imgText2"]]}>
-            Usuarios asignados: 
+            Usuarios asignados: {usersInEvent.length}
           </Typography>
           
           </div>
@@ -424,7 +454,7 @@ export default function ModifyStaff() {
             {usersInEvent.map((user) => (
                 <div key={user.email} className={classes["userInEvent"]}>
                 <IconButton 
-                onClick={() => handleRemoveUser(user.email)}
+                onClick={() => handleRemoveUser(user.email,user.code)}
                 size="sm" color="blue-gray" variant="text" className="flex justify-start m-4">
                   <TrashIcon className="h-4 w-4 text-yellowCapas" />
                 </IconButton>

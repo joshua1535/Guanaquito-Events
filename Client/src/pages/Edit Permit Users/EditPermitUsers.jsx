@@ -24,6 +24,7 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '../../Context/userContext';
 import { permitService } from "../../Services/permitService";
+import { userService } from "../../Services/userService";
 
 function Toggle({ isChecked, onToggle }) {
   return (
@@ -167,11 +168,14 @@ export default function EditPermitUsers() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const [selectedUser, setSelectedUser] = useState(users[0]);
-  const [userList, setUserList] = useState(users);
+  const [userList, setUserList] = useState([]);
+  const [userfiltred, setUserfiltred] = useState([]); // Lista de permisos seleccionados por el usuario
   const [permits, setPermits] = useState([]);
   const { userCode } = useParams();
   const { user, token } = useUserContext(); // obteniendo token de contexto de usuario
   const [Client, setClient] = useState(false); // Lista de permisos seleccionados por el usuario
+  const [page, setPage] = useState(0); // inicio de la pagina
+  const [size, setSize] = useState(5); 
 
   const handleclient = () => 
   {
@@ -185,22 +189,77 @@ const [permisoAdministrarEventos, setPermisoAdministrarEventos] = useState(false
 const [permisoModerador, setPermisoModerador] = useState(false);
 const [permisoAdmin, setPermisoAdmin] = useState(false);
 // Continua con el resto de los permisos...
+useEffect(() => {
+  if(token){
+    userService.getAllUsers(page,size,token)
+        .then((data) => {
+            setUserList(data.content);          
+            console.log('evento obtenido:', user);
+        })
+        .catch((error) => {
+            console.error('Hubo un error al obtener las eventos:', error);
+        });
+    }
+}, [page,size,token]);
+
+useEffect(() => {
+userList.map((user) => {
+  if(user.code === userCode){
+    setUserfiltred(user);
+  }
+});
+}, [userList,userCode]);
+
+
+useEffect(() => {
+  if(token){
+    permitService.getAllPermits(token)
+        .then((data) => {
+             setPermits(data);          
+            console.log('todos los permisos:', permits);
+        })
+        .catch((error) => {
+            console.error('Hubo un error al obtener los permisos:', error);
+        });
+    }
+}, [token]);
 
 const handleGuardarClick = () => {
-  const activePermits = {};
+  let client = "Client"
+  let ticketVal = "Ticket Validator"
+  let stadistics = "Stadistics"
+  let eventAdmin = "Event Administrator"
+  let moderator = "Moderator"
+  let admin = "Admin"
 
-  if (permisoVerEstadisticas) {
-    permitService.grantPermitToUser(userCode, '1de84ecf-459e-4617-86fa-2e7b7ec8941d', token)
-    .then(response => {
-      console.log('Permisos actualizados con éxito:', response);
-      navigate('/admin-users');
-    })
-    .catch(error => {
-      console.error('Hubo un error al actualizar los permisos:', error);
-    });
-  }
-  if (permisoValidarTickets) {
-    permitService.grantPermitToUser(userCode, '5ff10358-482e-4c7f-869e-728f3bd1a7fa', token)
+  permits.map((permit) => {
+    if(permit.name === client){
+      client = permit.code;
+      console.log('client:', client);
+    }
+    if(permit.name === ticketVal){
+      ticketVal = permit.code;
+      console.log('ticketVal:', ticketVal);
+    }
+    if(permit.name === stadistics){
+      stadistics = permit.code;
+      console.log('stadistics:', stadistics);
+    }
+    if(permit.name === eventAdmin){
+      eventAdmin = permit.code;
+      console.log('eventAdmin:', eventAdmin);
+    }
+    if(permit.name === moderator){
+      moderator = permit.code;
+      console.log('moderator:', moderator);
+    }
+    if(permit.name === admin){
+      admin = permit.code;
+      console.log('admin:', admin);
+    }
+  });
+  if (permisoCliente) {
+    permitService.grantPermitToUser(userCode, client, token)
     .then(response => {
       console.log('Permisos actualizados con éxito:', response);
       navigate('/admin-users');
@@ -211,7 +270,7 @@ const handleGuardarClick = () => {
   }
   else
   {
-    permitService.revokePermitToUser(userCode, '5ff10358-482e-4c7f-869e-728f3bd1a7fa', token)
+    permitService.revokePermitToUser(userCode, client, token)
     .then(response => {
       console.log('Permisos actualizados con éxito:', response);
       navigate('/admin-users');
@@ -220,8 +279,54 @@ const handleGuardarClick = () => {
       console.error('Hubo un error al actualizar los permisos:', error);
     });
   }
+
+  if (permisoVerEstadisticas) {
+    permitService.grantPermitToUser(userCode, stadistics, token)
+    .then(response => {
+      console.log('Permisos actualizados con éxito:', response);
+      navigate('/admin-users');
+    })
+    .catch(error => {
+      console.error('Hubo un error al actualizar los permisos:', error);
+    });
+  }
+  else
+  {
+    permitService.revokePermitToUser(userCode, stadistics, token)
+    .then(response => {
+      console.log('Permisos actualizados con éxito:', response);
+      navigate('/admin-users');
+    })
+    .catch(error => {
+      console.error('Hubo un error al actualizar los permisos:', error);
+    });
+  }
+
+  if (permisoValidarTickets) {
+    permitService.grantPermitToUser(userCode, ticketVal, token)
+    .then(response => {
+      console.log('Permisos actualizados con éxito:', response);
+      navigate('/admin-users');
+    })
+    .catch(error => {
+      console.error('Hubo un error al actualizar los permisos:', error);
+    });
+  }
+  else
+  {
+    permitService.revokePermitToUser(userCode, ticketVal, token)
+    .then(response => {
+      console.log('Permisos actualizados con éxito:', response);
+      navigate('/admin-users');
+    })
+    .catch(error => {
+      console.error('Hubo un error al actualizar los permisos:', error);
+    });
+  }
+
+
   if (permisoAdministrarEventos) {
-    permitService.grantPermitToUser(userCode, 'c7dc2b04-12af-4545-b9e7-6c0eb195953a', token)
+    permitService.grantPermitToUser(userCode, eventAdmin, token)
     .then(response => {
       console.log('Permisos actualizados con éxito:', response);
       navigate('/admin-users');
@@ -230,8 +335,20 @@ const handleGuardarClick = () => {
       console.error('Hubo un error al actualizar los permisos:', error);
     });
   }
+  else
+  {
+    permitService.revokePermitToUser(userCode, eventAdmin, token)
+    .then(response => {
+      console.log('Permisos actualizados con éxito:', response);
+      navigate('/admin-users');
+    })
+    .catch(error => {
+      console.error('Hubo un error al actualizar los permisos:', error);
+    });
+  }
+
   if (permisoModerador) {
-    permitService.grantPermitToUser(userCode, 'c04d27a4-eab4-4ef9-b101-58488a873d71', token)
+    permitService.grantPermitToUser(userCode, moderator, token)
     .then(response => {
       console.log('Permisos actualizados con éxito:', response);
       navigate('/admin-users');
@@ -240,8 +357,31 @@ const handleGuardarClick = () => {
       console.error('Hubo un error al actualizar los permisos:', error);
     });
   }
+  else
+  {
+    permitService.revokePermitToUser(userCode, moderator, token)
+    .then(response => {
+      console.log('Permisos actualizados con éxito:', response);
+      navigate('/admin-users');
+    })
+    .catch(error => {
+      console.error('Hubo un error al actualizar los permisos:', error);
+    });
+  }
+
   if (permisoAdmin) {
-    permitService.grantPermitToUser(userCode, '4ce5f683-f24c-423b-a973-a27c4de90789', token)
+    permitService.grantPermitToUser(userCode, admin, token)
+    .then(response => {
+      console.log('Permisos actualizados con éxito:', response);
+      navigate('/admin-users');
+    })
+    .catch(error => {
+      console.error('Hubo un error al actualizar los permisos:', error);
+    });
+  }
+  else
+  {
+    permitService.revokePermitToUser(userCode, admin, token)
     .then(response => {
       console.log('Permisos actualizados con éxito:', response);
       navigate('/admin-users');
@@ -406,38 +546,27 @@ useEffect(() => {
           
           <div className=" sm:flex ">
           <div className={classes["userContainer"]}>
-            {userList.map((user) => (
+            
               <div
-                key={user.email}
-                className={`${classes["user"]} ${
-                  user === selectedUser ? classes["userSelected"] : ""
-                }`}
-                onClick={() => handleUserSelect(user)}
+                
+                className={classes["user"]}
               >
                 <div className="flex justify-center ">
                 <Avatar
-                  src={user.avatar}
-                  alt={user.email}
+                  src="https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+                  
                   className="w-auto h-auto 
-                  PC-1920*1080:w-2/4 
+                  PC-1920*1080:w-screen
                   PC-1600*900:w-2/4 
                   PC-1280*720:w-44 "
                 />
                 </div>
                 <div className={classes["emailContainer"]}>
-                  <p>{user.email}</p>
+                  <p>{userfiltred.email}</p>
                 </div>
-                <div className={classes["disablebuttonContainer"]}>
-              <Button
-              className=" text-xs" 
-              onClick={handleDisableAccount}
-              color="red">
-                Deshabilitar cuenta
-              </Button>
-              </div>
               </div>
               
-            ))}
+            
           </div>
 
           <div className={classes["listPermitsContainer"]}>
@@ -453,6 +582,19 @@ useEffect(() => {
                 Permisos
               </Typography>              
             </div> 
+            
+            <div 
+              style={{ cursor: "pointer" }}
+              className={`p-2 m-2 w-1/2 flex items-center justify-center ${permisoCliente ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
+              onClick={handleClienteClick}
+            >
+              <Typography className="ml-2 m-4 font-bold text-yellowCapas 
+                PC-1920*1080:text-2xl 
+                PC-1600*900:text-base PC-1600*900:m-1 
+                PC-1280*720:text-sm PC-1280*720:m-1">
+                Cliente
+              </Typography>
+            </div>
 
             <div 
               style={{ cursor: "pointer" }}
