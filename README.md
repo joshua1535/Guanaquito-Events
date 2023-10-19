@@ -1,3 +1,5 @@
+### Trabajo que se entrego como proyecto final de materia en "Programacion N Capas".
+
 # Guanaco Business
 
 Pagina web de compra de boletos para eventos socioculturales varios.
