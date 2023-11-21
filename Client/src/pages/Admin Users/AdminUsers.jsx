@@ -72,6 +72,7 @@ function UserTable({users,navigate}) {
 
   const TABLE_ROWS = users.map((user) => ({
     code: user.code,
+    profilePicture: user.profilePicture,
     email: user.email,
     active: user.active,
     dateAdded: user.dateAdded,
@@ -106,7 +107,7 @@ function UserTable({users,navigate}) {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(({code, email, active, dateAdded}) => {
+            {TABLE_ROWS.map(({code, profilePicture, email, active, dateAdded}) => {
 
 
               const isLast = TABLE_ROWS[TABLE_ROWS.length - 1].email === email;
@@ -135,7 +136,7 @@ function UserTable({users,navigate}) {
                 <tr key={email}>
                   <td className={firstElement}>
                     <div className="flex items-center gap-3 Mobile-390*844:gap-0 Mobile-280:gap-0 break-words ">
-                      <Avatar src='https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png' alt={email} size="md" className="Mobile-390*844:hidden Mobile-280:hidden" />
+                      <Avatar src={profilePicture} alt={email} size="md" className="Mobile-390*844:hidden Mobile-280:hidden" />
                       <div className="flex flex-col">
                         <Typography className="text-white text-base Mobile-390*844:text-xs Mobile-280:text-xs PC-640*480:text-sm">
                           {email}
