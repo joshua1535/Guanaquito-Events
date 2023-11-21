@@ -571,8 +571,6 @@ useEffect(() => {
           </div>
 
           <div className={classes["listPermitsContainer"]}>
-          <div className={classes["permitListContainer"]}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div 
               className={`p-2 m-2 flex w-full items-center justify-start "}`}
             >
@@ -582,7 +580,10 @@ useEffect(() => {
                 PC-1280*720:text-2xl PC-1280*720:w-full PC-1280*720:m-1">
                 Permisos
               </Typography>              
-            </div> 
+            </div>
+          <div className={classes["permitListContainer"]}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+           
             
             <div 
               style={{ cursor: "pointer" }}
@@ -669,6 +670,7 @@ useEffect(() => {
 
               
             </div>
+            </div> 
             <div className={classes["buttonsContainer"]}>
             <div className={classes["buttonContainer"]}>
                 <Button 
@@ -686,7 +688,7 @@ useEffect(() => {
             </div>
             </div>    
 
-            </div>  
+             
         </div>
 
           </div>
