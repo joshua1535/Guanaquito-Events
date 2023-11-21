@@ -4,6 +4,7 @@ import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { Link } from 'react-router-dom';
 import {
     Carousel,
     Navbar,
@@ -102,6 +103,7 @@ function TicketItem({ ticket }) {
   
     return (
       <div className={[classes["cardTicketContainer"]]}>
+
          <div >
             {!available ? (
               <Chip variant='ghost' color="red" value='Canjeado' className="m-auto p-2 font-text">
@@ -472,7 +474,14 @@ export default function MyTickets(){
       </header>
         <div className={[classes["bodyContainer"]]}>
             <h1 className={[classes["title"]]}>Mis Tickets</h1>
-
+            {/* Boton para poder ir a transferir tickets */}
+            <div className='flex justify-center mt-3'>
+              <Link to="/transferticket">
+                <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 hover:bg-yellow-700'>
+                  Transferir Tickets
+                </Button>
+              </Link>
+            </div>
             <div className={[classes["cardContainer"]]}>
             {tickets.map((ticket, index) => (
           <TicketItem key={ticket.id} ticket={ticket} />

@@ -297,7 +297,7 @@ export default function TransferTicket() {
         <form className="space-y-6">
           <div className="space-y-2">
             <label htmlFor="eventName" className={[classes["titleInputs"]]}>
-              Codigo de transferencia
+              Código de transferencia
             </label>
             <Input
               id="eventName"
@@ -313,10 +313,10 @@ export default function TransferTicket() {
                 
               </label>
                 <Select className='text-white'>
-                    <Option>Coldplay Tour</Option>
-                    <Option>Torneo Smash Ultimate</Option>
-                    <Option>Super Mario Bros</Option>
-                    <Option>Real Madrid vs Barcelona</Option>
+                    <Option className='text-yellowCapas'>Coldplay Tour</Option>
+                    <Option className='text-yellowCapas'>Torneo Smash Ultimate</Option>
+                    <Option className='text-yellowCapas'>Super Mario Bros</Option>
+                    <Option className='text-yellowCapas'>Real Madrid vs Barcelona</Option>
                 </Select>
             </div>
           </div>
@@ -327,16 +327,16 @@ export default function TransferTicket() {
                 
               </label>
                 <Select className='text-white'>
-                    <Option>Zona Lateral</Option>
-                    <Option>VIP</Option>
-                    <Option>Platinum</Option>
+                    <Option className='text-yellowCapas'>Zona Lateral</Option>
+                    <Option className='text-yellowCapas'>VIP</Option>
+                    <Option className='text-yellowCapas'>Platinum</Option>
                 </Select>
             </div>
             <button
             type="button" // Change the type to "button"
             onClick={generateCodeHandler}
           >
-            <p className="text-yellowCapas underline">Generar código</p>
+            <p className="text-yellowCapas underline hover:text-white">Generar código</p>
           </button>
           </div>  
           
@@ -368,12 +368,12 @@ export default function TransferTicket() {
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
             <Button 
             onClick={backButtonHandler}
-            className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+            className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 hover:bg-gray-900'>
               Cancelar
             </Button>
             <Button 
             onClick={confirmTransferHandler}
-            className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+            className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 hover:bg-yellow-700'>
               Continuar
             </Button>
           </div>

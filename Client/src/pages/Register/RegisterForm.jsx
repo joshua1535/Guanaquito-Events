@@ -30,11 +30,11 @@ const RegisterForm = () => {
 
         e.preventDefault();
 
-        console.log("email: " + email);
-        console.log("password: " + password);
+        /* console.log("email: " + email);
+        console.log("password: " + password); */
         const registered = await signup(email, password, "https://pbs.twimg.com/media/FHAsufPX0Agj5Wg?format=jpg&name=large");
-        console.log(registered);
-        console.log("registered");
+        /* console.log(registered);
+        console.log("registered"); */
         setError(!registered);
     
         if(registered) {
