@@ -556,9 +556,10 @@ useEffect(() => {
                   src="https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
                   
                   className="w-auto h-auto 
-                  PC-1920*1080:w-screen
-                  PC-1600*900:w-2/4 
-                  PC-1280*720:w-44 "
+                            PC-1920*1080:w-screen
+                            PC-1600*900:w-2/4 
+                            PC-1280*720:w-44 
+                            md:w-1/2 lg:w-1/3"
                 />
                 </div>
                 <div className={classes["emailContainer"]}>
