@@ -32,7 +32,7 @@ const RegisterForm = () => {
 
         /* console.log("email: " + email);
         console.log("password: " + password); */
-        const registered = await signup(email, password, "https://pbs.twimg.com/media/FHAsufPX0Agj5Wg?format=jpg&name=large");
+        const registered = await signup(email, password, "https://i.seadn.io/gae/_9to9M96e2o7mE1U1o0oaPQ2s03Y3RSsm6Kubz9k9D4mwC2_oYDpIKTDATidGJv_X9JRyfFf3BnUBrIhoLXCcPzmqVK7z6fWujHz7-8?auto=format&dpr=1&w=1000");
         /* console.log(registered);
         console.log("registered"); */
         setError(!registered);
