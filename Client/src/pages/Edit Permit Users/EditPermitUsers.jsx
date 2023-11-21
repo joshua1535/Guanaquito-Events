@@ -571,7 +571,7 @@ useEffect(() => {
 
           <div className={classes["listPermitsContainer"]}>
           <div className={classes["permitListContainer"]}>
-          <div className="flex flex-col w-full items-center justify-center" >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div 
               className={`p-2 m-2 flex w-full items-center justify-start "}`}
             >
