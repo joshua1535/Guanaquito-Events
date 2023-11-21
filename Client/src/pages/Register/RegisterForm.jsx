@@ -30,8 +30,11 @@ const RegisterForm = () => {
 
         e.preventDefault();
 
+        console.log("email: " + email);
+        console.log("password: " + password);
         const registered = await signup(email, password, "https://pbs.twimg.com/media/FHAsufPX0Agj5Wg?format=jpg&name=large");
-
+        console.log(registered);
+        console.log("registered");
         setError(!registered);
     
         if(registered) {
@@ -72,7 +75,7 @@ const RegisterForm = () => {
 
                     <div className={classes["loginContainer"]}>
 
-                    <button onClick={loginHandler} className={classes["buttonlogin"]}>
+                    <button type="submit" className={classes["buttonlogin"]}>
                         Crear cuenta
                     </button>        
 
