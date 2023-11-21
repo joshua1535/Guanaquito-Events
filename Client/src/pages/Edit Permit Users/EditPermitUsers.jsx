@@ -582,15 +582,15 @@ useEffect(() => {
               </Typography>              
             </div>
           <div className={classes["permitListContainer"]}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:mr-12 sm:mx-auto">
            
             
             <div 
               style={{ cursor: "pointer" }}
-              className={`p-2 m-2 w-1/2 flex items-center justify-center ${permisoCliente ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
+              className={`p-2 m-2 w-32 rounded-md h-20 flex items-center justify-center ${permisoCliente ? "border-4 border-green-500 " : "border-4 opacity-40 border-red-500 "}`}
               onClick={handleClienteClick}
             >
-              <Typography className="ml-2 m-4 font-bold text-yellowCapas 
+              <Typography className="m-2 m-4  text-yellowCapas 
                 PC-1920*1080:text-2xl 
                 PC-1600*900:text-base PC-1600*900:m-1 
                 PC-1280*720:text-sm PC-1280*720:m-1">
@@ -600,7 +600,7 @@ useEffect(() => {
 
             <div 
               style={{ cursor: "pointer" }}
-              className={`p-2 m-2 w-1/2 flex items-center justify-center ${permisoVerEstadisticas ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
+              className={`p-2 m-2 w-32 rounded-md h-20 flex items-center justify-center ${permisoVerEstadisticas ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
               onClick={handleVerEstadisticasClick}
             >
               <Typography className="ml-2 m-4 font-bold text-yellowCapas 
@@ -613,7 +613,7 @@ useEffect(() => {
 
               <div 
               style={{ cursor: "pointer" }}
-              className={`p-2 m-2 flex w-1/2 items-center justify-center ${permisoValidarTickets ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
+              className={`p-2 m-2 flex w-32 rounded-md h-20 items-center justify-center whitespace-normal ${permisoValidarTickets ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
               onClick={handleValidarTicketsClick}
             >
               <Typography className="ml-2 m-4 font-bold text-yellowCapas 
@@ -628,7 +628,7 @@ useEffect(() => {
 
               <div 
               style={{ cursor: "pointer" }}
-              className={`p-2 m-2 flex w-1/2 items-center justify-center ${permisoAdministrarEventos ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
+              className={`p-2 m-2  flex w-32 rounded-md h-20 items-center justify-center whitespace-normal  ${permisoAdministrarEventos ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
               onClick={handleAdministrarEventosClick}
             >
               <Typography className="ml-2 m-4 font-bold text-yellowCapas 
@@ -643,7 +643,7 @@ useEffect(() => {
 
               <div 
               style={{ cursor: "pointer" }}
-              className={`p-2 m-2 flex w-1/2 items-center justify-center ${permisoModerador ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
+              className={`p-2 m-2 flex w-32 rounded-md h-20 items-center justify-center ${permisoModerador ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
               onClick={handleModeradorClick}
             >
               <Typography className="ml-2 m-4 font-bold text-yellowCapas 
@@ -658,14 +658,14 @@ useEffect(() => {
 
               <div 
               style={{ cursor: "pointer" }}
-              className={`p-2 m-2 flex w-1/2 items-center justify-center ${permisoAdmin ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
+              className={`p-2 m-2 flex w-32 rounded-md h-20 items-center justify-center whitespace-normal ${permisoAdmin ? "border-4 border-green-500" : "border-4 opacity-40 border-red-500"}`}
               onClick={handleAdminClick}
             >
               <Typography className="ml-2 m-4 font-bold text-yellowCapas 
                 PC-1920*1080:text-2xl 
                 PC-1600*900:text-base PC-1600*900:m-1 
                 PC-1280*720:text-sm PC-1280*720:m-1">
-                Super Admin
+                Super Administrador
               </Typography>
 
               
