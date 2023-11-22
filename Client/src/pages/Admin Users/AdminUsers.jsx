@@ -30,7 +30,11 @@ import classes from "./AdminUsers.module.css";
 import {
     ChevronDownIcon,
     Bars2Icon,
-    ArrowLeftIcon
+    ArrowLeftIcon,
+    ChevronDoubleRightIcon,
+    ChevronRightIcon,
+    ChevronLeftIcon,
+    ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
@@ -63,6 +67,8 @@ const TABLE_HEAD = ["Usuario", "Roles", "Estado", "Registrado desde", ""];
 
 function UserTable({users,navigate}) {
 
+  const { token } = useUserContext(); // Mueve el hook fuera del bucle
+
 
   const handleEdit = (code) => {
     const userCode = code;
@@ -72,11 +78,34 @@ function UserTable({users,navigate}) {
 
   const TABLE_ROWS = users.map((user) => ({
     code: user.code,
+    profilePicture: user.profilePicture,
     email: user.email,
     active: user.active,
     dateAdded: user.dateAdded,
   }));
 
+  const [permits, setPermits] = useState([]);
+
+  useEffect(() => {
+    // Llama a useUserContext solo una vez al principio
+    if (token) {
+      console.log('El token es:', token);
+      // Llamada al servicio para cada usuario
+      TABLE_ROWS.forEach((user) => {
+        permitService
+          .getPermitsByUser(user.code, token)
+          .then((data) => {
+            setPermits((prevPermits) => [...prevPermits, { userCode: user.code, permits: data }]);
+            console.log(`Los permisos de usuario ${user.code} obtenidos:`, data);
+          })
+          .catch((error) => {
+            console.error(`Hubo un error al obtener los permisos de usuario ${user.code}:`, error);
+          });
+      });
+    }
+  }, [users, token]); // Solo se ejecuta cuando TABLE_ROWS cambia
+
+  
   return (
     
     <Card className="flex justify-start w-full rounded-none bg-transparent shadow-none font-text">
@@ -106,8 +135,8 @@ function UserTable({users,navigate}) {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(({code, email, active, dateAdded}) => {
-
+            {TABLE_ROWS.map(({code, profilePicture, email, active, dateAdded}) => {
+              
 
               const isLast = TABLE_ROWS[TABLE_ROWS.length - 1].email === email;
               //Si es el primer elemento de la tabla que sea sticky
@@ -115,27 +144,15 @@ function UserTable({users,navigate}) {
               const firstElement = isLast ? "p-4 sticky left-0 Mobile-390*844:w-6 Mobile-280:w-4 PC-640*480:w-14 bg-blueCapas Mobile-280:p-0" 
               :"p-4 border-b border-blue-gray-50 sticky left-0 Mobile-390*844:w-6 Mobile-280:w-4 PC-640*480:w-14 bg-blueCapas Mobile-280:p-0"
               
-              const { token } = useUserContext();
-              const [permits, setPermits] = useState([]);
 
-              useEffect(() => {
-                if(token){
-                  permitService.getPermitsByUser(code, token)
-                      .then((data) => {
-                        setPermits(data)        
-                          console.log('Los permisos de usuarios obtenidas:', data);
-                      })
-                      .catch((error) => {
-                          console.error('Hubo un error al obtener los permisos:', error);
-                      });
-                  }
-              }, [code,token]); 
+                // Filtrar los permisos del usuario actual
+                const userPermits = permits.find((p) => p.userCode === code)?.permits || [];
 
               return (
                 <tr key={email}>
                   <td className={firstElement}>
                     <div className="flex items-center gap-3 Mobile-390*844:gap-0 Mobile-280:gap-0 break-words ">
-                      <Avatar src='https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png' alt={email} size="md" className="Mobile-390*844:hidden Mobile-280:hidden" />
+                      <Avatar src={profilePicture} alt={email} size="md" className="Mobile-390*844:hidden Mobile-280:hidden" />
                       <div className="flex flex-col">
                         <Typography className="text-white text-base Mobile-390*844:text-xs Mobile-280:text-xs PC-640*480:text-sm">
                           {email}
@@ -146,9 +163,12 @@ function UserTable({users,navigate}) {
                   {
                   <td className={classes}>
                     <div className="flex items-center gap-2">
-                      {permits.map((permits) => (
-                        <p key={permits} className="bg-blue-gray-100 text-black rounded-full px-3 py-2 text-xs">
-                          {permits.name}
+                    {userPermits.map((permit) => (
+                        <p
+                          key={permit.name}
+                          className="bg-blue-gray-100 text-black rounded-full px-3 py-2 text-xs"
+                        >
+                          {permit.name}
                         </p>
                       ))}
                     </div>
@@ -184,17 +204,7 @@ function UserTable({users,navigate}) {
         </table>
       </CardBody>
       <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-        <Typography variant="small" color="white" className="font-normal">
-          Pagina 1
-        </Typography>
-        <div className="flex gap-2">
-          <Button variant="outlined" color="white" size="sm">
-            Anterior
-          </Button>
-          <Button variant="outlined" color="white" size="sm">
-            Siguiente
-          </Button>
-        </div>
+  
       </CardFooter>
     </Card>
   );
@@ -282,11 +292,11 @@ export default function AdminUsers() {
     const [userList, setUserList] = useState([]);
 
     const [users, setUsers] = useState([]);
-  const [page, setPage] = useState(0); // inicio de la pagina
-  const [size, setSize] = useState(5); // número de usuarios por página
-  const { user, token } = useUserContext(); // obteniendo token de contexto de usuario
-
-  console.log('El token del usuario es:', token);
+    const [page, setPage] = useState(0);
+    const [lastPage, setLastPage] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [size, setSize] = useState(4);
+    const {user, token } = useUserContext(); // obteniendo token de contexto de usuario
 
     const navigate = useNavigate();
 
@@ -295,13 +305,15 @@ export default function AdminUsers() {
         userService.getAllUsers(page, size, token)
             .then((data) => {
               setUsers(data.content)        
+              setLastPage(data.total_pages);
+              setTotalElements(data.total_elements);
                 console.log('Los usuarios obtenidos:', data.content);
             })
             .catch((error) => {
                 console.error('Hubo un error al obtener los usuarios:', error);
             });
         }
-    }, [ page, size,token]); 
+    }, [page, size, token, totalElements]); 
 
 
   /*
@@ -320,13 +332,18 @@ export default function AdminUsers() {
 
     */
   
+      const handlePageChange = (newPage) => {
+        if (newPage >= 0 && newPage < lastPage) {
+          setPage(newPage);
+        }
+      };
+      
+      const handleFirstPage = () => handlePageChange(0);
+      const handlePrevPage = () => handlePageChange(page - 1);
+      const handleNextPage = () => handlePageChange(page + 1);
+      const handleLastPage = () => handlePageChange(lastPage - 1);
 
-   const editPermitClick = () => {
-      navigate('/admin-users/permits-user');
-    }
 
-
-  
     useEffect(() => {
       window.addEventListener(
         "resize",
@@ -388,28 +405,41 @@ export default function AdminUsers() {
         </div>
       </CardHeader>
           <UserTable users={users} navigate={navigate} />
-         {/*  <div className={classes["usersInEventContainer"]}>
-            {users.map((user) => (
-                <div key={user.email} className={classes["userInEvent"]}>
-                <Avatar
-                    src={user.avatar}
-                    alt={user.name}
-                    className="w-auto h-auto "
-                />
-                <div className={[classes["emailContainer"]]}>
-                <p>{user.email}</p>
-                <div className={[classes["buttonContainer"]]}>
-                <button 
-                onClick={editPermitClick}
-                className={[classes["editPermitsButton"]]}>
-                Editar permisos
-                </button>
-
-                </div>
-              </div>
-                </div>
-            ))}
-          </div> */}
+          <div className="flex justify-center items-center my-12">
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleFirstPage}
+        >
+          <ChevronDoubleLeftIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handlePrevPage}
+        >
+          <ChevronLeftIcon className="h-6 w-6" />
+        </Button>
+        <Typography children={page + 1} className="mx-8 text-white" />
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleNextPage}
+        >
+          <ChevronRightIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleLastPage}
+        >
+          <ChevronDoubleRightIcon className="h-6 w-6" />
+        </Button>
+          </div>
     </div>
     </div>
   );

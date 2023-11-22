@@ -61,8 +61,8 @@ function OrderTable( { orders }) {
           const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
   
           return (
-            <Card className="h-full w-2/3 m-auto mt-5 border-2 border-dark-blue shadow-lg" key={index}>
-              <CardHeader floated={false} shadow={false} className="rounded-none">
+            <Card className="h-full w-2/3 m-auto mt-5 border-2 border-dark-blue shadow-lg rounded-[10px] md:overflow-auto" key={index}>
+              <CardHeader floated={false}  className="rounded-md outline-double p-3">
                 <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
                   <div>
                     <Typography variant="h5" className='text-blueCapas'>

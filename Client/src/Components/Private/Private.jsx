@@ -1,13 +1,30 @@
 import { useUserContext } from '../../Context/userContext';
 import { Navigate } from 'react-router-dom';
+import { userService } from '../../Services/userService';
+import { useEffect, useState } from 'react';
 
-const PrivateRoute = ({role, children }) => {
-    const { token, user } = useUserContext();
+const PrivateRoute = ({neededPermits, children }) => {
+    const [hasPermission, setHasPermission] = useState(true);
+    const { token } = useUserContext();
+
     
-    if(!token) return <Navigate replace to="/"/>;
-    if(!user || !user.permits.some(permit => permit.name === role)) return <Navigate replace to="*"/>;
+    useEffect(() => {
+        
+        const verifyPermits = async () => {
+            const { permits } = await userService.verifyToken(token);
+            if(permits) {
+                let permitList = permits.map(permit => permit.name);
+                if(!neededPermits.some(permit => permitList.includes(permit))) {
+                    console.log("No tienes permisos para acceder a esta página");
+                    setHasPermission(false);
+                }
+            }
+        }
 
-    return children;
+        verifyPermits();
+    }, [neededPermits]);
+
+    return hasPermission ? children : <Navigate to="*" />;
 }
 
 export default PrivateRoute;
