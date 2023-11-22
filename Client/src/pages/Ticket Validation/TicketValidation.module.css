@@ -15,7 +15,7 @@
 
 .codeTicketContainer
 {
-    @apply px-20 w-[40%] h-max rounded-lg bg-transparent outline border-2 border-yellowCapas 
+    @apply px-20 w-[40%] h-max rounded-lg bg-transparent outline border-2 border-yellowCapas
 }
 
 .qrContainer
