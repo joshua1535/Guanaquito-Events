@@ -53,7 +53,6 @@ export const UserProvider = (props) => {
             
             } catch (error) {
                 console.error(error);
-                console.error("Error in login");
             } finally {
             
                 return status;
