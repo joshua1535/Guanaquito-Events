@@ -175,11 +175,29 @@ const profileMenuItems = [
     }, [token]);
 
     useEffect(() => {
-      console.log(event);
-      console.log("Minutes")
-      console.log (register?.remainingMinutes);
-      console.log("Seconds")
-      console.log (register?.remainingSeconds);
+
+      const interval = setInterval(() => {
+        if(register != null){
+          if(register.remainingSeconds > 0){
+            setRegister({
+              ...register,
+              remainingSeconds: register.remainingSeconds - 1
+            });
+          }else{
+            if(register.remainingMinutes > 0){
+              setRegister({
+                ...register,
+                remainingMinutes: register.remainingMinutes - 1,
+                remainingSeconds: 59
+              });
+            }else{
+              clearInterval(interval);
+            }
+          }
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+      
       
     }, [event, register]);
 
