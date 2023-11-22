@@ -26,6 +26,7 @@
     "react-router-dom": "^6.14.1",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
+    "sonner": "^1.2.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

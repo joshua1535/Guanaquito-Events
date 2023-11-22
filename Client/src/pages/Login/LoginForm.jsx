@@ -8,11 +8,16 @@ import { useUserContext } from '../../Context/userContext';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+import { Toaster, toast } from 'sonner';
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+
 const LoginForm = () => {
 
     const navigate = useNavigate();
 
     const { login, token, user } = useUserContext();
+
+    const notifyError = () => toast.error('Usuario o contraseña incorrectos');
 
     useEffect(() => {
     
@@ -64,6 +69,18 @@ const LoginForm = () => {
 
         const logged = await login(identifier, password);
 
+        if(!logged){
+            toast.error('Usuario o contraseña incorrectos', {
+                duration: 2000,
+                icon: <XCircleIcon style={{color: "red"}} />,
+            });
+        }else{
+            toast.success('Bienvenido', { 
+                duration: 2000,
+                icon: <CheckCircleIcon style={{color: "green"}} />,
+            });
+        };
+        
         setError(!logged);
     
         setIdentifier("");
@@ -81,6 +98,7 @@ const LoginForm = () => {
 
     return (
         <div className={classes["generalContainer"]}>
+            <Toaster />
             <form onSubmit={onSubmitHandler}>
                 <div className={classes["inputsContainer"]} >
                     <img className={classes["logoImg"]} src={logo} />
@@ -123,11 +141,10 @@ const LoginForm = () => {
 
                         <button
                             type='button'
-                            onClick={registerHandler}
+                            onClick={() => onSubmitHandler}
                             className={classes["buttonlogingoogle"]}>
                             <span>Registrarse</span>
                         </button>
-
                     </div>
                 </div>
             </form>
