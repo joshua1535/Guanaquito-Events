@@ -17,23 +17,28 @@ const LoginForm = () => {
     useEffect(() => {
     
         if (token) {
-            
             if(user){
-
-                if(user.permits.some(permit => permit.name === 'Admin')){
+                
+                if(user.permitList.some(permit => permit === 'Admin')){
                     return navigate('/admin-users')
-                }else if(user.permits.some(permit => permit.name === 'Event Administrator')){
-                    return navigate('/admin-event/')
-                }else if(user.permits.some(permit => permit.name === 'Ticket Validator')){
-                    return navigate('/admin-scanner')
-                }else if(user.permits.some(permit => permit.name === 'Stadistics')){
-                    return navigate('/admin-graphs')
-                }else if(user.permits.some(permit => permit.name === 'Client')){
-                    return navigate('/home')
                 }
 
-            }
+                if(user.permitList.some(permit => permit=== 'Event Administrator')){
+                    return navigate('/admin-event/')
+                }
 
+                if(user.permitList.some(permit => permit=== 'Ticket Validator')){
+                    return navigate('/admin-scanner')
+                }
+
+                if(user.permitList.some(permit => permit === 'Stadistics')){
+                    return navigate('/admin-graphs')
+                }
+
+                if(user.permitList.some(permit => permit === 'Client')){
+                    return navigate('/home')
+                }
+            }
         }
     
     }, [token, user]);
@@ -104,7 +109,7 @@ const LoginForm = () => {
                             placeholder="*****************"
                             onChange={(e) => onChange(e, setPassword)}/>
                         <div className={classes["inputOptionsContainer"]}>
-                            <input type="checkbox" className="form-checkbox" />
+                            <input type="checkbox" class="form-checkbox" />
                             <p className={classes["rememberMeTitle"]} >Recuerdame</p>
                             <button
                                 onClick={forgotpasswordHandler}

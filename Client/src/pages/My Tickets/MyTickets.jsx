@@ -4,7 +4,6 @@ import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Link } from 'react-router-dom';
 import {
     Carousel,
     Navbar,
@@ -103,7 +102,6 @@ function TicketItem({ ticket }) {
   
     return (
       <div className={[classes["cardTicketContainer"]]}>
-
          <div >
             {!available ? (
               <Chip variant='ghost' color="red" value='Canjeado' className="m-auto p-2 font-text">
@@ -482,6 +480,7 @@ export default function MyTickets(){
                 </Button>
               </Link>
             </div>
+
             <div className={[classes["cardContainer"]]}>
             {tickets.map((ticket, index) => (
           <TicketItem key={ticket.id} ticket={ticket} />

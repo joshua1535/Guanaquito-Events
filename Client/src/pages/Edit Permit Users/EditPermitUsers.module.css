@@ -58,7 +58,7 @@
 {}
 
 .listPermitsContainer {
-    @apply flex flex-col gap-4 sm:w-1/2 font-text text-white 
+    @apply flex flex-col gap-4 sm:w-1/2 font-text text-white
 
 }
 
