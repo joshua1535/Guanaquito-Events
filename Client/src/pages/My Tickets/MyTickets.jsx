@@ -474,6 +474,14 @@ export default function MyTickets(){
       </header>
         <div className={[classes["bodyContainer"]]}>
             <h1 className={[classes["title"]]}>Mis Tickets</h1>
+            {/* Boton para poder ir a transferir tickets */}
+            <div className='flex justify-center mt-3'>
+              <Link to="/transferticket">
+                <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 md:mb-5 hover:bg-yellow-700'>
+                  Transferir Tickets
+                </Button>
+              </Link>
+            </div>
 
             <div className={[classes["cardContainer"]]}>
             {tickets.map((ticket, index) => (
