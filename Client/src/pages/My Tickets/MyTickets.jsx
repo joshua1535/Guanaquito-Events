@@ -4,7 +4,6 @@ import logo from '../../assets/logo.png';
 import imgtemplate from '../../assets/loginimg.png';
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Link } from 'react-router-dom';
 import {
     Carousel,
     Navbar,
@@ -29,8 +28,9 @@ import {
     ChevronDoubleLeftIcon,
     ChevronRightIcon,
   } from "@heroicons/react/24/outline";
-  import { useNavigate } from 'react-router-dom';
-  import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+  
+import { useNavigate } from 'react-router-dom';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { ticketService } from '../../Services/ticketService';
 import { v4 as uuidv4 } from 'uuid';
@@ -103,7 +103,6 @@ function TicketItem({ ticket }) {
   
     return (
       <div className={[classes["cardTicketContainer"]]}>
-
          <div >
             {!available ? (
               <Chip variant='ghost' color="red" value='Canjeado' className="m-auto p-2 font-text">
@@ -230,15 +229,17 @@ const profileMenuItems = [
     label: "Sign Out",
   },
 ];
- 
+
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
+  const { logout } = useUserContext();
 
   const navigate = useNavigate();
   const handleMenu = (label) => {
     if (label === "Sign Out") {
       closeMenu();
+      logout();
       navigate("/");
       
     }
@@ -320,18 +321,17 @@ function ProfileMenu() {
 }
 
 
- 
+
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
+
   const triggers = {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
 }
- 
-  
- 
+
+
 // nav list component
 const navListItems = [
   {
@@ -341,7 +341,7 @@ const navListItems = [
     label: "Mis tickets",
   },
 ];
- 
+
 function NavList() {
   const navigate = useNavigate();
   
@@ -477,11 +477,12 @@ export default function MyTickets(){
             {/* Boton para poder ir a transferir tickets */}
             <div className='flex justify-center mt-3'>
               <Link to="/transferticket">
-                <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 hover:bg-yellow-700'>
+                <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 md:mb-5 hover:bg-yellow-700'>
                   Transferir Tickets
                 </Button>
               </Link>
             </div>
+
             <div className={[classes["cardContainer"]]}>
             {tickets.map((ticket, index) => (
           <TicketItem key={ticket.id} ticket={ticket} />

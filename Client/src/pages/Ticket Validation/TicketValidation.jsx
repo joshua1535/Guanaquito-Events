@@ -170,7 +170,7 @@ function ProfileMenu() {
           </div>
         </Navbar>
         </header>
-    <div className="flex flex-col items-center px-4 sm:px-0">
+    <div className="flex flex-col items-center px-4 sm:px-0 ">
                 <div className='w-1/3 
                 PC-1920*1080:w-1/3
                 PC-1366*768:w-1/3
@@ -207,16 +207,16 @@ function ProfileMenu() {
 
             
             <div className={[classes["codeTicketContainer"]]}>
-              <p className={[classes["titleEventText"]]}>Codigo del Ticket</p>  
+              <p className={[classes["titleEventText"]]}>Código del Ticket</p>  
               <input 
                       placeholder={'Codigo'} 
-                      className='w-full md:w-full my-3  rounded-md p-2 bg-white' 
+                      className='w-full my-3 text-center  rounded-md p-2 bg-white' 
                       type='text'                 
                   /> 
                 <div className='flex justify-center'>
                 <button
                     style={ { fontFamily: "Poppins" }}
-                   className='w-44 h-10 px-8 mb-5 mr-0 md:mr-4 rounded-lg text-white bg-Orange'>
+                    className='w-44 h-10 px-8 mb-5 mr-0 md:mr-4 rounded-lg text-white bg-Orange hover:bg-yellow-700'>
                       Validar
                 </button>
                 </div>
