@@ -6,18 +6,22 @@ const UserContext = React.createContext();
 export const UserProvider = (props) => {
 
     const [token, setToken] = useState(getToken());
-    const [user, setUser] = useState(undefined);
+    const [user, setUser] = useState();
     const [tokenVerified, setTokenVerified] = useState(false);
 
     useEffect(() => {
+        
         const verifyTokenAsync = async () => {
             const lsToken = getToken();
 
             if(lsToken && !tokenVerified) {
+                
                 const { email, permits } = await userService.verifyToken(lsToken);
                 if(email && permits) {
-                    setUser({ email, permits });
+                    let permitList = permits.map(permit => permit.name);
+                    setUser({ email, permitList });
                     setTokenAll(lsToken);
+                    console.log(permitList);
                 }
                 setTokenVerified(true);
             }
