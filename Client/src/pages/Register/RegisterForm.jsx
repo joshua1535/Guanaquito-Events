@@ -11,10 +11,6 @@ const RegisterForm = () => {
 
     const navigate = useNavigate();
 
-    const loginHandler = () => {
-        navigate('/');
-    };
-
     const { signup } = useUserContext();
 
     const [email, setEmail] = useState('');
@@ -72,7 +68,7 @@ const RegisterForm = () => {
 
                     <div className={classes["loginContainer"]}>
 
-                    <button onClick={loginHandler} className={classes["buttonlogin"]}>
+                    <button type="submit" className={classes["buttonlogin"]}>
                         Crear cuenta
                     </button>        
 
