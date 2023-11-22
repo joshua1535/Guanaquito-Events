@@ -46,7 +46,7 @@ export const registerService = {
         console.log ("transactionCode: " + transactionCode);
         console.log ("token: " + token);
         try {
-          const response = await fetch('http://localhost:8080/register/update/transaction-code', {
+          const response = await fetch('https://software-api.onrender.com/register/update/transaction-code', {
             method: 'PATCH',
             body: JSON.stringify({
                 transactionCode: transactionCode,
@@ -77,7 +77,7 @@ export const registerService = {
         console.log("transactionCode: " + transactionCode);
         console.log("token: " + token);
         try {
-          const response = await fetch(`http://localhost:8080/register/status?ticketCode=${ticketCode}&transactionCode=${transactionCode}`, {
+          const response = await fetch(`https://software-api.onrender.com/register/status?ticketCode=${ticketCode}&transactionCode=${transactionCode}`, {
             method: 'GET',
             headers: {
               "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export const registerService = {
 
        validateTicket  : async function (transactionCode, token) {
         try {
-          const response = await fetch('http://localhost:8080/register/validate-ticket', {
+          const response = await fetch('https://software-api.onrender.com/register/validate-ticket', {
             method: 'PATCH',
             body: JSON.stringify({
                 transactionCode: transactionCode,

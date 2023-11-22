@@ -29,7 +29,7 @@ import {
     ChevronRightIcon,
   } from "@heroicons/react/24/outline";
   
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { ticketService } from '../../Services/ticketService';
