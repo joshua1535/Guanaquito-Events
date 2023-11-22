@@ -96,7 +96,6 @@ const LoginForm = () => {
 
     const registerHandler = (e) => {
         
-        e.stopPropagation();
         navigate('/register');
     
     };
@@ -146,7 +145,7 @@ const LoginForm = () => {
 
                         <button
                             type='button'
-                            onClick={() => onSubmitHandler}
+                            onClick={() => registerHandler()}
                             className={classes["buttonlogingoogle"]}>
                             <span>Registrarse</span>
                         </button>
