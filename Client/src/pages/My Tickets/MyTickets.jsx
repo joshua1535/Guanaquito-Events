@@ -477,7 +477,7 @@ export default function MyTickets(){
             {/* Boton para poder ir a transferir tickets */}
             <div className='flex justify-center mt-3'>
               <Link to="/transferticket">
-                <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 hover:bg-yellow-700'>
+                <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 md:mb-5 hover:bg-yellow-700'>
                   Transferir Tickets
                 </Button>
               </Link>
