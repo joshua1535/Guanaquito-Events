@@ -28,8 +28,9 @@ import {
     ChevronDoubleLeftIcon,
     ChevronRightIcon,
   } from "@heroicons/react/24/outline";
-  import { useNavigate } from 'react-router-dom';
-  import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+  
+import { useNavigate } from 'react-router-dom';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { ticketService } from '../../Services/ticketService';
 import { v4 as uuidv4 } from 'uuid';
@@ -228,15 +229,17 @@ const profileMenuItems = [
     label: "Sign Out",
   },
 ];
- 
+
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
+  const { logout } = useUserContext();
 
   const navigate = useNavigate();
   const handleMenu = (label) => {
     if (label === "Sign Out") {
       closeMenu();
+      logout();
       navigate("/");
       
     }
@@ -318,18 +321,17 @@ function ProfileMenu() {
 }
 
 
- 
+
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
+
   const triggers = {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
 }
- 
-  
- 
+
+
 // nav list component
 const navListItems = [
   {
@@ -339,7 +341,7 @@ const navListItems = [
     label: "Mis tickets",
   },
 ];
- 
+
 function NavList() {
   const navigate = useNavigate();
   
