@@ -553,7 +553,7 @@ useEffect(() => {
               >
                 <div className="flex justify-center ">
                 <Avatar
-                  src="https://s3.amazonaws.com/moonup/production/uploads/1670331935393-6312579fc7577b68d90a7646.png"
+                  src={userfiltred.profilePicture}
                   
                   className="w-auto h-auto 
                   PC-1920*1080:w-screen
