@@ -15,7 +15,7 @@
 
 .codeTicketContainer
 {
-    @apply px-20 w-6/7 h-max rounded-lg bg-dark-blue border-dashed border-2 border-yellowCapas
+    @apply px-20 w-[40%] h-max rounded-lg bg-transparent outline border-2 border-yellowCapas 
 }
 
 .qrContainer
@@ -57,7 +57,7 @@
 .titleEventText
 {
     font-family: 'Poppins'; 
-    @apply text-Orange text-sm sm:text-lg md:text-xl lg:text-2xl mt-4
+    @apply text-Orange text-sm sm:text-lg md:text-xl lg:text-2xl mt-4 md:flex md:justify-center
     PC-1920*1080:text-3xl 
     PC-1600*900:text-3xl
     PC-1366*768:text-3xl

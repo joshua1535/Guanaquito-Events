@@ -207,10 +207,10 @@ function ProfileMenu() {
 
             
             <div className={[classes["codeTicketContainer"]]}>
-              <p className={[classes["titleEventText"]]}>Codigo del Ticket</p>  
+              <p className={[classes["titleEventText"]]}>Código del Ticket</p>  
               <input 
                       placeholder={'Codigo'} 
-                      className='w-full md:w-full my-3  rounded-md p-2 bg-white' 
+                      className='w-full my-3 text-center  rounded-md p-2 bg-white' 
                       type='text'                 
                   /> 
                 <div className='flex justify-center'>
