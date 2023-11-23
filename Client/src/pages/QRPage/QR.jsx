@@ -4,7 +4,6 @@ import logo from '../../assets/logo.png';
 import classes from './QR.module.css';
 import {
   Navbar,
-  MobileNav,
   Typography,
   Button,
   Menu,
@@ -23,8 +22,6 @@ import QRCode from "react-qr-code";
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
-import { ticketService } from '../../Services/ticketService';
-import { v4 as uuidv4 } from 'uuid';
 import { registerService } from '../../Services/registerService';
 
 
@@ -252,6 +249,7 @@ const profileMenuItems = [
       </Navbar>
     </header>
     <div className="flex flex-col items-center justify-center px-4 sm:px-0">
+            <p className={[classes["titleText"]]}>CÓDIGO/QR PARA CANJEAR TU TICKET</p>
             <QRCode
               value={transactionCode.toString()}
               size={300}
@@ -260,7 +258,7 @@ const profileMenuItems = [
               level={"L"}
               includeMargin={false}
               renderAs={"svg"}
-              className='mt-32 mb-10'
+              className='mt-24 mb-10'
             >
             </QRCode>
             <p className={[classes["codeText"]]}>{transactionCode.toString()}</p>

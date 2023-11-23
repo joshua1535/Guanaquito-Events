@@ -67,8 +67,54 @@ export default function TicketItem({ ticket }) {
 
     };
 
-    const transferTicketHandler = () => {
-      navigate("/transferticket");
+    //Funcion para generar el código de transferencia para el ticket, es el que ingresará la otra persona para recibir el ticket
+    const transferTicketHandler = (eventCode, ticketCode, ticketTier) => {
+
+        registerService.getRegisterByTicketCode(ticketCode, token)
+      .then((register) => {
+         //Obtener el primer elemento del array
+        register = register[0];
+        console.log(register);
+         //Si el registro del ticket no existe
+         if (register === undefined) {
+          const uuid = uuidv4();
+          registerService.saveTicket(ticketCode, uuid, token);
+          navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
+        }
+        //Si el registro del ticket existe
+        
+        registerService.getStatus(token, ticketCode, register?.transactionCode)
+        .then((status) => {
+
+          console.log(status.remainingMinutes);
+          console.log(status.remainingSeconds);
+          console.log(register.transactionCode);
+       
+        //Si el ticket ya fue validado, no se puede volver a validar
+        if(register.validationTime !== null){
+          alert('El ticket ya fue validado');
+          return;
+        }
+
+        //Si el QR ya fue generado, pero aun tiene tiempo de validez
+        else if (status.remainingMinutes !== null && (register.remainingMinutes !== 0 && register.remainingSeconds !== 0) && status.remainingSeconds !== null &&  register.transactionCode !== null) {
+          console.log ("El QR ya fue generado, pero aun tiene tiempo de validez");
+          navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${register.transactionCode}`);
+        }
+
+        //Si el QR ya fue generado, y ya expiró
+        else if (status.remainingMinutes === null  && status.remainingSeconds === null &&  register.transactionCode !== null) {
+          const uuid = uuidv4();
+          registerService.updateTransactionCode(uuid.toString(), ticketCode, token);
+          navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
+        }
+      }
+      
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+    })
     };
   
     return (
@@ -163,7 +209,7 @@ export default function TicketItem({ ticket }) {
               )}
                 {available && (
                 <Button
-                    onClick={() => transferTicketHandler()}
+                    onClick={() => transferTicketHandler(ticket.eventCode, ticket.ticketCode, ticketTier)}
                     variant="outlined"
                     color="blue"
                     className="font-text ml-2 w-auto h-auto"
