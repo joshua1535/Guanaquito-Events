@@ -15,7 +15,7 @@ import {
   Option,
 } from "@material-tailwind/react";
 import logo from "../../assets/logo.png";
-import imgtemplate from "../../assets/loginimg.png";
+import imgtemplate from "../../assets/loginimg.jpg";
 import classes from "./Stats.module.css";
 import {
     ChevronDownIcon,

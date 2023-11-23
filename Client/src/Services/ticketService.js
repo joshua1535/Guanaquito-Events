@@ -33,6 +33,19 @@ export const ticketService = {
         console.error(`Error obteniendo los tickets: `, error);
         throw error;
       }
+    },
+
+    transferTicket: async function(ticketData, token) {
+      try {
+        const response = await API.patch(`/ticket/transfer`, ticketData, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+      } catch (error) {
+        console.error(`Error transferiendo el ticket: `, error);
+        throw error;
+      }
     }
   };
   

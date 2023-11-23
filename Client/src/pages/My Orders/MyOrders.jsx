@@ -2,23 +2,8 @@ import React, { useState } from 'react';
 import './MyOrders.module.css';
 import classes from './MyOrders.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
 import { useEffect } from "react";
-import {
-    Navbar,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-    IconButton,
-    Card,
-    CardHeader,
-    Typography,
-    Button,
-    CardBody,
-    Avatar,
-    Collapse,
-  } from "@material-tailwind/react";
+import {Navbar,Menu,MenuHandler,MenuList,MenuItem,IconButton,Typography,Button,Avatar,Collapse} from "@material-tailwind/react";
   import {
     ChevronDownIcon,
     Bars2Icon,
@@ -32,109 +17,8 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { orderService } from '../../Services/orderService';
 
-
-
-const TABLE_HEAD = ["Evento", "Fecha", "Localidad", "Precio", "Total"];
-
-
-function OrderTable( { orders }) {
-
-  const TABLE_ROWS = orders.map((order, index) => ({
-    numeroOrden: order.orderCode,
-    fechaOrden: order.orderDate,
-    total : order.totalOrder,
-    tickets: order.tickets.map(ticket => ({
-      evento: ticket.eventTitle,
-      fecha: ticket.eventDate,
-      hora: ticket.eventTime,
-      localidad: ticket.ticketTier,
-      precio: ticket.ticketPrice,
-      img: ticket.eventPicture,
-    })),
-  }));
-
-    return (
-      <>
-        {TABLE_ROWS.map((order, index) => {
-          const total = order.tickets.reduce((total, ticket) => total + ticket.precio, 0);
-          const isLast = index === TABLE_ROWS.length - 1;
-          const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
-  
-          return (
-            <Card className="h-full w-2/3 m-auto mt-5 border-2 border-dark-blue shadow-lg rounded-[10px] md:overflow-auto" key={index}>
-              <CardHeader floated={false}  className="rounded-md outline-double p-3">
-                <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
-                  <div>
-                    <Typography variant="h5" className='text-blueCapas'>
-                      Orden #{order.numeroOrden}
-                    </Typography>
-                    <Typography color="gray" className="mt-1 font-normal">
-                      Fecha: {order.fechaOrden}
-                    </Typography>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardBody className="overflow-scroll px-0">
-                <table className="w-full min-w-max table-auto text-left">
-                  <thead>
-                    <tr>
-                      {TABLE_HEAD.map((head) => (
-                        <th key={head} className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                          <Typography
-                            variant="small"
-                            className="font-normal leading-none text-blueCapas"
-                          >
-                            {head}
-                          </Typography>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {order.tickets.map((ticket, ticketIndex) => (
-                      <tr key={ticketIndex}>
-                        <td className={classes}>
-                            <div className="flex items-center gap-4">
-                            <Avatar src={ticket.img} />
-                          <Typography variant="small" color="blue-gray" className="font-bold">
-                            {ticket.evento}
-                          </Typography>
-                          </div>
-                        </td>
-                        <td className={`${classes} bg-blue-gray-50/50`}>
-                          <Typography variant="small" color="blue-gray" className="font-normal">
-                            {ticket.fecha}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography variant="small" color="blue-gray" className="font-normal">
-                            {ticket.localidad}
-                          </Typography>
-                        </td>
-                        <td className={`${classes} bg-blue-gray-50/50`}>
-                          <Typography variant="small" color="blue-gray" className="font-normal">
-                            ${ticket.precio}
-                          </Typography>
-                        </td>
-                      </tr>
-                    ))}
-                    <tr>
-                      <td className="p-4" colSpan={TABLE_HEAD.length - 1}></td>
-                      <td className="p-4">
-                        <Typography variant="small" color="blue-gray" className="font-bold">
-                          ${total}
-                        </Typography>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </CardBody>
-            </Card>
-          );
-        })}
-      </>
-    );
-  }
+import OrderTable from '../../Components/OrderTable';
+import Footer from '../../Components/Footer';
 
 // profile menu component
 const profileMenuItems = [
@@ -447,39 +331,7 @@ export default function MyOrders(){
         </Button>
           </div>
             </div>
-      <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
-
-        <div className='relative mx-auto flex mb-5 items-center text-white'>        
-          <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
-          <Typography
-            as="a"
-            href="#"
-            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-          >
-            Guanaco Business
-          </Typography>
-        </div>
-        <p className='h-max w-max text-sm text-gray-500'>
-        © 2023 Copyright
-        </p>
-        <div className='flex justify-start content-start'>
-          </div>
-        <div className='flex justify-end content-end'>
-            <FaFacebook
-            className='mr-2 w-8 h-8'
-
-            />
-
-            <FaTwitter
-            className='mr-2 ml-2 w-8 h-8'
-            />
-            <FaInstagram 
-            className='mr-2 ml-2 w-8 h-8'
-            />
-
-        </div>
-
-      </footer>
+            <Footer />
     </div>
         );
     };

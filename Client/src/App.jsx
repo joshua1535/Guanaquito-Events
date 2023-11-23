@@ -28,6 +28,7 @@ import AdminGraphs from './pages/Admin Graphs/AdminGraphs';
 import StatsPage from './pages/Stats/Stats';
 import MyEvents from './pages/My Events/MyEvents';
 import Private from './Components/Private/Private';
+import ReceiveTicket from './pages/Receive Ticket/ReceiveTicket';
 
 
 function App() {
@@ -54,7 +55,8 @@ function App() {
           <Route path="/admin-event/eventpermit" element={<Private neededPermits={['Admin']}> <EventsPermit /> </Private>} />
           <Route path="/admin-event/modifystaff" element={<Private neededPermits={['Admin']}> <ModifyStaff /> </Private>} />
           <Route path="/qr/:eventCode/:ticketCode/tier/:ticketTier/register/:transactionCode" element={<QRPage />} />
-          <Route path="/transferticket" element={<Private neededPermits={['Client']}><TransferTicket /> </Private>} />  
+          <Route path="/transferticket/:eventCode/:ticketCode/tier/:ticketTier/register/:transactionCode" element={<Private neededPermits={['Client']}><TransferTicket /> </Private>} />  
+          <Route path="/receiveticket" element={<Private neededPermits={['Client']}><ReceiveTicket /> </Private>} />  
           <Route path="/admin-users" element={<Private neededPermits={['Admin']}> <AdminUsers /> </Private>} />
           <Route path="/admin-users/permits-user/:userCode" element={<Private neededPermits={['Admin']}> <EditPermitUsers /> </Private>} />
           <Route path="/admin-graphs" element={<Private neededPermits={['Stadistics']}> <AdminGraphs /> </Private>} />

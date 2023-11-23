@@ -1,7 +1,7 @@
 import logo from '../../assets/logo.png';
 import './LoginForm.module.css';
 import classes from './LoginForm.module.css';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import { useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '../../Context/userContext';
@@ -96,7 +96,6 @@ const LoginForm = () => {
 
     const registerHandler = (e) => {
         
-        e.stopPropagation();
         navigate('/register');
     
     };
@@ -146,7 +145,7 @@ const LoginForm = () => {
 
                         <button
                             type='button'
-                            onClick={() => onSubmitHandler}
+                            onClick={() => registerHandler()}
                             className={classes["buttonlogingoogle"]}>
                             <span>Registrarse</span>
                         </button>

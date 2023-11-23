@@ -1,31 +1,10 @@
 import './HomePage.module.css';
 import classes from './HomePage.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
 import React, { useState } from "react";
 import { useEffect } from "react";
-import {
-  Carousel,
-  Navbar,
-  Collapse,
-  Typography,
-  Button,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
-  Card,
-  IconButton,
-} from "@material-tailwind/react";
-import {
-  ChevronDownIcon,
-  Bars2Icon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ArrowLongRightIcon,
-  ArrowRightOnRectangleIcon,
-} from "@heroicons/react/24/outline";
+import {Carousel,Navbar,Collapse,Typography,Button,Menu,MenuHandler,MenuList,MenuItem,Avatar,Card,IconButton} from "@material-tailwind/react";
+import {ChevronDownIcon,Bars2Icon} from "@heroicons/react/24/outline";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -33,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
+import SliderCards from '../../Components/SliderCards';
+import Footer from '../../Components/Footer';
 
 const listEvents = [
   {
@@ -72,80 +53,6 @@ const listEvents = [
     img: "https://www.cultura.gob.sv/wp-content/uploads/2022/02/Ballet-naciola-105.png",
   },
 ];
-
-
-const cardData = [
-  { id: 1, title: 'CINE', imageUrl: 'https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2023/03/palomitas-sala-cine-2992264.jpg?tf=3840x' },
-  { id: 2, title: 'CONCIERTO', imageUrl: 'https://thumbs.dreamstime.com/b/muchedumbre-del-concierto-10447765.jpg' },
-  { id: 3, title: 'TEATRO', imageUrl: 'https://www.hoyesarte.com/wp-content/uploads/2009/08/teatro-2.jpg' },
-  { id: 4, title: 'DEPORTES', imageUrl: 'https://i.ytimg.com/vi/uGU1IztR5rg/maxresdefault.jpg' },
-  // Agrega más tarjetas si es necesario
-];
-
-const SliderCards = () => {
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    centerMode: true, // Habilita el centro del modo
-    centerPadding: '25%', // Ajusta el espacio para mostrar una porción de la siguiente tarjeta (25% en este caso)
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          arrows: false,
-          swipe: true,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          arrows: false,
-          swipe: true,
-          centerPadding: '20%', // Ajusta el espacio en dispositivos móviles
-        },
-      },
-    ],
-  };
-  const navigate = useNavigate();
-
-  const viewEventsHandler = () => {
-    navigate("/events");
-  };
-  
-
-  return (
-    <div className={[classes["sliderMobileContainer"]]}>
-
-      <Slider {...settings}>
-        {cardData.map((card) => (
-          <div key={card.id} className="p-4">
-            <div className="relative bg-white rounded shadow h-64 border-2 border-gray-300">
-              <img
-                src={card.imageUrl}
-                alt={card.title}
-                className="object-cover w-full h-full"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
-                <h2 className="text-lg font-bold">{card.title}</h2>
-              </div>
-            </div>
-          </div>
-        ))}
-      </Slider>
-      <button 
-      onClick={viewEventsHandler}
-      className={classes["viewMoreButtonMobile"]}>Ver todos</button>
-    </div>
-  );
-};
-
-
-
 
 // profile menu component
 const profileMenuItems = [
@@ -203,8 +110,6 @@ function ProfileMenu() {
 
   };
 
-  
-  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -258,18 +163,13 @@ function ProfileMenu() {
 }
 
 
- 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
   const triggers = {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
 }
- 
-  
- 
 // nav list component
 const navListItems = [
   {
@@ -279,11 +179,6 @@ const navListItems = [
     label: "Mis tickets",
   },
 ];
- 
-
-
-  
-
 
 function NavList() {
   const navigate = useNavigate();
@@ -332,8 +227,6 @@ export default function HomePage() {
   const [page, setPage] = useState(0); // Para controlar la página actual
   const [size] = useState(7); // Para controlar el tamaño de la página
 
-
-
   const navigate = useNavigate();
 
   const viewBuyTicketsHandler = (code) => {
@@ -344,61 +237,36 @@ export default function HomePage() {
     navigate("/events");
   };
   
-   
-  
   useEffect(() => {
-    if(token){
-      eventService.getCurrentEvents( page, size, token)
-          .then((data) => {
-            setEvents(data.content);
-          })
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          });
-          eventService.getEventsByCategory("CI",0, 6, token)
-          .then((data) => {
-            setRecentMoviesEvents(data.content);
-            console.log("soy las peliculas")
-            console.log(data.content);
-          })
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          });
-      eventService.getEventsByCategory("DE",0, 6, token)
-          .then((data) => {
-            setRecentSportsEvents(data.content);
-            console.log("soy los deportes")
-            console.log(data.content);
-          }
-          )
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          }
-          );
-      eventService.getEventsByCategory("MU",0, 6, token)
-          .then((data) => {
-            setRecentConcertsEvents(data.content);
-            console.log("soy los conciertos")
-            console.log(data.content);
-          }
-          )
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          }
-          );
-      eventService.getEventsByCategory("OB",0, 6, token)
-          .then((data) => {
-            setRecentTheaterEvents(data.content);
-            console.log("soy los teatros")
-            console.log(data.content);
-          }
-          )
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          }
-          );
+    const fetchEventsByCategory = async (category, setStateFunction) => {
+      try {
+        const data = await eventService.getEventsByCategory(category, 0, 6, token);
+        setStateFunction(data.content);
+        console.log(`Soy los ${category.toLowerCase()}`);
+        console.log(data.content);
+      } catch (error) {
+        console.error(`Hubo un error al obtener las eventos de la categoría ${category}:`, error);
       }
-  }, [token]); 
+    };
+  
+    const fetchData = async () => {
+      try {
+        if (token) {
+          const eventData = await eventService.getCurrentEvents(page, size, token);
+          setEvents(eventData.content);
+  
+          await fetchEventsByCategory("CI", setRecentMoviesEvents);
+          await fetchEventsByCategory("DE", setRecentSportsEvents);
+          await fetchEventsByCategory("MU", setRecentConcertsEvents);
+          await fetchEventsByCategory("OB", setRecentTheaterEvents);
+        }
+      } catch (error) {
+        console.error('Hubo un error al obtener los eventos:', error);
+      }
+    };
+  
+    fetchData();
+  }, [token, page, size]);
 
 
 
@@ -634,39 +502,7 @@ export default function HomePage() {
 
 </div>
 <SliderCards/>
-          <footer className=" bg-bluefooter text-white mt-5 py-4 px-6 text-center">
-
-          <div className='relative mx-auto flex mb-5 items-center text-white'>        
-            <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
-            <Typography
-              as="a"
-              href="#"
-              className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-            >
-              Guanaco Business
-            </Typography>
-          </div>
-          <p className='h-max w-max text-sm text-gray-500'>
-          © 2023 Copyright
-          </p>
-          <div className='flex justify-start content-start'>
-            </div>
-          <div className='flex justify-end content-end'>
-              <FaFacebook
-              className='mr-2 w-8 h-8'
-
-               />
-
-              <FaTwitter
-              className='mr-2 ml-2 w-8 h-8'
-              />
-              <FaInstagram 
-              className='mr-2 ml-2 w-8 h-8'
-              />
-
-          </div>
-
-          </footer>
+  <Footer/>
 </div>
       );
       
