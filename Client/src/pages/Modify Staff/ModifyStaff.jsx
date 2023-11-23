@@ -199,7 +199,7 @@ export default function ModifyStaff() {
     const [users, setUsers] = useState([]);
     const [usersValid, setUsersValid] = useState([]);
     const [page, setPage] = useState(0); // inicio de la pagina
-    const [size, setSize] = useState(5); 
+    const [size, setSize] = useState(500); 
 
     useEffect(() => {
       if(token){
