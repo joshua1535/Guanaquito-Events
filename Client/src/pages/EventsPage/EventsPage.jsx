@@ -13,6 +13,7 @@ import {
   MenuItem,
   Avatar,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import {
   ChevronDownIcon,
@@ -396,9 +397,9 @@ const EventsPage = () => {
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
-      </MobileNav>
+      </Collapse>
       </Navbar>
     </header>
       <div className="flex flex-col sm:flex-row h-screen bg-dark-blue">
