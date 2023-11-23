@@ -24,6 +24,9 @@ import { QrReader } from 'react-qr-reader';
 import { registerService } from '../../Services/registerService';
 import { useUserContext } from '../../Context/userContext';
 
+import { Toaster, toast } from 'sonner';
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+
 //profile menu component
 const profileMenuItems = [
   {
@@ -127,11 +130,21 @@ function ProfileMenu() {
       (res => {
         console.log(res);
         setValidated(true);
-        alert("Ticket validado con exito");
+
+        toast.success('Ticket validado con exito', { 
+          duration: 5000,
+          icon: <CheckCircleIcon style={{color: "green"}} />,
+          position: "top-right",
+      });
       })
       .catch(err => {
         setError(true);
-        alert("Ticket invalido");
+
+        toast.error('Ticket invalido', {
+          duration: 5000,
+          icon: <XCircleIcon style={{color: "red"}} />,
+          position: "top-right",
+        });
 
         console.log(err);
       }
@@ -154,6 +167,7 @@ function ProfileMenu() {
 
     return (
         <>
+        <Toaster />
         <header className={[classes["headerContainer"]]}>
         <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
         <div className={[classes["headerTypography"]]}>
