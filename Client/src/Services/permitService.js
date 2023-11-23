@@ -52,7 +52,7 @@ export const permitService = {
   
   revokePermitToUser: async function(userCode, permitCode, token) {
     try {
-      const response = await fetch('http://localhost:8080/permit/delete',{
+      const response = await fetch('https://software-api.onrender.com/permit/delete',{
         "method": "DELETE",
         "headers": {
           "Content-Type": "application/json",
