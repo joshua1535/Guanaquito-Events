@@ -18,7 +18,7 @@ export const eventService = {
         }
     },
 
-    getAllEvents: async function (token) {
+    getAllEvents: async function (token, page, size) {
         try {
             const response = await API.get("/event/all", {
                 params: {
