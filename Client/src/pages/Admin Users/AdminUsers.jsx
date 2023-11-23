@@ -1,67 +1,23 @@
 import React, { useState, useEffect } from "react";
-import {
-  Carousel,
-  Navbar,
-  Collapse,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
-  IconButton,
-  Select,
-  Option,
-  Card,
-  CardHeader,
-  Input,
-  Typography,
-  Button,
-  CardBody,
-  Chip,
-  CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Tooltip,
-} from "@material-tailwind/react";
+import {Navbar,Menu,MenuHandler,MenuList,MenuItem,Avatar,IconButton,Card,CardHeader,Input,Typography,Button,CardBody,Chip,CardFooter,Tabs,TabsHeader,Tab,Tooltip} from "@material-tailwind/react";
 import logo from "../../assets/logo.png";
 import imgtemplate from "../../assets/loginimg.png";
 import classes from "./AdminUsers.module.css";
 import {
     ChevronDownIcon,
-    Bars2Icon,
-    ArrowLeftIcon,
     ChevronDoubleRightIcon,
     ChevronRightIcon,
     ChevronLeftIcon,
     ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import { userService } from "../../Services/userService";
 import { permitService } from "../../Services/permitService";
 import { useUserContext } from "../../Context/userContext";
 
 
-
-const TABS = [
-  {
-    label: "Todos",
-    value: "todos",
-    
-  },
-  {
-    label: "Clientes",
-    value: "clientes",
-  },
-  {
-    label: "Empleados",
-    value: "empleados",
-  },
-];
- 
 const TABLE_HEAD = ["Usuario", "Roles", "Estado", "Registrado desde", ""];
  
 
@@ -285,12 +241,6 @@ function ProfileMenu() {
   );
 }
 export default function AdminUsers() {
-    const [isNavOpen, setIsNavOpen] = useState(false);
-    const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
-    const [searchValue, setSearchValue] = useState("");
-    const [selectedUser, setSelectedUser] = useState("");
-    const [userList, setUserList] = useState([]);
-
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(0);
     const [lastPage, setLastPage] = useState(0);
@@ -315,29 +265,13 @@ export default function AdminUsers() {
         }
     }, [page, size, token, totalElements]); 
 
-
-  /*
-      useEffect(() => {
-        if(token){
-          userService.getAllUsersByPermit('9585336e-1449-4d5d-97f5-c2581e365169',page, size, token)
-              .then((data) => {
-                setUsers( data.content)        
-                  console.log('Los usuarios clientes obtenidas:', data.content);
-              })
-              .catch((error) => {
-                  console.error('Hubo un error al obtener los clientes:', error);
-              });
-          }
-      }, ['9585336e-1449-4d5d-97f5-c2581e365169', page, size,token]); 
-
-    */
   
       const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < lastPage) {
           setPage(newPage);
         }
       };
-      
+  
       const handleFirstPage = () => handlePageChange(0);
       const handlePrevPage = () => handlePageChange(page - 1);
       const handleNextPage = () => handlePageChange(page + 1);
@@ -354,9 +288,6 @@ export default function AdminUsers() {
     useEffect(() => {
       document.title = "Admin Users";
     }, []);
-
-    
-  
 
   return (
     <div className={[classes["generalContainer"]]}>
@@ -383,26 +314,6 @@ export default function AdminUsers() {
           </Typography>
         </div>
         <CardHeader floated={false} shadow={false} className="rounded-none bg-transparent Mobile-390*844:my-4 Mobile-280:my-4 ">
-        <div className="flex items-center justify-between gap-4  PC-1920*1080:flex-row PC-1600*900:flex-row PC PC-800*600:flex-col 
-        PC-640*480:flex-col Mobile-390*844:flex-col Mobile-280:flex-col bg-transparent">
-          <Tabs value="all" className="w-full md:w-max bg-blue-gray-200 rounded-lg">
-            <TabsHeader className="bg-transparent">
-              {TABS.map(({ label, value }) => (
-                <Tab 
-                  key={value} 
-                  value={value} 
-                  className="Mobile-390*844:text-md Mobile-280:text-xs PC-640*480:text-md PC-800*600:text-md"
-                  onClick={() => handleTabClick(value)}
-                >
-                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                </Tab>
-              ))}
-            </TabsHeader>
-          </Tabs>
-          <div className="w-full md:w-72">
-            <Input label="Search" icon={<MagnifyingGlassIcon className="h-5 w-5" />} />
-          </div>
-        </div>
       </CardHeader>
           <UserTable users={users} navigate={navigate} />
           <div className="flex justify-center items-center my-12">
