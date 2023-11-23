@@ -63,7 +63,7 @@ const filterItems = ( permitList)=> {
 
 export const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useUserContext();
+  const { user, logout } = useUserContext();
   const closeMenu = () => setIsMenuOpen(false);
   const navigate = useNavigate();
 
@@ -131,7 +131,9 @@ export const ProfileMenu = () => {
           {
             <MenuItem
             key={"Sign Out"}
-            onClick={() => handleMenu("/")}
+            onClick={() => {
+              logout();
+              handleMenu("/");}}
             className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10">
             
             <Typography
