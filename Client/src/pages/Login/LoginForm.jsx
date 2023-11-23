@@ -125,15 +125,6 @@ const LoginForm = () => {
                             type="password" 
                             placeholder="*****************"
                             onChange={(e) => onChange(e, setPassword)}/>
-                        <div className={classes["inputOptionsContainer"]}>
-                            <input type="checkbox" class="form-checkbox" />
-                            <p className={classes["rememberMeTitle"]} >Recuerdame</p>
-                            <button
-                                onClick={forgotpasswordHandler}
-                                className={classes["buttonforgotpassword"]} >
-                                <p className={classes["forgotpassword"]} > ¿Olvidaste tu contraseña?</p>
-                            </button>
-                        </div>
                     </div>
 
                     <div className={classes["loginContainer"]}>
