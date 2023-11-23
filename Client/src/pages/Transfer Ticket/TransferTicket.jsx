@@ -26,6 +26,7 @@ import {
     Bars2Icon,
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
+import { ticketService } from '../../Services/ticketService';
 
 
   const categoryOptions = [
@@ -35,7 +36,6 @@ import { useNavigate } from 'react-router-dom';
     "Música",
     // Añade más categorías según tus necesidades
   ];
-
 
 // profile menu component
 const profileMenuItems = [
@@ -91,8 +91,6 @@ function ProfileMenu() {
 
   };
 
-  
-  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -145,8 +143,6 @@ function ProfileMenu() {
   );
 }
 
-
- 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
  
@@ -155,8 +151,6 @@ function NavListMenu() {
     onMouseLeave: () => setIsMenuOpen(false),
   };
 }
- 
-  
  
 // nav list component
 const navListItems = [
@@ -169,10 +163,6 @@ const navListItems = [
 ];
  
 
-
-  
-
-
 function NavList() {
   const navigate = useNavigate();
   
@@ -183,7 +173,6 @@ function NavList() {
       navigate("/mytickets");
     }
   };
-
 
   return (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
@@ -212,6 +201,7 @@ export default function TransferTicket() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const [generateCode, setGenerateCode] = useState(false);
+    const [ticketCode, setTicketCode] = useState("");
 
     const navigate = useNavigate();
 
@@ -220,7 +210,17 @@ export default function TransferTicket() {
     }
 
     const confirmTransferHandler = () => {
+      ticketService.transferTicket({
+        newUserOwnerCode: "",
+        transferCode: ticketCode
+      }, token)
+      .then(response => {
+        console.log('Ticket transferido con exito: ', response);
         navigate('/mytickets');
+      })
+      .catch(error => {
+        console.log('Error al transferir ticket: ', error);
+      })
     }
 
     const generateCodeHandler = () => {
@@ -303,68 +303,11 @@ export default function TransferTicket() {
               id="eventName"
               type="text"
               color='white'
+              value={ticketCode}
+              onChange={ticket => setTicketCode(ticket.target.value)}
               placeholder="XXX-XXX-XXX"
             />
-          </div>
-          <div className={[classes["container3Inputs"]]}>
-            <div>
-              <label htmlFor="category" className={[classes["titleInputs"]]}>
-                Evento
-                
-              </label>
-                <Select className='text-white'>
-                    <Option>Coldplay Tour</Option>
-                    <Option>Torneo Smash Ultimate</Option>
-                    <Option>Super Mario Bros</Option>
-                    <Option>Real Madrid vs Barcelona</Option>
-                </Select>
-            </div>
-          </div>
-          <div className={[classes["container3Inputs"]]}>
-            <div>
-              <label htmlFor="category" className={[classes["titleInputs"]]}>
-                Tipo de Tier
-                
-              </label>
-                <Select className='text-white'>
-                    <Option>Zona Lateral</Option>
-                    <Option>VIP</Option>
-                    <Option>Platinum</Option>
-                </Select>
-            </div>
-            <button
-            type="button" // Change the type to "button"
-            onClick={generateCodeHandler}
-          >
-            <p className="text-yellowCapas underline">Generar código</p>
-          </button>
-          </div>  
-          
-          {generateCode && 
-                <div className={[classes["popupContainer"]]}>
-              <Dialog open={true} onClose={() => setGenerateCode(false)} className='Mobile-390*844:w-96 Mobile-280:w-96'>
-                <Dialog.Header className='font-text Mobile-390*844:text-base Mobile-280:text-sm'>
-                  Transferencia
-                </Dialog.Header>
-                <Dialog.Body className='font-text text-justify Mobile-390*844:text-sm Mobile-280:text-sm'>
-                Envia este código a la persona que te transferíra la titularidad del/os ticket(s)
-                <p className=' Mobile-390*844:text-base Mobile-390*844:pb-3 text-center text-Orange text-2xl'> 
-                  1589-842-0287
-                </p>
-                <div className=' sm:flex justify-center'>
-                  <p className=" text-center pr-1">Tiempo de expiración:</p>
-                  <p className="text-center font-bold text-red-600">10:00</p>
-
-                </div>
-                </Dialog.Body>
-                <Dialog.Footer className='flex justify-center font-text'>
-                  <Button onClick={() => setGenerateCode(false)} className='bg-Orange text-white'>
-                  Cerrar
-                  </Button>
-                </Dialog.Footer>
-              </Dialog>
-                </div>  
-            }     
+          </div>   
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
             <Button 
             onClick={backButtonHandler}

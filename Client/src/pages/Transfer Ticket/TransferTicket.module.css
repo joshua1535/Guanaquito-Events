@@ -40,8 +40,8 @@
 }
 
 .formContainer {
-    @apply flex items-center mt-10 justify-center h-auto m-auto w-2/3
-    Mobile-280:w-60 
+    @apply flex items-center mt-60 justify-center h-auto m-auto w-2/3
+    Mobile-280:w-60
 }
 
 .form {
