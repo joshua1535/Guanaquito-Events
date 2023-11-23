@@ -93,7 +93,7 @@ export default function EventsPermit() {
     }
 
     const handleBackClick = () => {
-      navigate(-1);
+      navigate('/admin-event/');
   }
 
     React.useEffect(() => {

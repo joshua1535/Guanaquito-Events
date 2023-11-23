@@ -1,34 +1,14 @@
 import './ModifyEvent.module.css';
 import classes from './ModifyEvent.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.jpg';
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import {
-    Carousel,
-    Navbar,
-    Collapse,
-    Typography,
-    Button,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-    Avatar,
-    Card,
-    IconButton,
-    Chip,
-    Input,
-    Select,
-    Option,
-  } from "@material-tailwind/react";
+import {Navbar,Typography,Button,Menu,MenuHandler,MenuList,MenuItem,Avatar,Input,Select,Option} from "@material-tailwind/react";
   import {
     ChevronDownIcon,
-    Bars2Icon,
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
@@ -66,17 +46,21 @@ export default function ModifyEvent() {
     const [eventName, setEventName] = useState();
     const [date, setDate] = useState();
     const [time, setTime] = useState();
-
-    //para tiers
-    const [tierName, setTierName] = useState();
-    const [tierPrice, setTierPrice] = useState();
-    const [tierCapacity, setTierCapacity] = useState();
+    const [sponsor, setSponsor] = useState();
+    const [sponsors, setSponsors] = useState([null]);
 
     useEffect(() => {
       if(token){
         eventService.getEventById(eventCode,token)
             .then((data) => {
-              setEvent(data);          
+              setEvent(data);  
+              setEventName(data.title);
+              setParticipants(data.involvedPeople.split(", "));
+              setSponsors(data.sponsors.split(", "));        
+              setImage(data.image);
+              setDate(data.date);
+              setDuration(data.duration);
+              setTime(data.time);
                 console.log('evento obtenido:', event);
             })
             .catch((error) => {
@@ -98,16 +82,13 @@ export default function ModifyEvent() {
         }
     }, [token]); 
 
-    const [sponsor, setSponsor] = useState();
-    const [sponsors, setSponsors] = useState([null]);
-
 
     const navigate = useNavigate();
 
     const handlesaveClick2 = () => {
       eventService.updateEvent({
           code: eventCode,
-          title: eventName,
+          title: eventName,  // Reemplaza esto con el valor del campo "Nombre del evento"
           involvedPeople: participants.join(", "),
           image: image,  // Reemplaza esto con el valor del campo "Foto del evento"
           date: date,  // Reemplaza esto con el valor del campo "Fecha"
@@ -344,7 +325,7 @@ export default function ModifyEvent() {
                   </label>
                   <Input
                     type="text"
-                    name="name"  // Asegúrate de darle un nombre al input, que corresponde a la propiedad que quieres cambiar
+                    name="name" 
                     color="white"
                     onChange={(event) => handleInputChange(location.code, event)}
                     placeholder={location.name}
@@ -467,7 +448,7 @@ export default function ModifyEvent() {
                 
               </label>
                 <Select
-                 onChange={value => setCategory(value)}
+                onChange={value => setCategory(value)}
                 className='text-white'>
                     <Option value="CI">Cine</Option>
                     <Option value="MU">Musica</Option>
@@ -490,7 +471,7 @@ export default function ModifyEvent() {
             </div>
             <div>
             <label htmlFor="duration" className={[classes["titleInputs"]]}>
-              Duración (segundos)
+              Duración (horas)
             </label>
             <Input
               id="duration"
@@ -531,7 +512,6 @@ export default function ModifyEvent() {
                 <Input
                   id="sponsors"
                   type="text"
-                  color='white'
                   value={sponsors.join(", ")}
                   disabled
                 />
@@ -573,6 +553,7 @@ export default function ModifyEvent() {
               id="eventPhoto"
               type="text"
               color='white'
+              value={image}
               placeholder="Seleccione una foto"
               onChange={event => setImage(event.target.value)}
             />

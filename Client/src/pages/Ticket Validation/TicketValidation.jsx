@@ -23,6 +23,9 @@ import { useNavigate } from 'react-router-dom';
 import { QrReader } from 'react-qr-reader';
 import { registerService } from '../../Services/registerService';
 import { useUserContext } from '../../Context/userContext';
+
+import { Toaster, toast } from 'sonner';
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Header from '../../Components/Header/Header';
 
   const TicketValidationPage = () => {
@@ -47,11 +50,21 @@ import Header from '../../Components/Header/Header';
       (res => {
         console.log(res);
         setValidated(true);
-        alert("Ticket validado con exito");
+
+        toast.success('Ticket validado con exito', { 
+          duration: 5000,
+          icon: <CheckCircleIcon style={{color: "green"}} />,
+          position: "top-right",
+      });
       })
       .catch(err => {
         setError(true);
-        alert("Ticket invalido");
+
+        toast.error('Ticket invalido', {
+          duration: 5000,
+          icon: <XCircleIcon style={{color: "red"}} />,
+          position: "top-right",
+        });
 
         console.log(err);
       }
@@ -75,6 +88,7 @@ import Header from '../../Components/Header/Header';
     return (
         <>
         <Header/>
+        <Toaster />
     <div className="flex flex-col items-center px-4 sm:px-0 ">
                 <div className='w-1/3 
                 PC-1920*1080:w-1/3

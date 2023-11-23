@@ -4,7 +4,7 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import logo from '../assets/logo.png'; // Asegúrate de reemplazar 'path_to_logo' con la ruta correcta al archivo de logo
 
 const Footer = ({additionalClasses}) => (
-  <footer className={`bg-bluefooter text-white mt-5 py-4 px-6 text-center ${additionalClasses}`}>
+  <footer className={`bg-bluefooter text-white mt-5 py-3 px-6 text-center ${additionalClasses}`}>
     <div className='relative mx-auto flex mb-5 items-center text-white'>        
       <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
       <Typography

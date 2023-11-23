@@ -66,7 +66,7 @@ export const eventService = {
     },
     changeEventStatus: async function(eventCode, token) {
         try {
-            const response = await fetch(`http://localhost:8080/event/status/${eventCode}`, {
+            const response = await fetch(`https://software-api.onrender.com/event/status/${eventCode}`, {
                 method: 'PATCH',
                 headers: {                    
                     'Authorization': `Bearer ${token}`

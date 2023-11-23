@@ -19,6 +19,8 @@ import { useUserContext } from '../../Context/userContext';
 import { ticketService } from '../../Services/ticketService';
 import TicketItem from "../../Components/TicketItem";
 import Footer from '../../Components/Footer';
+import monoGif from '../../assets/imgs/monoGif.gif';
+
 import Header from '../../Components/Header/Header';
 
 
@@ -99,11 +101,21 @@ export default function MyTickets(){
               </Link>
             </div>
 
-            <div className={[classes["cardContainer"]]}>
-            {tickets.map((ticket, index) => (
-          <TicketItem key={ticket.id} ticket={ticket} />
-        ))}
-      </div>
+            {tickets.length === 0 ? (
+              <div className="text-white text-3xl flex flex-col items-center">
+              <p className="mb-4">EL DIAVLO, NO HAY TICKETS</p>
+              <img className="mx-auto" src={monoGif} alt="GIF" />
+            </div>
+      ) : (
+        <div className={[classes["cardContainer"]]}>
+          {tickets.map((ticket, index) => (
+            <TicketItem key={ticket.id} ticket={ticket} />
+          ))}
+        </div>
+      )}
+      {/* Esconder la pagincacion si no hay tickets */}
+      {tickets.length > 0 && (
+        
       <div className="flex justify-center items-center my-12">
         <Button
           variant="outline"
@@ -139,6 +151,7 @@ export default function MyTickets(){
           <ChevronDoubleRightIcon className="h-6 w-6" />
         </Button>
           </div>
+      )}
         </div>
           <Footer/>    
         </div>

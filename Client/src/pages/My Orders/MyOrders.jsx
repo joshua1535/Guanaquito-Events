@@ -19,6 +19,7 @@ import { orderService } from '../../Services/orderService';
 
 import OrderTable from '../../Components/OrderTable';
 import Footer from '../../Components/Footer';
+import monoGif from '../../assets/imgs/monoGif.gif';
 import Header from '../../Components/Header/Header';
 
 export default function MyOrders(){
@@ -93,44 +94,54 @@ export default function MyOrders(){
         <Header/>
         <div className={[classes["bodyContainer"]]}>
         <h1 className={[classes["title"]]}>Mis Ordenes</h1>
-        <div className={[classes["tableContainer"]]}>
-            <OrderTable orders = {orders}/>
+        {orders.length === 0 ? (
+          <div className="text-white text-3xl flex flex-col items-center">
+          <p className="mb-4">EL DIAVLO, NO HAY ORDENES</p>
+          <img className="mx-auto" src={monoGif} alt="GIF" />
         </div>
-        <div className="flex justify-center items-center my-12">
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handleFirstPage}
-        >
-          <ChevronDoubleLeftIcon className="h-6 w-6" />
-        </Button>
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handlePreviousPage}
-        >
-          <ChevronLeftIcon className="h-6 w-6" />
-        </Button>
-        <Typography children={page + 1} className="mx-8 text-white" />
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handleNextPage}
-        >
-          <ChevronRightIcon className="h-6 w-6" />
-        </Button>
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handleLastPage}
-        >
-          <ChevronDoubleRightIcon className="h-6 w-6" />
-        </Button>
+        ) : (
+          <div className={[classes["tableContainer"]]}>
+            <OrderTable orders={orders} />
           </div>
+        )}
+        {/* Esconder la paginacion si no hay ordenes */}
+        {orders.length > 0 && (
+          <div className="flex justify-center items-center my-12">
+            <Button
+              variant="outline"
+              color="blue"
+              className="mr-2"
+              onClick={handleFirstPage}
+            >
+              <ChevronDoubleLeftIcon className="h-6 w-6" />
+            </Button>
+            <Button
+              variant="outline"
+              color="blue"
+              className="mr-2"
+              onClick={handlePreviousPage}
+            >
+              <ChevronLeftIcon className="h-6 w-6" />
+            </Button>
+            <Typography children={page + 1} className="mx-8 text-white" />
+            <Button
+              variant="outline"
+              color="blue"
+              className="mr-2"
+              onClick={handleNextPage}
+            >
+              <ChevronRightIcon className="h-6 w-6" />
+            </Button>
+            <Button
+              variant="outline"
+              color="blue"
+              className="mr-2"
+              onClick={handleLastPage}
+            >
+              <ChevronDoubleRightIcon className="h-6 w-6" />
+            </Button>
+          </div>
+        )}
             </div>
             <Footer />
     </div>
