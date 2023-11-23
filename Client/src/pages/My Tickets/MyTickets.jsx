@@ -19,6 +19,7 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { ticketService } from '../../Services/ticketService';
 import TicketItem from "../../Components/TicketItem";
+import Footer from '../../Components/Footer';
 
 // profile menu component
 const profileMenuItems = [
@@ -333,41 +334,7 @@ export default function MyTickets(){
         </Button>
           </div>
         </div>
-             <footer className=" bg-bluefooter text-white mt-5 py-4 px-6 text-center">
-
-        <div className='relative mx-auto flex mb-5 items-center text-white'>        
-          <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
-          <Typography
-          children="Guanaco Business"
-            as="a"
-            href="#"
-            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-          >
-            Guanaco Business
-          </Typography>
+          <Footer/>    
         </div>
-        <p className='h-max w-max text-sm text-gray-500'>
-        © 2023 Copyright
-        </p>
-        <div className='flex justify-start content-start'>
-          </div>
-        <div className='flex justify-end content-end'>
-            <FaFacebook
-            className='mr-2 w-8 h-8'
-
-            />
-
-            <FaTwitter
-            className='mr-2 ml-2 w-8 h-8'
-            />
-            <FaInstagram 
-            className='mr-2 ml-2 w-8 h-8'
-            />
-
-        </div>
-
-      </footer>
-            
-            </div>
         );
     };
