@@ -225,7 +225,7 @@ export default function HomePage() {
   const { user, token} = useUserContext();
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(0); // Para controlar la página actual
-  const [size] = useState(7); // Para controlar el tamaño de la página
+  const [size] = useState(12); // Para controlar el tamaño de la página
 
   const navigate = useNavigate();
 
@@ -240,7 +240,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchEventsByCategory = async (category, setStateFunction) => {
       try {
-        const data = await eventService.getEventsByCategory(category, 0, 6, token);
+        const data = await eventService.getEventsByCategory(category, 0, 12, token);
         setStateFunction(data.content);
         console.log(`Soy los ${category.toLowerCase()}`);
         console.log(data.content);
