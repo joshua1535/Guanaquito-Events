@@ -1,23 +1,29 @@
-import './MyTickets.module.css';
-import classes from './MyTickets.module.css';
+import './ReceiveTicket.module.css';
+import classes from './ReceiveTicket.module.css';
 import logo from '../../assets/logo.png';
-import React, { useState } from "react";
+import React from "react";
 import { useEffect } from "react";
-import {Navbar,Typography,Button,Menu,MenuHandler,MenuList,MenuItem,Avatar,IconButton,Collapse} from "@material-tailwind/react";
+import { useState } from "react";
+import {
+    Navbar,
+    Typography,
+    Button,
+    Menu,
+    MenuHandler,
+    MenuList,
+    MenuItem,
+    Avatar,
+    IconButton,
+    Input,
+    Collapse,
+  } from "@material-tailwind/react";
   import {
     ChevronDownIcon,
     Bars2Icon,
-    ChevronDoubleRightIcon,
-    ChevronLeftIcon,
-    ChevronDoubleLeftIcon,
-    ChevronRightIcon,
   } from "@heroicons/react/24/outline";
-  
-import { Link, useNavigate } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
-import { useUserContext } from '../../Context/userContext';
+import { useNavigate } from 'react-router-dom';
 import { ticketService } from '../../Services/ticketService';
-import TicketItem from "../../Components/TicketItem";
+import { useUserContext } from '../../Context/userContext';
 
 // profile menu component
 const profileMenuItems = [
@@ -37,17 +43,15 @@ const profileMenuItems = [
     label: "Sign Out",
   },
 ];
-
+ 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
-  const { logout } = useUserContext();
 
   const navigate = useNavigate();
   const handleMenu = (label) => {
     if (label === "Sign Out") {
       closeMenu();
-      logout();
       navigate("/");
       
     }
@@ -75,8 +79,6 @@ function ProfileMenu() {
 
   };
 
-  
-  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -115,6 +117,7 @@ function ProfileMenu() {
             >
               <Typography
                 as="span"
+                variant="lg"
                 className="font-normal"
                 color={isLastItem ? "red" : "inherit"}
               >
@@ -128,18 +131,15 @@ function ProfileMenu() {
   );
 }
 
-
-
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
+ 
   const triggers = {
     onMouseEnter: () => setIsMenuOpen(true),
     onMouseLeave: () => setIsMenuOpen(false),
   };
 }
-
-
+ 
 // nav list component
 const navListItems = [
   {
@@ -149,6 +149,7 @@ const navListItems = [
     label: "Mis tickets",
   },
 ];
+ 
 
 function NavList() {
   const navigate = useNavigate();
@@ -161,7 +162,6 @@ function NavList() {
     }
   };
 
-
   return (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       <NavListMenu />
@@ -170,6 +170,7 @@ function NavList() {
           key={label}
           as="a"
           href="#"
+          variant="lg"
           color="white"
           className="font-normal"
         >
@@ -184,56 +185,36 @@ function NavList() {
   );
 }
 
-export default function MyTickets(){
-
+export default function TransferTicket() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const [generateCode, setGenerateCode] = useState(false);
+    const [ticketCode, setTicketCode] = useState("");
     const { user, token} = useUserContext();
-    const [tickets, setTickets] = useState([]);
-    const [page, setPage] = useState(0);
-    const [lastPage, setLastPage] = useState(0);
-    const [totalElements, setTotalElements] = useState(0);
-    const [size, setSize] = useState(6);
 
-    useEffect(() => {
-        if(token) {
-          ticketService.getTicketsByUser(token, size, page)
-          .then((res) => {
-            setTickets(res.content);
-            setLastPage(res.total_pages);
-            setTotalElements(res.total_elements);
-          }
-          )
-          .catch((err) => console.log(err));
-        }
-      }, [token, page, size]);
+    const navigate = useNavigate();
 
-      useEffect(() => {
-        console.log(totalElements);
-        console.log (lastPage);
-      }, [totalElements, lastPage]);
+    const backButtonHandler = () => {
+        navigate(-1);
+    }
 
-      const handleNextPage = () => {
-        if (page < lastPage - 1) {
-          setPage((cur) => cur + 1);
-        }
-      };
+    const confirmTransferHandler = () => {
+      ticketService.transferTicket({
+        newUserOwnerCode: "",
+        transferCode: ticketCode
+      }, token)
+      .then(response => {
+        console.log('Ticket transferido con exito: ', response);
+        navigate('/mytickets');
+      })
+      .catch(error => {
+        console.log('Error al transferir ticket: ', error);
+      })
+    }
 
-      const handlePrevPage = () => {
-        if (page > 0) {
-          setPage((cur) => cur - 1);
-        }
-      };
-
-      const handleFirstPage = () => {
-        setPage(0);
-      };
-
-      const handleLastPage = () => {
-        setPage(lastPage - 1);
-      };
-
-
+    const generateCodeHandler = () => {
+        setGenerateCode(true);
+    }
 
     React.useEffect(() => {
         window.addEventListener(
@@ -244,22 +225,34 @@ export default function MyTickets(){
 
     
         useEffect(() => {
-            document.title = "My Tickets";
+            document.title = "Create Event";
         }, []);
-    
-        return (
-            <div className={[classes["generalContainer"]]}>
+
+        useEffect(() => {
+          console.log(generateCode);
+        }, [generateCode]);
+
+    return (
+        <div className={[classes["generalContainer"]]}>
         <header className={[classes["headerContainer"]]}>
-      <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
-      <div className={[classes["headerTypography"]]}>
-        <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
+        <Navbar  className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
+        <div className={[classes["headerTypography"]]}>
+        <img src={logo} alt="logo" className="hidden sm:inline-block h-12 w-12 mx-4" />
         <Typography
-        children="Guanaco Business"
           as="a"
           href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
+          className="mr-4 text-xl hidden sm:inline-block  cursor-pointer py-1.5 font-medium text-white"
+          style={{ fontFamily: "PoppinsLight" } }
         >
           Guanaco Business
+        </Typography>
+        <Typography
+          as="a"
+          href="#"
+          className="mr-4 text-xl sm:hidden inline-block  cursor-pointer py-1.5 font-medium text-white"
+          style={{ fontFamily: "PoppinsLight" } }
+        >
+          Transferir ticket
         </Typography>
         <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
           <NavList />
@@ -278,95 +271,49 @@ export default function MyTickets(){
       <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
       </Collapse>
-    </Navbar>
-      </header>
+
+      </Navbar>
+    </header>
         <div className={[classes["bodyContainer"]]}>
-            <h1 className={[classes["title"]]}>Mis Tickets</h1>
-            {/* Boton para poder ir a recibir tickets */}
-            <div className='flex justify-center mt-3'>
-              <Link to="/receiveticket">
-                <Button className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844 md:mb-5 hover:bg-yellow-700'>
-                  Recibir Ticket
-                </Button>
-              </Link>
+            <div className={[classes["formContainer"]]}>
+      <div className={[classes["form"]]}>
+      <div className={[classes["titleContainer"]]}>
+                <h1 className={[classes["title1"]]}>
+                Solicite el código de transferencia a la persona 
+                a la que desea ceder la titularidad del/os ticket(s)
+                </h1>
             </div>
-
-            <div className={[classes["cardContainer"]]}>
-            {tickets.map((ticket, index) => (
-          <TicketItem key={ticket.id} ticket={ticket} />
-        ))}
+        <form className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="eventName" className={[classes["titleInputs"]]}>
+              Codigo de transferencia
+            </label>
+            <Input
+              id="eventName"
+              type="text"
+              color='white'
+              value={ticketCode}
+              onChange={ticket => setTicketCode(ticket.target.value)}
+              placeholder="XXX-XXX-XXX"
+            />
+          </div>   
+          <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
+            <Button 
+            onClick={backButtonHandler}
+            className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+              Cancelar
+            </Button>
+            <Button 
+            onClick={confirmTransferHandler}
+            className='bg-yellowCapas Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
+              Recibir
+            </Button>
+          </div>
+        </form>
       </div>
-      <div className="flex justify-center items-center my-12">
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handleFirstPage}
-        >
-          <ChevronDoubleLeftIcon className="h-6 w-6" />
-        </Button>
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handlePrevPage}
-        >
-          <ChevronLeftIcon className="h-6 w-6" />
-        </Button>
-        <Typography children={page + 1} className="mx-8 text-white" />
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handleNextPage}
-        >
-          <ChevronRightIcon className="h-6 w-6" />
-        </Button>
-        <Button
-          variant="outline"
-          color="blue"
-          className="mr-2"
-          onClick={handleLastPage}
-        >
-          <ChevronDoubleRightIcon className="h-6 w-6" />
-        </Button>
-          </div>
+    </div>
         </div>
-             <footer className=" bg-bluefooter text-white mt-5 py-4 px-6 text-center">
-
-        <div className='relative mx-auto flex mb-5 items-center text-white'>        
-          <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
-          <Typography
-          children="Guanaco Business"
-            as="a"
-            href="#"
-            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-          >
-            Guanaco Business
-          </Typography>
         </div>
-        <p className='h-max w-max text-sm text-gray-500'>
-        © 2023 Copyright
-        </p>
-        <div className='flex justify-start content-start'>
-          </div>
-        <div className='flex justify-end content-end'>
-            <FaFacebook
-            className='mr-2 w-8 h-8'
+    )
+}
 
-            />
-
-            <FaTwitter
-            className='mr-2 ml-2 w-8 h-8'
-            />
-            <FaInstagram 
-            className='mr-2 ml-2 w-8 h-8'
-            />
-
-        </div>
-
-      </footer>
-            
-            </div>
-        );
-    };
