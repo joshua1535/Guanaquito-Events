@@ -4,7 +4,6 @@ import logo from '../../assets/logo.png';
 import classes from './AdminEvents.module.css';
 import {
   Navbar,
-  MobileNav,
   Typography,
   Button,
   Menu,
@@ -12,14 +11,14 @@ import {
   MenuList,
   MenuItem,
   Avatar,
-  IconButton,
 } from "@material-tailwind/react";
 import {
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
   ChevronDownIcon,
-  Bars2Icon,
-} from "@heroicons/react/24/outline";
+  ChevronLeftIcon,
+  ChevronRightIcon} from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
 import Footer from '../../Components/Footer';
@@ -115,20 +114,26 @@ const AdminEvents = () => {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const { user, token} = useUserContext();
   const [events, setEvents] = useState([]);
+  const [page, setPage] = useState(0);
+  const [lastPage, setLastPage] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [size, setSize] = useState(6);
 
   
   useEffect(() => {
     if(token){
-      eventService.getAllEvents(token)
+      eventService.getAllEvents(token, page, size)
           .then((data) => {
-            setEvents(data.content);          
+            setEvents(data.content);   
+            setLastPage(data.total_pages);
+            setTotalElements(data.total_elements);       
               console.log('Los eventos obtenidas:', events);
           })
           .catch((error) => {
               console.error('Hubo un error al obtener las eventos:', error);
           });
       }
-  }, [token]); 
+  }, [token, page, size]); 
 
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
@@ -142,6 +147,33 @@ const AdminEvents = () => {
   const editEventClick = (eventCode) => {
     navigate(`/admin-event/eventpermit/${eventCode}`);
   }
+
+  useEffect(() => {
+    console.log("total elements");
+    console.log(totalElements);
+    console.log("last page");
+    console.log (lastPage);
+  }, [totalElements, lastPage]);
+
+  const handleNextPage = () => {
+    if (page < lastPage - 1) {
+      setPage((cur) => cur + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 0) {
+      setPage((cur) => cur - 1);
+    }
+  };
+
+  const handleFirstPage = () => {
+    setPage(0);
+  };
+
+  const handleLastPage = () => {
+    setPage(lastPage - 1);
+  };
 
   React.useEffect(() => {
     window.addEventListener(
@@ -219,6 +251,41 @@ const AdminEvents = () => {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="flex justify-center items-center my-12">
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleFirstPage}
+        >
+          <ChevronDoubleLeftIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handlePrevPage}
+        >
+          <ChevronLeftIcon className="h-6 w-6" />
+        </Button>
+        <Typography children={page + 1} className="mx-8 text-white" />
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleNextPage}
+        >
+          <ChevronRightIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          variant="outline"
+          color="blue"
+          className="mr-2"
+          onClick={handleLastPage}
+        >
+          <ChevronDoubleRightIcon className="h-6 w-6" />
+        </Button>
           </div>
         </div>
       </div>
