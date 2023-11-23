@@ -1,7 +1,7 @@
 import './EventPermits.module.css';
 import classes from './EventPermits.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";

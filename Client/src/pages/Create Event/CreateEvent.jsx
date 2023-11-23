@@ -1,7 +1,7 @@
 import './CreateEvent.module.css';
 import classes from './CreateEvent.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";

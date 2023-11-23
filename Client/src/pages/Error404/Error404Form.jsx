@@ -1,5 +1,5 @@
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import classes from './Error404Form.module.css';
 
 

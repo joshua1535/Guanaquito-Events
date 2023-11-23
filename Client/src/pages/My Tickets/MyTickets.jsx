@@ -1,7 +1,7 @@
 import './MyTickets.module.css';
 import classes from './MyTickets.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import React, { useState } from "react";
 import { useEffect } from "react";
 import {

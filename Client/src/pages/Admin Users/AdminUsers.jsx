@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {Navbar,Menu,MenuHandler,MenuList,MenuItem,Avatar,IconButton,Card,CardHeader,Input,Typography,Button,CardBody,Chip,CardFooter,Tabs,TabsHeader,Tab,Tooltip} from "@material-tailwind/react";
 import logo from "../../assets/logo.png";
+import imgtemplate from "../../assets/loginimg.jpg";
 import classes from "./AdminUsers.module.css";
 import {
     ChevronDownIcon,

@@ -1,7 +1,7 @@
 import logo from '../../assets/logo.png';
 import './RegisterForm.module.css';
 import classes from './RegisterForm.module.css';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import { useNavigate } from 'react-router-dom';
 
 import { useState } from 'react';

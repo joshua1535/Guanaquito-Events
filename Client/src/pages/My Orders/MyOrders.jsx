@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './MyOrders.module.css';
 import classes from './MyOrders.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import { useEffect } from "react";
 import {
     Navbar,
