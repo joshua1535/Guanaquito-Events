@@ -344,7 +344,8 @@ export default function CreateEvent() {
             <Input
               id="eventName"
               type="text"
-              color='white'
+              color='yellow'
+              className='text-black bg-white '
               value={eventName}
               onChange={event => setEventName(event.target.value)}
               placeholder="Ingrese el nombre del evento"
@@ -358,7 +359,8 @@ export default function CreateEvent() {
               <Input
                 id="participant"
                 type="text"
-                color='white'
+                color='yellow'
+                className='text-black bg-white '
                 value={participant}
                 onChange={handleParticipantInputChange}
                 placeholder="Ingrese el nombre del participante"
@@ -406,7 +408,8 @@ export default function CreateEvent() {
                 
               </label>
                 <Select 
-                className='text-white'
+                color='yellow'
+                className='text-black bg-white '
                 onChange={value => setCategory(value)}
                 >
                     <Option value="CI" >Cine</Option>
@@ -422,7 +425,8 @@ export default function CreateEvent() {
               <Input
                 id="time"
                 type="time"
-                color='white'
+                color='yellow'
+              className='text-black bg-white '
                 value={time}
                 onChange={event => setTime(event.target.value)}
                 placeholder="Seleccione la hora"
@@ -435,7 +439,8 @@ export default function CreateEvent() {
             <Input
               id="duration"
               type="text"
-              color='white'
+              color='yellow'
+              className='text-black bg-white '
               value={duration}
               onChange={handleDurationChange}
               placeholder="Ingrese la duración"
@@ -450,7 +455,8 @@ export default function CreateEvent() {
               <Input
                 id="sponsor"
                 type="text"
-                color='white'
+                color='yellow'
+              className='text-black bg-white '
                 value={sponsor}
                 onChange={handleSponsorInputChange}
                 placeholder="Ingrese el nombre del patrocinador"
@@ -499,7 +505,8 @@ export default function CreateEvent() {
             <Input
               id="date"
               type="date"
-              color='white'
+              color='yellow'
+              className='text-black bg-white '
               value={date}
               onChange={event => setDate(event.target.value)}
               placeholder="Seleccione la fecha"
@@ -512,8 +519,9 @@ export default function CreateEvent() {
             <Input
               id="eventPhoto"
               type="text"
-              color='white'
-              placeholder="Seleccione una foto"
+              color='yellow'
+              className='text-black bg-white '
+              placeholder="Ingrese URL de la foto"
               onChange={event => setImage(event.target.value)}
             />
           </div>

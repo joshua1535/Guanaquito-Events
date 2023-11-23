@@ -239,7 +239,7 @@ const AdminEvents = () => {
                   PC-1920*1080:w-56 PC-1920*1080:h-80
                   PC-1600*900:w-48 PC-1600*900:h-72
                  w-40 h-56 object-cover mb-2 rounded"/>
-                  <p style={ { fontFamily: "PoppinsLight" }} className=" text-white font-semibold text-xl">{event.title}</p>
+                  <p style={ { fontFamily: "PoppinsLight" }} className=" text-white font-semibold text-xl break-words hover:break-all w-36 h-7 overflow-auto">{event.title}</p>
                   <p style={ { fontFamily: "PoppinsLight" }} className="text-Orange font-semibold text-lg">{event.date}</p>
                 <div className="flex justify-center">
                 <button 
