@@ -1,6 +1,4 @@
-### Trabajo que se entrego como proyecto final de materia en "Programacion N Capas".
-
-# Guanaco Business
+# Guanaco Tickets
 
 Pagina web de compra de boletos para eventos socioculturales varios.
 
@@ -9,7 +7,7 @@ Pagina web de compra de boletos para eventos socioculturales varios.
 	- Registrarse e Iniciar sesión con correo y contraseña.
 	- Ver cartelera de eventos por categoria y eventos proximos.
 	- Compra de boletos.
-	- Capacidad de transferir boletos a otra persona mediante un codigo Qr.
+	- Capacidad de transferir boletos a otra persona mediante un codigo.
 	- Ver historial de ordenes realizadas.
 	- Ver los tickets comprados.
 	
