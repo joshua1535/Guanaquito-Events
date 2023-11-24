@@ -34,7 +34,7 @@ import ReceiveTicket from './pages/Receive Ticket/ReceiveTicket';
 function App() {
   return (
     <div className="App">
-      <Router basename={import.meta.env.DEV ? '/' : '/Guanaco-Tickets/'}>
+      <Router>
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
@@ -69,7 +69,6 @@ function App() {
       </Router>
     </div>
   );
-  
 }
 
 export default App;
