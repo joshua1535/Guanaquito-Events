@@ -17,13 +17,16 @@ const LoginForm = () => {
 
     const { login, token, user } = useUserContext();
 
-    const notifyError = () => toast.error('Usuario o contraseña incorrectos');
 
     useEffect(() => {
     
         if (token) {
             if(user){
                 
+                if(user.permitList.some(permit => permit === 'Client')){
+                    return navigate('/home')
+                }
+
                 if(user.permitList.some(permit => permit === 'Admin')){
                     return navigate('/admin-users')
                 }
@@ -40,9 +43,6 @@ const LoginForm = () => {
                     return navigate('/admin-graphs')
                 }
 
-                if(user.permitList.some(permit => permit === 'Client')){
-                    return navigate('/home')
-                }
             }
         }
     
