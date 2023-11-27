@@ -4,7 +4,7 @@ import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.BASE_URL || 'Guanaco-Tickets',
+  base: '/Guanaco-Tickets/',
   plugins: [react()],
   css: {
     preprocessorOptions: {
@@ -18,4 +18,13 @@ export default defineConfig({
       '@material-tailwind/react': resolve(__dirname, 'node_modules/@material-tailwind/react'),
     },
   },
+  experimental: {
+    renderBuiltUrl(filename, hostType) {
+      if (hostType === 'js') {
+        return { runtime: `window.__toCdnUrl(${JSON.stringify(filename)})` }
+      } else {
+        return { relative: true }
+      }
+    }
+  }
 });
