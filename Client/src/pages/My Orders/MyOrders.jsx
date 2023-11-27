@@ -19,7 +19,7 @@ import { orderService } from '../../Services/orderService';
 
 import OrderTable from '../../Components/OrderTable';
 import Footer from '../../Components/Footer';
-import monoGif from '../../assets/imgs/monoGif.gif';
+import monoGif from '../../assets/imgs/bandeja-de-entrada-vacia.png';
 import Header from '../../Components/Header/Header';
 
 export default function MyOrders(){
@@ -95,9 +95,10 @@ export default function MyOrders(){
         <div className={[classes["bodyContainer"]]}>
         <h1 className={[classes["title"]]}>Mis Ordenes</h1>
         {orders.length === 0 ? (
-          <div className="text-white text-3xl flex flex-col items-center">
-          <p className="mb-4">EL DIAVLO, NO HAY ORDENES</p>
-          <img className="mx-auto" src={monoGif} alt="GIF" />
+          <div className="text-white h-full lg:text-2xl mb items-center border-t-4 border-gray-500 rounded-t-2xl">
+          <img className="mx-auto mt-16 w-32 h-32" src={monoGif} alt="GIF" />
+          <p className="lg:my-4 flex items-center justify-center">Aún no hay ordenes en tu cuenta</p>
+          
         </div>
         ) : (
           <div className={[classes["tableContainer"]]}>
