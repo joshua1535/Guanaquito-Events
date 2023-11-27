@@ -18,13 +18,4 @@ export default defineConfig({
       '@material-tailwind/react': resolve(__dirname, 'node_modules/@material-tailwind/react'),
     },
   },
-  experimental: {
-    renderBuiltUrl(filename, hostType) {
-      if (hostType === 'js') {
-        return { runtime: `window.__toCdnUrl(${JSON.stringify(filename)})` }
-      } else {
-        return { relative: true }
-      }
-    }
-  }
 });
