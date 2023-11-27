@@ -1,124 +1,164 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 import { useUserContext } from "../Context/userContext";
 import { registerService } from "../Services/registerService";
 import { Button, Card, Chip, Typography } from "@material-tailwind/react";
 import classes from "../pages/My Tickets/MyTickets.module.css";
+import { Toaster, toast } from 'sonner';
+import { XCircleIcon } from "@heroicons/react/24/outline";
 
 
 export default function TicketItem({ ticket }) {
     const { eventTitle, eventPicture, eventDate, ticketTier, available, time } = ticket;
     const { user, token} = useUserContext();
 
+    const showError = () => toast.error('No se puede transferir el ticket, fue obtenido por medio de una transferencia', {
+      duration: 5000,
+      icon: <XCircleIcon style={{color: "red"}} />,
+      position: "top-right",
+  });
+
+
+
+
+
     const navigate = useNavigate();
     
     const redeemTicketHandler = (eventCode, ticketCode, ticketTier) => {
-
+      //Debe generarse otro registro en la tabla ahora perteneciente a un codigo de validación
+      //Pueden existir 2 registros por ticket, uno para el QR y otro para el código de validación
+      
       registerService.getRegisterByTicketCode(ticketCode, token)
       .then((register) => {
-         //Obtener el primer elemento del array
-        register = register[0];
-        console.log(register);
-         //Si el registro del ticket no existe
-         if (register === undefined) {
-          const uuid = uuidv4();
-          registerService.saveTicket(ticketCode, uuid, token);
-          navigate(`/qr/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
-        }
-        //Si el registro del ticket existe
-        
-        registerService.getStatus(token, ticketCode, register?.transactionCode)
-        .then((status) => {
-        
+          //Obtener el elemento del array que tiene transferenceTime nulo 
+          register = register ? register.find((reg) => reg.transferenceTime === null) : null;
 
+          //Si el registro del ticket no existe
+          if (register === undefined) {
+            const uuid = uuidv4();
+            registerService.saveTicket(ticketCode, uuid, token);
+            navigate(`/qr/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
+          }
+          //Si el registro del ticket existe
+          registerService.getStatus(token, ticketCode, register?.transactionCode)
+          .then((status) => {
+            console.log(status.remainingMinutes);
+            console.log(status.remainingSeconds);
+            console.log(register.transactionCode);
 
-          console.log(status.remainingMinutes);
-          console.log(status.remainingSeconds);
-          console.log(register.transactionCode);
-       
-        //Si el ticket ya fue validado, no se puede volver a validar
-        if(register.validationTime !== null){
-          alert('El ticket ya fue validado');
-          return;
-        }
+            //Si el ticket ya fue validado, no se puede volver a validar
+            if(register.validationTime !== null){
+              alert('El ticket ya fue validado');
+              return;
+            }
+            
+            //Si el QR ya fue generado, pero aun tiene tiempo de validez
+            else if (status.remainingMinutes !== null && (register.remainingMinutes !== 0 && register.remainingSeconds !== 0) && status.remainingSeconds !== null &&  register.transactionCode !== null) {
+              console.log ("El QR ya fue generado, pero aun tiene tiempo de validez");
+              navigate(`/qr/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${register.transactionCode}`);
+            }
 
-        //Si el QR ya fue generado, pero aun tiene tiempo de validez
-        else if (status.remainingMinutes !== null && (register.remainingMinutes !== 0 && register.remainingSeconds !== 0) && status.remainingSeconds !== null &&  register.transactionCode !== null) {
-          console.log ("El QR ya fue generado, pero aun tiene tiempo de validez");
-          navigate(`/qr/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${register.transactionCode}`);
-        }
+            //Si el QR ya fue generado, y ya expiró
+            else if (status.remainingMinutes === null  && status.remainingSeconds === null &&  register.transactionCode !== null) {
+              const uuid = uuidv4();
+              registerService.updateTransactionCode(uuid.toString(), ticketCode, token);
+              navigate(`/qr/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
+            }
+          }
 
-        //Si el QR ya fue generado, y ya expiró
-        else if (status.remainingMinutes === null  && status.remainingSeconds === null &&  register.transactionCode !== null) {
-          const uuid = uuidv4();
-          registerService.updateTransactionCode(uuid.toString(), ticketCode, token);
-          navigate(`/qr/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
-        }
-
-
-      }
-      
-      )
-      .catch((err) => {
-        console.log(err);
-      });
-    })
+          )
+          .catch((err) => {
+            console.log(err);
+          });
+        })
 
     };
+
 
     //Funcion para generar el código de transferencia para el ticket, es el que ingresará la otra persona para recibir el ticket
     const transferTicketHandler = (eventCode, ticketCode, ticketTier) => {
 
-        registerService.getRegisterByTicketCode(ticketCode, token)
+      //Debe generarse otro registro en la tabla ahora perteneciente a un codigo de transferencia
+      //Pueden existir 2 registros por ticket, uno para el QR y otro para el código de transferencia
+
+      registerService.getRegisterByTicketCode(ticketCode, token)
       .then((register) => {
-         //Obtener el primer elemento del array
-        register = register[0];
-        console.log(register);
-         //Si el registro del ticket no existe
-         if (register === undefined) {
-          const uuid = uuidv4();
-          registerService.saveTicket(ticketCode, uuid, token);
-          navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
-        }
-        //Si el registro del ticket existe
+          //Obtener el elemento del array que si tiene transferenceTime valido 
+
+          register = register ? register.find((reg) => reg.transferenceTime !== null) : null;
+          console.log ("soy register")
+          console.log (register)
+          //Si el registro del ticket existe
+          if (register !== undefined) {
+            alert('El ticket ya fue transferido');
+            return;
+          }
+          
+          //Ahora que se ha verificado que el ticket no ha sido transferido nunca
+          //Se procede a buscar si hay un registro existente para el ticket
+          registerService.getRegisterByTicketCode(ticketCode, token)
+          .then((register) => {
+            register = register ? register.find((reg) => reg.transferenceTime === null) : null;
+
+          //Si el registro del ticket no existe
+          if (register === undefined || register === null) {
+            console.log ("hola buenas tardes")
+            const uuid = uuidv4();
+            registerService.saveTicket(ticketCode, uuid, token);
+            navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
+          }
+
+          console.log ("hola buenas tardes 2")
+          console.log (register)
+
+          //Si el registro del ticket existe
+          registerService.getStatus(token, ticketCode, register?.transactionCode)
+          .then((status) => {
+            console.log(status.remainingMinutes);
+            console.log(status.remainingSeconds);
+            console.log(register.transactionCode);
+
+            //Si el ticket ya fue validado, no se puede volver a validar
+            if(register.validationTime !== null){
+              alert('El ticket ya fue validado');
+              return;
+            }
+            
+            //Si el QR ya fue generado, pero aun tiene tiempo de validez
+            else if (status.remainingMinutes !== null && (register.remainingMinutes !== 0 && register.remainingSeconds !== 0) && status.remainingSeconds !== null &&  register.transactionCode !== null) {
+              console.log ("El QR ya fue generado, pero aun tiene tiempo de validez");
+              navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${register.transactionCode}`);
+            }
+
+            //Si el QR ya fue generado, y ya expiró
+            else if (status.remainingMinutes === null  && status.remainingSeconds === null &&  register.transactionCode !== null) {
+              const uuid = uuidv4();
+              registerService.updateTransactionCode(uuid.toString(), ticketCode, token);
+              navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
+            }
+          }
+            
+            )
+            .catch((err) => {
+              console.log(err);
+            }
+            )
+          })
         
-        registerService.getStatus(token, ticketCode, register?.transactionCode)
-        .then((status) => {
-
-          console.log(status.remainingMinutes);
-          console.log(status.remainingSeconds);
-          console.log(register.transactionCode);
-       
-        //Si el ticket ya fue validado, no se puede volver a validar
-        if(register.validationTime !== null){
-          alert('El ticket ya fue validado');
-          return;
-        }
-
-        //Si el QR ya fue generado, pero aun tiene tiempo de validez
-        else if (status.remainingMinutes !== null && (register.remainingMinutes !== 0 && register.remainingSeconds !== 0) && status.remainingSeconds !== null &&  register.transactionCode !== null) {
-          console.log ("El QR ya fue generado, pero aun tiene tiempo de validez");
-          navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${register.transactionCode}`);
-        }
-
-        //Si el QR ya fue generado, y ya expiró
-        else if (status.remainingMinutes === null  && status.remainingSeconds === null &&  register.transactionCode !== null) {
-          const uuid = uuidv4();
-          registerService.updateTransactionCode(uuid.toString(), ticketCode, token);
-          navigate(`/transferticket/${eventCode}/${ticketCode}/tier/${ticketTier}/register/${uuid}`);
-        }
-      }
-      
-      )
-      .catch((err) => {
-        console.log(err);
-      });
-    })
-    };
+    }
+    )
+    .catch((err) => {
+      console.log(err);
+    }
+    )
+  }
   
+
+
     return (
       <div className={[classes["cardTicketContainer"]]}>
+        <Toaster />
          <div >
             {!available ? (
               <Chip variant='ghost' color="red" value='Canjeado' className="m-auto p-2 font-text">

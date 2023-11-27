@@ -158,7 +158,7 @@ export default function ModifyEvent() {
     };
 
     const handleAddTierClick = () => {
-      navigate('/admin-event/modifyevent/addtier');
+      navigate(`/admin-event/modifyevent/addtier/${eventCode}`);
     };
 
     const handleButtonClick = () => {

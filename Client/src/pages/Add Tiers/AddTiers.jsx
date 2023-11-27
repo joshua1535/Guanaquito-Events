@@ -6,18 +6,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import {
-    Carousel,
-    Navbar,
-    Typography,
     Button,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-    Avatar,
-    Card,
-    IconButton,
-    Chip,
     Input,
     Select,
     Option,
@@ -47,7 +36,6 @@ import Header from '../../Components/Header/Header';
     const [tierCapacity, setTierCapacity] = useState('');
     const { user, token} = useUserContext();
     
-    console.log(eventCode);
   
   
       // Crea una función para manejar el cambio de cada campo
@@ -72,7 +60,9 @@ import Header from '../../Components/Header/Header';
           capacity: parseInt(tierCapacity),
           eventCode: eventCode
         };
-      
+        
+        console.log(tierInfo);
+
         tierService.saveTier(tierInfo, token)
           .then(response => {
             console.log('Tier creado con éxito:', response);

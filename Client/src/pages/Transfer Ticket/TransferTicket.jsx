@@ -1,23 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TransferTicket.module.css';
-import logo from '../../assets/logo.png';
 import classes from './TransferTicket.module.css';
-import {
-  Navbar,
-  Typography,
-  Button,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
-  IconButton,
-  Collapse,
-} from "@material-tailwind/react";
-import {
-  ChevronDownIcon,
-  Bars2Icon,
-} from "@heroicons/react/24/outline";
+
 import QRCode from "react-qr-code";
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '../../Context/userContext';
@@ -27,11 +11,9 @@ import Header from '../../Components/Header/Header';
 
   const TransferTicket = () => {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
-    const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
-    const { user, token} = useUserContext();
+    const { token} = useUserContext();
     const { eventCode, ticketCode, ticketTier, transactionCode} = useParams();
     const [event, setEvent] = useState(null);
-    const [ticket, setTicket] = useState(null);
     const [register , setRegister] = useState(null);
 
     useEffect(() => {

@@ -6,6 +6,7 @@ import {
   MenuItem,
   IconButton,
   Typography,
+  Button,
 } from "@material-tailwind/react";
 import logo from "../../assets/logo.png";
 import classes from "../../pages/HomePage/HomePage.module.css";
@@ -13,7 +14,7 @@ import {
     ChevronDownIcon,
     Bars2Icon,
 } from "@heroicons/react/24/outline";
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { ProfileMenu } from '../ProfileMenu/ProfileMenu';
 
 
@@ -71,6 +72,7 @@ const navListItems = [
 export const  Header = ({role, children, darkMode = false}) => {
     const { user } = useUserContext();
     console.log(useUserContext);
+    const navigate = useNavigate();
 
     //if(!token) return <Navigate replace to="/"/>;
     //if(!user || !user.permits.some(permit => permit.name === role)) return <Navigate replace to="*"/>;
@@ -92,15 +94,19 @@ export const  Header = ({role, children, darkMode = false}) => {
         <header className={"sticky top-0 z-10 overflow-hidden" + (!darkMode ? " bg-white" : "")}>
           <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
             <div className={[classes["headerTypography"]]}>
+            <button className="focus:outline-none" onClick={() => navigate("/")}>
+              <div className="flex items-center ">  
               <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
-              
               <Typography
                 as="a"
-                href="#"
                 className={"mr-auto cursor-pointer py-1.5 font-medium text-white" + (darkMode ? " text-xl hidden sm:inline-block":" ml-2")}
                 style={darkMode ? { fontFamily: "PoppinsLight" } :{ fontFamily: "Roboto, sans-serif" }}>
                   Guanaco Business
               </Typography>
+              </div>
+              </button>
+              
+              
             
               {isClient && <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
                 <NavList />
