@@ -51,7 +51,7 @@ function App() {
           <Route path="/admin-event/modifyevent/:eventCode" element={<Private neededPermits={['Event Administrator']}> <ModifyEvent /> </Private>} />
           <Route path="/admin-event/addtiers/:eventCode" element={<Private neededPermits={['Event Administrator']}> <AddTiers /> </Private>} />
           <Route path="/admin-event/" element={<Private neededPermits={['Event Administrator']}> <AdminEvents /> </Private>} />
-          <Route path="/admin-event/modifyevent/addtier" element={<Private neededPermits={['Event Administrator']}> <AddTiers /> </Private>} />
+          <Route path="/admin-event/modifyevent/addtier/:eventCode" element={<Private neededPermits={['Event Administrator']}> <AddTiers /> </Private>} />
           <Route path="/admin-event/eventpermit/:eventCode" element={<Private neededPermits={['Admin']}> <EventsPermit /> </Private>} />
           <Route path="/admin-event/modifystaff/:eventCode" element={<Private neededPermits={['Admin']}> <ModifyStaff /> </Private>} />
           <Route path="/qr/:eventCode/:ticketCode/tier/:ticketTier/register/:transactionCode" element={<QRPage />} />

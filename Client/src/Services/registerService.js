@@ -20,6 +20,9 @@ export const registerService = {
     },
     
     saveTicket : async function (ticketCode, transactionCode, token) {
+      console.log ("ticketCode: " + ticketCode);
+      console.log ("transactionCode del servicio: " + transactionCode);
+      console.log ("token: " + token);
         try {
             const response = await API.post(`/register/`, 
             {
@@ -74,7 +77,7 @@ export const registerService = {
 
     getStatus: async function (token, ticketCode, transactionCode) {
         console.log("ticketCode: " + ticketCode);
-        console.log("transactionCode: " + transactionCode);
+        console.log("transactionCode del servicio 2: " + transactionCode);
         console.log("token: " + token);
         try {
           const response = await fetch(`https://software-api.onrender.com/register/status?ticketCode=${ticketCode}&transactionCode=${transactionCode}`, {
