@@ -1,4 +1,4 @@
-### Trabajo que se entrego como proyecto final de materia en "Programacion N Capas".
+### Trabajo que se entrego como proyecto final de materia en "Programacion N Capas" e "Ingenieria de Software".
 
 # Guanaco Business
 
