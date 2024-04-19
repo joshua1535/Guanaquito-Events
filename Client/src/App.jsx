@@ -28,6 +28,7 @@ import AdminGraphs from './pages/Admin Graphs/AdminGraphs';
 import StatsPage from './pages/Stats/Stats';
 import MyEvents from './pages/My Events/MyEvents';
 import Private from './Components/Private/Private';
+import ReceiveTicket from './pages/Receive Ticket/ReceiveTicket';
 
 
 function App() {
@@ -37,31 +38,32 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
-          <Route path="/emailconfirmation" element={<Private role="Client"> <EmailConfirmationForm /> </Private>} />
+          <Route path="/emailconfirmation" element={<Private neededPermits={['Client']}> <EmailConfirmationForm /> </Private>} />
           <Route path="/emailregister" element={<EmailConfirmationFormRegister />} />
-          <Route path="/passwordconfirmation" element={<Private role="Client"> <PasswordConfirmationForm /> </Private>} />
-          <Route path="/updatepassword" element={<Private role="Client">  <UpdatePasswordForm /> </Private>} />
-          <Route path="/home" element={<Private role="Client">  <HomePage /> </Private>} />
-          <Route path="/events" element={<Private role="Client">  <EventsPage /> </Private>} />
-          <Route path="/myorders" element={<Private role="Client"> <MyOrders /> </Private>} />
+          <Route path="/passwordconfirmation" element={<Private neededPermits={['Client']}> <PasswordConfirmationForm /> </Private>} />
+          <Route path="/updatepassword" element={<Private neededPermits={['Client']}>  <UpdatePasswordForm /> </Private>} />
+          <Route path="/home" element={<Private neededPermits={['Client']}>  <HomePage /> </Private>} />
+          <Route path="/events" element={<Private neededPermits={['Client']}>  <EventsPage /> </Private>} />
+          <Route path="/myorders" element={<Private neededPermits={['Client']}> <MyOrders /> </Private>} />
           <Route path="/mytickets" element={<MyTickets />} />
-          <Route path="/buytickets/:code" element={<Private role="Client"> <BuyTicket /> </Private>} />
-          <Route path="/admin-event/createevent" element={<Private role="Event Administrator"> <CreateEvent /> </Private>} />
-          <Route path="/admin-event/modifyevent/:eventCode" element={<Private role="Event Administrator"> <ModifyEvent /> </Private>} />
-          <Route path="/admin-event/addtiers/:eventCode" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
-          <Route path="/admin-event/" element={<Private role="Event Administrator"> <AdminEvents /> </Private>} />
-          <Route path="/admin-event/modifyevent/addtier" element={<Private role="Event Administrator"> <AddTiers /> </Private>} />
-          <Route path="/admin-event/eventpermit" element={<Private role="Admin"> <EventsPermit /> </Private>} />
-          <Route path="/admin-event/modifystaff" element={<Private role="Admin"> <ModifyStaff /> </Private>} />
+          <Route path="/buytickets/:code" element={<Private neededPermits={['Client']}> <BuyTicket /> </Private>} />
+          <Route path="/admin-event/createevent" element={<Private neededPermits={['Event Administrator']}> <CreateEvent /> </Private>} />
+          <Route path="/admin-event/modifyevent/:eventCode" element={<Private neededPermits={['Event Administrator']}> <ModifyEvent /> </Private>} />
+          <Route path="/admin-event/addtiers/:eventCode" element={<Private neededPermits={['Event Administrator']}> <AddTiers /> </Private>} />
+          <Route path="/admin-event/" element={<Private neededPermits={['Event Administrator']}> <AdminEvents /> </Private>} />
+          <Route path="/admin-event/modifyevent/addtier/:eventCode" element={<Private neededPermits={['Event Administrator']}> <AddTiers /> </Private>} />
+          <Route path="/admin-event/eventpermit/:eventCode" element={<Private neededPermits={['Admin']}> <EventsPermit /> </Private>} />
+          <Route path="/admin-event/modifystaff/:eventCode" element={<Private neededPermits={['Admin']}> <ModifyStaff /> </Private>} />
           <Route path="/qr/:eventCode/:ticketCode/tier/:ticketTier/register/:transactionCode" element={<QRPage />} />
-          <Route path="/transferticket" element={<Private role="Client"><TransferTicket /> </Private>} />  
-          <Route path="/admin-users" element={<Private role="Admin"> <AdminUsers /> </Private>} />
-          <Route path="/admin-users/permits-user/:userCode" element={<Private role="Admin"> <EditPermitUsers /> </Private>} />
-          <Route path="/admin-graphs" element={<Private role="Stadistics"> <AdminGraphs /> </Private>} />
+          <Route path="/transferticket/:eventCode/:ticketCode/tier/:ticketTier/register/:transactionCode" element={<Private neededPermits={['Client']}><TransferTicket /> </Private>} />  
+          <Route path="/receiveticket" element={<Private neededPermits={['Client']}><ReceiveTicket /> </Private>} />  
+          <Route path="/admin-users" element={<Private neededPermits={['Admin']}> <AdminUsers /> </Private>} />
+          <Route path="/admin-users/permits-user/:userCode" element={<Private neededPermits={['Admin']}> <EditPermitUsers /> </Private>} />
+          <Route path="/admin-graphs" element={<Private neededPermits={['Stadistics']}> <AdminGraphs /> </Private>} />
           <Route path="/admin-scanner" element={<TicketValidationPage />} />
-          <Route path="/admin-graphs/graph" element={<Private role="Stadistics"> <StatsPage/> </Private>} />
-          <Route path="/historyevents" element={<Private role="Client"> <MyEvents /> </Private>} />
-          <Route path="/permits-user" element={<Private role="Admin"> <EditPermitUsers /> </Private>} />
+          <Route path="/admin-graphs/graph" element={<Private neededPermits={['Stadistics']}> <StatsPage/> </Private>} />
+          <Route path="/historyevents" element={<Private neededPermits={['Client']}> <MyEvents /> </Private>} />
+          <Route path="/permits-user" element={<Private neededPermits={['Admin']}> <EditPermitUsers /> </Private>} />
           <Route path="*" element={<Error404Form />} />
         </Routes>
       </Router>

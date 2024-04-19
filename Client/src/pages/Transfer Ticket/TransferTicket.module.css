@@ -1,71 +1,260 @@
-.generalContainer{
+.generalContainer {
+    @apply hidden sm:flex sm:flex-col sm:items-center sm:justify-center sm:mt-6
 }
 
 .headerContainer{
-    @apply sticky top-0 z-10 bg-white overflow-hidden max-h-full
+    @apply sticky w-full top-0 z-10
+    PC-1920*1080:inline-block 
+    PC-1600*900:inline-block 
+    PC-1366*768:inline-block
+    PC-1280*720:inline-block 
+    PC-800*600:inline-block
+    PC-640*480:inline-block 
+    
 }
 
-.headerTypography{
+.qrContainer
+{
+    @apply w-3/4 sm:w-1/2 lg:w-1/4
+    PC-1920*1080:w-1/4  PC-1920*1080:my-12
+    PC-1600*900:w-1/5 PC-1600*900:my-12
+    PC-1366*768:w-60  PC-1366*768:my-12 
+    PC-1280*720:w-60 PC-1280*720:my-12
+    PC-800*600:w-48 PC-800*600:my-12
+    PC-640*480:w-32 PC-640*480:my-12
+    Mobile-390*844:w-48 Mobile-390*844:my-12
+    
+    
+
+}
+
+.codeText
+{
+    font-family: 'PoppinsLight';
+    @apply text-white
+    PC-1920*1080:text-2.5xl
+    PC-1600*900:text-2xl
+    PC-1366*768:text-2xl
+    PC-1280*720:text-2xl
+    PC-800*600:text-xl
+    PC-640*480:text-lg
+    Mobile-390*844:text-base Mobile-390*844:mt-4
+    Mobile-280:text-sm
+}
+
+.titleText
+{
+    font-family: 'PoppinsLight'; 
+    @apply text-Orange text-sm sm:text-lg md:text-xl lg:text-2xl mt-10
+    PC-1920*1080:text-3xl 
+    PC-1600*900:text-3xl
+    PC-1366*768:text-3xl
+    PC-1280*720:text-2.5xl
+    PC-800*600:text-2xl
+    PC-640*480:text-xl
+    Mobile-390*844:text-xl
+}
+
+.titleEventText
+{
+    font-family: 'PoppinsLight'; 
+    @apply text-white text-sm sm:text-lg md:text-xl lg:text-2xl mt-4
+    PC-1920*1080:text-3xl 
+    PC-1600*900:text-3xl
+    PC-1366*768:text-3xl
+    PC-1280*720:text-2.5xl
+    PC-800*600:text-2xl
+    PC-640*480:text-xl
+    Mobile-390*844:text-xl
+
+}
+ 
+.ticketEventText
+{   
+    font-family: 'Poppins';
+    @apply text-Orange sm:text-sm md:text-base lg:text-lg mt-2
+    PC-1920*1080:text-2.5xl PC-1920*1080:mt-6
+    PC-1600*900:text-2xl PC-1600*900:mt-6
+    PC-1366*768:text-xl PC-1366*768:mt-5
+    PC-1280*720:text-xl
+    PC-800*600:text-lg
+    PC-640*480:text-lg
+    Mobile-390*844:text-lg
+    
+}
+
+.titleTimeText
+{
+    font-family: 'PoppinsLight';
+    @apply 
+    PC-1920*1080:text-2.5xl PC-1920*1080:mt-7
+    PC-1600*900:text-2xl PC-1600*900:mt-5
+    PC-1366*768:text-lg
+    PC-1280*720:text-lg
+    PC-800*600:text-base
+    PC-640*480:text-sm
+    Mobile-390*844:text-sm
+    text-xs sm:text-sm md:text-base lg:text-lg text-white mt-7
+}
+
+.TimeText
+{
+    font-family: 'PoppinsSemiBold';
+    @apply 
+    PC-1920*1080:text-3xl PC-1920*1080:mt-5
+    PC-1600*900:text-2xl
+    PC-1366*768:text-xl
+    PC-1280*720:text-xl
+    PC-800*600:text-xl
+    Mobile-390*844:text-xl
+    text-sm sm:text-lg md:text-xl lg:text-2xl text-red-500
+}
+
+.headerTypography{    
     @apply relative mx-auto flex items-center text-white
 }
 
-.titleContainer{
-    @apply flex flex-row justify-start w-full h-max  m-0 p-0
+.titleH1 
+{
+    font-family: 'PoppinsLight';
+    @apply text-center text-white 
+    PC-1920*1080:text-3xl
+    PC-1600*900:text-3xl
+    PC-1366*768:text-2xl
+    PC-1280*720:text-xl
+    PC-800*600:text-xl
+    PC-640*480:text-base
+
 }
 
-.title1 {
-    @apply font-bold text-left text-white font-text
-
-    PC-1920*1080:text-2xl PC-1920*1080:mt-2
-    PC-1600*900:text-2xl PC-1600*900:mt-2
-    PC-1366*768:text-2xl PC-1366*768:mt-2
-    PC-1280*720:text-xl PC-1280*720:mb-4
-    PC-800*600:text-xl PC-800*600:mt-5 PC-800*600:mb-4
-    PC-640*480:text-xl PC-640*480:mt-3 PC-640*480:mb-4
-    Mobile-390*844:text-2xl Mobile-390*844:mt-2 Mobile-390*844:mb-4
-    Mobile-280:text-xl 
+.pData
+{
+    @apply sm:p-3 sm:pb-6 sm:text-xl
+    PC-800*600:pb-2 PC-800*600:p-0  PC-800*600:pl-3
+    PC-640*480:pb-2 PC-640*480:p-0 PC-640*480:pl-2
 }
 
-.title2 {
-    @apply font-bold text-left text-orange-500 font-text ml-2
+.titleSpan
+{
+    font-family: 'PoppinsLight';
+    @apply text-white
+    PC-1920*1080:text-3xl
+    PC-1600*900:text-2.5xl
+    PC-800*600:text-base
+    PC-640*480:text-sm
 
-    PC-1920*1080:text-6xl PC-1920*1080:mt-5
-    PC-1600*900:text-5xl PC-1600*900:mt-5
-    PC-1366*768:text-4xl PC-1366*768:mt-5
-    PC-1280*720:text-4xl PC-1280*720:mt-5
-    PC-800*600:text-3xl PC-800*600:mt-5
-    PC-640*480:text-2xl PC-640*480:mt-5
-    Mobile-390*844:text-2xl Mobile-390*844:mt-4
-    Mobile-280:text-xl
 }
 
-.formContainer {
-    @apply flex items-center mt-10 justify-center h-auto m-auto w-2/3
-    Mobile-280:w-60 
+.contentSpan
+{
+    font-family: 'PoppinsLight';
+    @apply text-Orange
+    PC-1920*1080:text-2.5xl
+    PC-1600*900:text-2.5xl
+    PC-800*600:text-base
+    PC-640*480:text-sm
 }
 
-.form {
-    width: 1800px;
-
-    @apply p-8 rounded-lg bg-dark-blue border-dashed border-2 border-yellowCapas
-    Mobile-280:w-60 Mobile-280:p-4
+.imgContainer
+{
+    @apply 
+    PC-1920*1080:h-CarouselItemPC-1920*1080 PC-1920*1080:object-fill PC-1920*1080:inline-block
+    PC-1600*900:h-CarouselItemPC-1600*900 PC-1600*900:object-fill PC-1600*900:inline-block
+    PC-1366*768:h-2/3 PC-1366*768:w-80 PC-1366*768:object-cover PC-1366*768:inline-block
+    PC-1280*720:h-CarouselItemPC-1280*720
+    PC-800*600:h-CarouselItemPC-640*480 PC-800*600:object-fill PC-800*600:inline-block
+    PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480 PC-640*480:object-fill
+     
 }
 
-.titleInputs {
-    @apply font-bold text-xl text-center font-text text-yellowCapas mb-10 
-}
-
-.popupContainer{
-    @apply absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4
-    Mobile-390*844:w-5/6
-}
-
-.container3Inputs {
-    @apply grid grid-cols-3 gap-4 w-5/6
-    PC-1280*720:w-full
-    PC-800*600:grid-cols-1
-    PC-640*480:grid-cols-1
-    Mobile-390*844:grid-cols-1
-    Mobile-280:grid-cols-1
+.infoContainer
+{
+    @apply sm:flex-grow sm:ml-4 sm:bg-cover 
+    PC-1920*1080:h-CarouselItemPC-1920*1080 
+    PC-1600*900:h-CarouselItemPC-1600*900 PC-1600*900:w-CarouselItemPC-1600*900 
+    PC-1280*720:h-CarouselItemPC-1280*720 PC-1280*720:w-CarouselItemPC-1280*720
+    PC-800*600:w-CarouselItemPC-640*480 PC-800*600:h-CarouselItemPC-640*480
+    PC-640*480:w-CarouselItemPC-640*480 PC-640*480:h-CarouselItemPC-640*480 PC-640*480:ml-0 PC-640*480:flex-grow
     
 }
+
+.topbuttonsContainer
+{
+    @apply flex columns-2 h-max w-full me-0
+    
+}
+
+
+.ticketText
+{
+    @apply 
+    PC-1920*1080:text-3xl
+    PC-1600*900:text-2.5xl
+    PC-1280*720:text-xl
+    PC-800*600:text-sm PC-800*600:w-max
+    PC-640*480:text-xs  PC-640*480:w-max
+}
+
+.ticketPrice
+{
+    @apply text-white
+    PC-1920*1080:text-2.5xl PC-1920*1080:text-white
+    PC-1600*900:text-2.5xl PC-1600*900:text-white
+    PC-1280*720:text-2xl
+    PC-800*600:text-base
+    PC-640*480:text-base
+}
+
+.ticketPrice2
+{
+    @apply 
+    PC-1920*1080:text-2.5xl
+    PC-1600*900:text-2.5xl
+    PC-1280*720:text-xl
+    PC-800*600:text-sm
+    PC-640*480:text-xs 
+}
+
+.dropboxContainer
+{
+    @apply rounded border mr-2 
+    PC-1920*1080:h-12 PC-1920*1080:w-12
+    PC-1600*900:h-10 PC-1600*900:w-12
+    PC-800*600:h-6 PC-800*600:w-8
+    PC-640*480:h-6 PC-640*480:w-8
+}
+
+.botbuttonsContainer
+{
+    @apply sm:flex sm:h-1/2 sm:items-end sm:justify-end sm:mb-auto
+    PC-1600*900:mt-8
+    PC-1280*720:mt-3 PC-1280*720:h-4/7
+    PC-800*600:pb-5
+    PC-640*480:pb-7 PC-640*480:text-sm
+    
+}
+
+
+
+
+.optionsContainer {
+    display: flex;   
+    font-family: 'PoppinsLight';
+    align-content: center;
+    justify-content: center;
+    background-color: #333F51;
+    color: #DD8E0A;
+    @apply 
+    w-full h-screen
+    Mobile-390*844:text-xl PC-800*600:text-2xl PC-1600*900:text-2xl PC-1366*768:text-2.5xl PC-1920*1080:text-2.5xl 
+    sm:w-1/4 md:w-1/4  lg:w-1/4  xl:w-1/4 2xl:w-1/4 hidden sm:inline-block
+}
+
+
+.categories
+{      
+    
+    @apply flex sm:grid h-max 
+}
+
+ 

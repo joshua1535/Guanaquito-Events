@@ -1,12 +1,15 @@
 import logo from '../../assets/logo.png';
 import './LoginForm.module.css';
 import classes from './LoginForm.module.css';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import { useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '../../Context/userContext';
 import { useState } from 'react';
 import { useEffect } from 'react';
+
+import { Toaster, toast } from 'sonner';
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 const LoginForm = () => {
 
@@ -14,26 +17,33 @@ const LoginForm = () => {
 
     const { login, token, user } = useUserContext();
 
+    const notifyError = () => toast.error('Usuario o contraseña incorrectos');
+
     useEffect(() => {
     
         if (token) {
-            
             if(user){
-
-                if(user.permits.some(permit => permit.name === 'Admin')){
+                
+                if(user.permitList.some(permit => permit === 'Admin')){
                     return navigate('/admin-users')
-                }else if(user.permits.some(permit => permit.name === 'Event Administrator')){
-                    return navigate('/admin-event/')
-                }else if(user.permits.some(permit => permit.name === 'Ticket Validator')){
-                    return navigate('/admin-scanner')
-                }else if(user.permits.some(permit => permit.name === 'Stadistics')){
-                    return navigate('/admin-graphs')
-                }else if(user.permits.some(permit => permit.name === 'Client')){
-                    return navigate('/home')
                 }
 
-            }
+                if(user.permitList.some(permit => permit=== 'Event Administrator')){
+                    return navigate('/admin-event/')
+                }
 
+                if(user.permitList.some(permit => permit=== 'Ticket Validator')){
+                    return navigate('/admin-scanner')
+                }
+
+                if(user.permitList.some(permit => permit === 'Stadistics')){
+                    return navigate('/admin-graphs')
+                }
+
+                if(user.permitList.some(permit => permit === 'Client')){
+                    return navigate('/home')
+                }
+            }
         }
     
     }, [token, user]);
@@ -64,6 +74,18 @@ const LoginForm = () => {
 
         const logged = await login(identifier, password);
 
+        if(!logged){
+            toast.error('Usuario o contraseña incorrectos', {
+                duration: 2000,
+                icon: <XCircleIcon style={{color: "red"}} />,
+            });
+        }else{
+            toast.success('Bienvenido', { 
+                duration: 2000,
+                icon: <CheckCircleIcon style={{color: "green"}} />,
+            });
+        };
+        
         setError(!logged);
     
         setIdentifier("");
@@ -74,13 +96,13 @@ const LoginForm = () => {
 
     const registerHandler = (e) => {
         
-        e.stopPropagation();
         navigate('/register');
     
     };
 
     return (
         <div className={classes["generalContainer"]}>
+            <Toaster />
             <form onSubmit={onSubmitHandler}>
                 <div className={classes["inputsContainer"]} >
                     <img className={classes["logoImg"]} src={logo} />
@@ -103,15 +125,6 @@ const LoginForm = () => {
                             type="password" 
                             placeholder="*****************"
                             onChange={(e) => onChange(e, setPassword)}/>
-                        <div className={classes["inputOptionsContainer"]}>
-                            <input type="checkbox" class="form-checkbox" />
-                            <p className={classes["rememberMeTitle"]} >Recuerdame</p>
-                            <button
-                                onClick={forgotpasswordHandler}
-                                className={classes["buttonforgotpassword"]} >
-                                <p className={classes["forgotpassword"]} > ¿Olvidaste tu contraseña?</p>
-                            </button>
-                        </div>
                     </div>
 
                     <div className={classes["loginContainer"]}>
@@ -123,11 +136,10 @@ const LoginForm = () => {
 
                         <button
                             type='button'
-                            onClick={registerHandler}
+                            onClick={() => registerHandler()}
                             className={classes["buttonlogingoogle"]}>
                             <span>Registrarse</span>
                         </button>
-
                     </div>
                 </div>
             </form>

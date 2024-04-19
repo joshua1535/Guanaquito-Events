@@ -1,9 +1,17 @@
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import classes from './Error404Form.module.css';
+import { useNavigate } from 'react-router-dom';
 
 
 const Error404Form = () => {
+
+    const navigate = useNavigate();
+
+    const goBackHandler = () => {
+        navigate('/');
+    };
+
     return (
         <div className={classes["generalContainer"]}>
             <div className={classes["infoContainer"]} >
@@ -29,7 +37,10 @@ const Error404Form = () => {
 
                         <div className={classes["loginContainer"]}>
 
-                            <button className={classes["buttonlogin"]}>
+                            <button
+                                type='button'
+                                onClick={goBackHandler}
+                                className={classes["buttonlogin"]}>
                                 Volver atras
                             </button>        
 

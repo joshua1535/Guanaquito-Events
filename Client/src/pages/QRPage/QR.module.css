@@ -41,7 +41,18 @@
     Mobile-390*844:text-base Mobile-390*844:mt-4
     Mobile-280:text-sm
 }
-
+.titleText
+{
+    font-family: 'PoppinsLight'; 
+    @apply text-Orange text-sm sm:text-lg md:text-xl lg:text-2xl mt-10
+    PC-1920*1080:text-3xl 
+    PC-1600*900:text-3xl
+    PC-1366*768:text-3xl
+    PC-1280*720:text-2.5xl
+    PC-800*600:text-2xl
+    PC-640*480:text-xl
+    Mobile-390*844:text-xl
+}
 .titleEventText
 {
     font-family: 'PoppinsLight'; 
@@ -53,7 +64,6 @@
     PC-800*600:text-2xl
     PC-640*480:text-xl
     Mobile-390*844:text-xl
-
 }
  
 .ticketEventText

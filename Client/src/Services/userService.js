@@ -14,8 +14,9 @@ export const userService = {
             return response.data;
 
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data);
         }
+        
     },
     signUp: async function (email, password, profilePic) {
 
@@ -32,7 +33,7 @@ export const userService = {
             return response.data;
 
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data);
         }
     },
     verifyToken: async function (token) {

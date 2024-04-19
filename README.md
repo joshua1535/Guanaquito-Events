@@ -2,14 +2,12 @@
 
 # Guanaco Business
 
-Pagina web de compra de boletos para eventos socioculturales varios.
-
 ### Esta aplicación permite:
 	Para los clientes:
 	- Registrarse e Iniciar sesión con correo y contraseña.
 	- Ver cartelera de eventos por categoria y eventos proximos.
 	- Compra de boletos.
-	- Capacidad de transferir boletos a otra persona mediante un codigo Qr.
+	- Capacidad de transferir boletos a otra persona mediante un codigo.
 	- Ver historial de ordenes realizadas.
 	- Ver los tickets comprados.
 	

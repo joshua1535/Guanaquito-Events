@@ -1,6 +1,6 @@
 import logo from '../../../assets/logo.png';
 import classes from './PasswordConfirmationForm.module.css';
-import imgtemplate from '../../../assets/loginimg.png';
+import imgtemplate from '../../../assets/loginimg.jpg';
 import { useNavigate } from 'react-router-dom';
 
 

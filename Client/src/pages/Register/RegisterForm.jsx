@@ -1,7 +1,7 @@
 import logo from '../../assets/logo.png';
 import './RegisterForm.module.css';
 import classes from './RegisterForm.module.css';
-import imgtemplate from '../../assets/loginimg.png';
+import imgtemplate from '../../assets/loginimg.jpg';
 import { useNavigate } from 'react-router-dom';
 
 import { useState } from 'react';
@@ -10,10 +10,6 @@ import { useUserContext } from '../../Context/userContext'
 const RegisterForm = () => {
 
     const navigate = useNavigate();
-
-    const loginHandler = () => {
-        navigate('/');
-    };
 
     const { signup } = useUserContext();
 
@@ -72,7 +68,7 @@ const RegisterForm = () => {
 
                     <div className={classes["loginContainer"]}>
 
-                    <button onClick={loginHandler} className={classes["buttonlogin"]}>
+                    <button type="submit" className={classes["buttonlogin"]}>
                         Crear cuenta
                     </button>        
 

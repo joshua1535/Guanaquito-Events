@@ -1,39 +1,20 @@
 import './ModifyEvent.module.css';
 import classes from './ModifyEvent.module.css';
 import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.png';
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import {
-    Carousel,
-    Navbar,
-    Collapse,
-    Typography,
-    Button,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-    Avatar,
-    Card,
-    IconButton,
-    Chip,
-    Input,
-    Select,
-    Option,
-  } from "@material-tailwind/react";
+import {Navbar,Typography,Button,Menu,MenuHandler,MenuList,MenuItem,Avatar,Input,Select,Option} from "@material-tailwind/react";
   import {
     ChevronDownIcon,
-    Bars2Icon,
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
 import { tierService } from '../../Services/tierService';
-
+import Footer from '../../Components/Footer';
+import Header from '../../Components/Header/Header';
 
 
   const categoryOptions = [
@@ -43,87 +24,6 @@ import { tierService } from '../../Services/tierService';
     "Música",
     // Añade más categorías según tus necesidades
   ];
-
-// profile menu component
-const profileMenuItems = [
-  {
-    label: "Gestionar eventos",
-  },
-  {
-    label: "Crear evento",
-  },
-  {
-    label: "Sign Out",
-  },
-];
- 
-function ProfileMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const closeMenu = () => setIsMenuOpen(false);
-
-  const navigate = useNavigate();
-
-  const handleMenuClick = (label) => {
-  if (label === "Gestionar eventos") {
-      navigate('/admin-event');
-  } else if (label === "Crear evento") {
-      navigate('/admin-event/createevent');
-  } else if (label === "Sign Out") {
-      navigate('/');
-  }
-  };
- 
-  return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-      <MenuHandler>
-        <Button
-          variant="text"
-          color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 ml-auto"
-        >
-          <Avatar
-            variant="circular"
-            size="sm"
-            alt="candice wu"
-            className="border border-blue-500 p-0.5"
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-          />
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`h-3 w-3 transition-transform ${
-              isMenuOpen ? "rotate-180" : ""
-            }`}
-          />
-        </Button>
-      </MenuHandler>
-      <MenuList className="p-1">
-        {profileMenuItems.map(({ label }, key) => {
-          const isLastItem = key === profileMenuItems.length - 1;
-          return (
-            <MenuItem
-              key={label}
-              onClick={ () => handleMenuClick(label)}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
-              <Typography
-                as="span"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
-              >
-                {label}
-              </Typography>
-            </MenuItem>
-          );
-        })}
-      </MenuList>
-    </Menu>
-  );
-}
-
 
 export default function ModifyEvent() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
@@ -146,17 +46,21 @@ export default function ModifyEvent() {
     const [eventName, setEventName] = useState();
     const [date, setDate] = useState();
     const [time, setTime] = useState();
-
-    //para tiers
-    const [tierName, setTierName] = useState();
-    const [tierPrice, setTierPrice] = useState();
-    const [tierCapacity, setTierCapacity] = useState();
+    const [sponsor, setSponsor] = useState();
+    const [sponsors, setSponsors] = useState([null]);
 
     useEffect(() => {
       if(token){
         eventService.getEventById(eventCode,token)
             .then((data) => {
-              setEvent(data);          
+              setEvent(data);  
+              setEventName(data.title);
+              setParticipants(data.involvedPeople.split(", "));
+              setSponsors(data.sponsors.split(", "));        
+              setImage(data.image);
+              setDate(data.date);
+              setDuration(data.duration);
+              setTime(data.time);
                 console.log('evento obtenido:', event);
             })
             .catch((error) => {
@@ -178,16 +82,13 @@ export default function ModifyEvent() {
         }
     }, [token]); 
 
-    const [sponsor, setSponsor] = useState();
-    const [sponsors, setSponsors] = useState([null]);
-
 
     const navigate = useNavigate();
 
     const handlesaveClick2 = () => {
       eventService.updateEvent({
           code: eventCode,
-          title: eventName,
+          title: eventName,  // Reemplaza esto con el valor del campo "Nombre del evento"
           involvedPeople: participants.join(", "),
           image: image,  // Reemplaza esto con el valor del campo "Foto del evento"
           date: date,  // Reemplaza esto con el valor del campo "Fecha"
@@ -257,7 +158,7 @@ export default function ModifyEvent() {
     };
 
     const handleAddTierClick = () => {
-      navigate('/admin-event/modifyevent/addtier');
+      navigate(`/admin-event/modifyevent/addtier/${eventCode}`);
     };
 
     const handleButtonClick = () => {
@@ -369,22 +270,7 @@ export default function ModifyEvent() {
 
     return (
         <div className={[classes["generalContainer"]]}>
-        <header className={[classes["headerContainer"]]}>
-      <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 bg-dark-blue border-none">
-      <div className={[classes["headerTypography"]]}>
-        <img src={logo} alt="logo" className="h-12 w-12 mx-4" />
-        <Typography
-          as="a"
-          href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-        >
-          Guanaco Business
-        </Typography>
-        
-        <ProfileMenu />
-        </div>
-    </Navbar>
-      </header>
+        <Header/>
       <div className={[classes["buttonchangeView"]]}>
       <button
       onClick={handleButtonClick2} 
@@ -439,7 +325,7 @@ export default function ModifyEvent() {
                   </label>
                   <Input
                     type="text"
-                    name="name"  // Asegúrate de darle un nombre al input, que corresponde a la propiedad que quieres cambiar
+                    name="name" 
                     color="white"
                     onChange={(event) => handleInputChange(location.code, event)}
                     placeholder={location.name}
@@ -562,7 +448,7 @@ export default function ModifyEvent() {
                 
               </label>
                 <Select
-                 onChange={value => setCategory(value)}
+                onChange={value => setCategory(value)}
                 className='text-white'>
                     <Option value="CI">Cine</Option>
                     <Option value="MU">Musica</Option>
@@ -585,7 +471,7 @@ export default function ModifyEvent() {
             </div>
             <div>
             <label htmlFor="duration" className={[classes["titleInputs"]]}>
-              Duración (segundos)
+              Duración (horas)
             </label>
             <Input
               id="duration"
@@ -626,7 +512,6 @@ export default function ModifyEvent() {
                 <Input
                   id="sponsors"
                   type="text"
-                  color='white'
                   value={sponsors.join(", ")}
                   disabled
                 />
@@ -668,6 +553,7 @@ export default function ModifyEvent() {
               id="eventPhoto"
               type="text"
               color='white'
+              value={image}
               placeholder="Seleccione una foto"
               onChange={event => setImage(event.target.value)}
             />
@@ -689,39 +575,7 @@ export default function ModifyEvent() {
     </div>
     </div> 
     )}
-      <footer className="  bg-bluefooter text-white mt-5 py-4 px-6 text-center">
-
-        <div className='relative mx-auto flex mb-5 items-center text-white'>        
-          <img src={logo} alt="logo" className="h-12 w-12 mr-2 mb-2" />
-          <Typography
-            as="a"
-            href="#"
-            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium text-white"
-          >
-            Guanaco Business
-          </Typography>
-        </div>
-        <p className='h-max w-max text-sm text-gray-500'>
-        © 2023 Copyright
-        </p>
-        <div className='flex justify-start content-start'>
-          </div>
-        <div className='flex justify-end content-end'>
-            <FaFacebook
-            className='mr-2 w-8 h-8'
-
-            />
-
-            <FaTwitter
-            className='mr-2 ml-2 w-8 h-8'
-            />
-            <FaInstagram 
-            className='mr-2 ml-2 w-8 h-8'
-            />
-
-        </div>
-
-    </footer>
+      <Footer />
     </div>   
     )
 }
