@@ -1,6 +1,6 @@
-# Guanaco Tickets
+### Trabajo que se entrego como proyecto final de materia en "Programacion N Capas" e "Ingenieria de Software".
 
-Pagina web de compra de boletos para eventos socioculturales varios.
+# Guanaco Business
 
 ### Esta aplicación permite:
 	Para los clientes:
