@@ -96,6 +96,15 @@ CREATE TABLE public.event_location(
 	constraint event_location_pk primary key (code)
 );
 
+CREATE TABLE public."token" (
+	code uuid NOT NULL DEFAULT gen_random_uuid(),
+	"content" varchar NOT NULL,
+	active boolean NOT NULL DEFAULT true,
+	"timestamp" timestamp without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	user_code uuid NULL,
+	CONSTRAINT token_pk PRIMARY KEY (code),
+	CONSTRAINT token_fk FOREIGN KEY (user_code) REFERENCES public.user(code) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- Declaracion de Foreign Key's
 -- Tabla UserXPermit
