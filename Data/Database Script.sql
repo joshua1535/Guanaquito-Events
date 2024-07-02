@@ -30,9 +30,13 @@ create table public.event(
 	event_time TIME not null,
 	duration INT not null,
 	sponsors VARCHAR(150) not null,
-	active Bool not null,
+	active boolean not null,
 	category_code VARCHAR(20) null,
-	constraint event_pk primary key (code)
+	constraint event_pk primary key (code),
+	weather varchar(50) NULL,
+	temperature DECIMAL NULL,
+	event_location_code uuid NULL,
+	demo varchar(300) null
 );
 
 create table public.userxevent(
@@ -82,6 +86,16 @@ create table public.register(
 	constraint register_pk primary key (code)
 );
 
+CREATE TABLE public.event_location(
+	code uuid not null default gen_random_uuid(),
+	geom geometry NOT NULL,
+	lat numeric NOT NULL,
+	lon	numeric NOT NULL,
+	location_name varchar (200) NOT NULL,
+	address varchar(500) NOT NULL,
+	constraint event_location_pk primary key (code)
+);
+
 CREATE TABLE public."token" (
 	code uuid NOT NULL DEFAULT gen_random_uuid(),
 	"content" varchar NOT NULL,
@@ -89,7 +103,7 @@ CREATE TABLE public."token" (
 	"timestamp" timestamp without time zone NULL DEFAULT CURRENT_TIMESTAMP,
 	user_code uuid NULL,
 	CONSTRAINT token_pk PRIMARY KEY (code),
-	CONSTRAINT token_fk FOREIGN KEY (user_code) REFERENCES public."user"(code) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT token_fk FOREIGN KEY (user_code) REFERENCES public.user(code) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Declaracion de Foreign Key's
@@ -99,6 +113,7 @@ alter table public.userxpermit add constraint permit_code_fk foreign key (permit
 
 -- Tabla Event
 alter table public.event add constraint category_code_fk foreign key (category_code) references public.category(code) on delete set null on update cascade;
+alter table public.event add constraint event_location_fk foreign key (event_location_code) references public.event_location(code) on delete set null on update cascade;
 
 -- Tabla UserXEvent
 alter table public.userxevent add constraint user_code_fk foreign key (user_code) references public.user(code) on delete set null on update cascade;
