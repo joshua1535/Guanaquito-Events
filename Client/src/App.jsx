@@ -29,6 +29,7 @@ import StatsPage from './pages/Stats/Stats';
 import MyEvents from './pages/My Events/MyEvents';
 import Private from './Components/Private/Private';
 import ReceiveTicket from './pages/Receive Ticket/ReceiveTicket';
+import AddLocation from './pages/Add Location/AddLocation.jsx';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
           <Route path="/admin-event/createevent" element={<Private neededPermits={['Event Administrator']}> <CreateEvent /> </Private>} />
           <Route path="/admin-event/modifyevent/:eventCode" element={<Private neededPermits={['Event Administrator']}> <ModifyEvent /> </Private>} />
           <Route path="/admin-event/addtiers/:eventCode" element={<Private neededPermits={['Event Administrator']}> <AddTiers /> </Private>} />
+          <Route path="/admin-event/addlocation/:eventCode" element={<Private neededPermits={['Event Administrator']}> <AddLocation /> </Private>} />
           <Route path="/admin-event/" element={<Private neededPermits={['Event Administrator']}> <AdminEvents /> </Private>} />
           <Route path="/admin-event/modifyevent/addtier/:eventCode" element={<Private neededPermits={['Event Administrator']}> <AddTiers /> </Private>} />
           <Route path="/admin-event/eventpermit/:eventCode" element={<Private neededPermits={['Admin']}> <EventsPermit /> </Private>} />

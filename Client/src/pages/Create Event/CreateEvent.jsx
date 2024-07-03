@@ -80,7 +80,8 @@ export default function CreateEvent() {
               console.log('Evento creado con éxito:', response);
               // Guarda el código del evento en el almacenamiento local
               const eventCode = response.code;
-              navigate(`/admin-event/addtiers/${eventCode}`);
+              navigate(`/admin-event/addlocation/${eventCode}`);
+              //navigate(`/admin-event/addtiers/${eventCode}`);
               // aquí puedes hacer cualquier otra cosa que necesites después de crear el evento
           })
           .catch(error => {
@@ -234,7 +235,7 @@ export default function CreateEvent() {
     return (
         <div className={[classes["generalContainer"]]}>
         <Header/>
-      <MapComponent />
+      {/*  <MapComponent />*/}
         <div className={[classes["bodyContainer"]]}>
             <div className={[classes["titleContainer"]]}>
                 <h1 className={[classes["title1"]]}>Crear</h1>
