@@ -234,7 +234,7 @@ export default function CreateEvent() {
     return (
         <div className={[classes["generalContainer"]]}>
         <Header/>
-      {/*  <MapComponent />*/}
+      <MapComponent />
         <div className={[classes["bodyContainer"]]}>
             <div className={[classes["titleContainer"]]}>
                 <h1 className={[classes["title1"]]}>Crear</h1>

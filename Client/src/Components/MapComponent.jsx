@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import wellknown from 'wellknown';
+import { Button } from '@material-tailwind/react';
 
 // Fix default icon issue with Webpack
 delete L.Icon.Default.prototype._getIconUrl;
@@ -11,122 +13,57 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Lista de lugares para eventos en El Salvador
+// Icono personalizado para la ubicación del usuario
+const userIcon = new L.Icon({
+  iconUrl: 'https://cdn-icons-png.freepik.com/512/5307/5307184.png', // Reemplaza con la URL de tu icono
+  iconSize: [40, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+// Icono personalizado para los lugares
+const placeIcon = new L.Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/988/988557.png', // Reemplaza con la URL de tu icono
+  iconSize: [40, 50],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+// Ejemplo de lugares con geometrías en formato WKT
 const places = [
   { 
     name: 'Estadio Mágico González', 
     lat: 13.697223, 
     lng: -89.191432,
-    geometry: [
-      [13.697623, -89.192132],
-      [13.697823, -89.191732],
-      [13.697423, -89.191332],
-      [13.697223, -89.191932],
-    ]
+    geometry: 'POLYGON((-89.192132 13.697623, -89.191732 13.697823, -89.191332 13.697423, -89.191932 13.697223, -89.192132 13.697623))'
   },
   { 
     name: 'Estadio Cuscatlán', 
     lat: 13.674268, 
     lng: -89.242654,
-    geometry: [
-      [13.674668, -89.243254],
-      [13.674868, -89.242854],
-      [13.674468, -89.242454],
-      [13.674268, -89.243054],
-    ]
+    geometry: 'POLYGON((-89.243254 13.674668, -89.242854 13.674868, -89.242454 13.674468, -89.243054 13.674268, -89.243254 13.674668))'
   },
-  { 
-    name: 'Teatro Nacional de El Salvador', 
-    lat: 13.69893, 
-    lng: -89.190186,
-    geometry: [
-      [13.69933, -89.190786],
-      [13.69953, -89.190386],
-      [13.69913, -89.189986],
-      [13.69893, -89.190586],
-    ]
-  },
-  { 
-    name: 'Centro Internacional de Ferias y Convenciones', 
-    lat: 13.705063, 
-    lng: -89.227483,
-    geometry: [
-      [13.705463, -89.228083],
-      [13.705663, -89.227683],
-      [13.705263, -89.227283],
-      [13.705063, -89.227883],
-    ]
-  },
-  { 
-    name: 'Plaza Libertad', 
-    lat: 13.699515, 
-    lng: -89.191243,
-    geometry: [
-      [13.699915, -89.191843],
-      [13.700115, -89.191443],
-      [13.699715, -89.191043],
-      [13.699515, -89.191643],
-    ]
-  },
-  { 
-    name: 'Museo de Arte de El Salvador', 
-    lat: 13.696124, 
-    lng: -89.236862,
-    geometry: [
-      [13.696524, -89.237462],
-      [13.696724, -89.237062],
-      [13.696324, -89.236662],
-      [13.696124, -89.237262],
-    ]
-  },
-  { 
-    name: 'Parque Cuscatlán', 
-    lat: 13.698793, 
-    lng: -89.20144,
-    geometry: [
-      [13.699193, -89.20204],
-      [13.699393, -89.20164],
-      [13.698993, -89.20124],
-      [13.698793, -89.20184],
-    ]
-  },
-  { 
-    name: 'Auditorio FEPADE', 
-    lat: 13.700743, 
-    lng: -89.233579,
-    geometry: [
-      [13.701143, -89.234179],
-      [13.701343, -89.233779],
-      [13.700943, -89.233379],
-      [13.700743, -89.233979],
-    ]
-  },
-  { 
-    name: 'Polideportivo de Ciudad Merliot', 
-    lat: 13.673217, 
-    lng: -89.254417,
-    geometry: [
-      [13.673617, -89.255017],
-      [13.673817, -89.254617],
-      [13.673417, -89.254217],
-      [13.673217, -89.254817],
-    ]
-  },
-  { 
-    name: 'Centro Comercial Multiplaza', 
-    lat: 13.675354, 
-    lng: -89.240104,
-    geometry: [
-      [13.675754, -89.240704],
-      [13.675954, -89.240304],
-      [13.675554, -89.239904],
-      [13.675354, -89.240504],
-    ]
-  }
+  // Agrega más lugares con geometrías aquí
 ];
 
 // Si la geolocalización no está disponible, se usa la posición predeterminada
 const defaultPosition = { lat: 13.697223, lng: -89.191432 }; // Estadio Mágico González
+
+const OpenPopupOnLoad = ({ children }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    map.eachLayer(layer => {
+      if (layer instanceof L.Marker) {
+        layer.openPopup();
+      }
+    });
+  }, [map]);
+
+  return <>{children}</>;
+};
 
 const MapComponent = () => {
   const [position, setPosition] = useState(defaultPosition);
@@ -160,30 +97,34 @@ const MapComponent = () => {
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {places.map((place, idx) => (
-        <React.Fragment key={idx}>
-          <Marker position={[place.lat, place.lng]}>
-            <Popup>
-              {place.name}<br />
-              <button onClick={() => handleSelectPlace(place.lat, place.lng)}>Seleccionar</button>
-            </Popup>
-          </Marker>
-          {place.geometry && (
-            <Polygon positions={place.geometry} />
-          )}
-        </React.Fragment>
-      ))}
-      <Marker position={[position.lat, position.lng]}>
-        <Popup>
-          {position.lat === defaultPosition.lat && position.lng === defaultPosition.lng 
-            ? 'Estadio Mágico González' 
-            : 'Ubicación aproximada de la persona'}
-        </Popup>
-      </Marker>
+      <OpenPopupOnLoad>
+        {places.map((place, idx) => (
+          <React.Fragment key={idx}>
+            <Marker position={[place.lat, place.lng]} icon={placeIcon} >
+              <Popup>
+                <div className='flex flex-col justify-center mt-4 py-0 text-md font-display font-semibold'>
+                  {place.name}<br />
+                  <Button color="blue" className='flex mx-auto my-4 justify-center p-2' onClick={() => handleSelectPlace(place.lat, place.lng)}>Seleccionar</Button>
+                </div>
+              </Popup>
+            </Marker>
+            {place.geometry && (
+              <Polygon positions={wellknown(place.geometry).coordinates[0].map(coord => [coord[1], coord[0]])} />
+            )}
+          </React.Fragment>
+        ))}
+        <Marker position={[position.lat, position.lng]} icon={userIcon}>
+          <Popup>
+          <div className='flex flex-col justify-center mt-4 py-0 text-md font-display font-semibold'>
+              {position.lat === defaultPosition.lat && position.lng === defaultPosition.lng 
+                ? 'Estadio Mágico González' 
+                : 'Ubicación aproximada de la persona'}
+            </div>
+          </Popup>
+        </Marker>
+      </OpenPopupOnLoad>
     </MapContainer>
   );
 }
 
 export default MapComponent;
-
-
