@@ -60,6 +60,15 @@ public class Event {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "weather")
+    private String weather;
+
+    @Column(name = "temperature")
+    private Float temperature;
+
+    @Column(name = "demo")
+    private String demo;
+
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     @JsonIgnore
     List<UserXEvent> userXEvents;
@@ -72,17 +81,21 @@ public class Event {
     @JoinColumn(name = "category_code")
     private Category category;
 
-    public Event(String title, String involvedPeople, String image, LocalDate date, LocalTime time, Integer duration,
-            String sponsors, Boolean active, Category category) {
-        super();
-        this.title = title;
-        this.involvedPeople = involvedPeople;
-        this.image = image;
-        this.date = date;
-        this.time = time;
-        this.duration = duration;
-        this.sponsors = sponsors;
-        this.active = active;
-        this.category = category;
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "event_location_code")
+    private EventLocation eventLocation;
+
+    // public Event(String title, String involvedPeople, String image, LocalDate date, LocalTime time, Integer duration,
+    //         String sponsors, Boolean active, Category category) {
+    //     super();
+    //     this.title = title;
+    //     this.involvedPeople = involvedPeople;
+    //     this.image = image;
+    //     this.date = date;
+    //     this.time = time;
+    //     this.duration = duration;
+    //     this.sponsors = sponsors;
+    //     this.active = active;
+    //     this.category = category;
+    // }
 }
