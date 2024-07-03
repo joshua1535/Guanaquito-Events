@@ -25,4 +25,6 @@ public interface RegisterService {
     FormatedRegisterDTO status(Register register);
     Register findByTicketCodeAndTransacCode(UUID ticketCode, String transacCode);
 
+    List<Register>  findByUserCodeAndValidationTimeNotNull(UUID userCode);
+
 }

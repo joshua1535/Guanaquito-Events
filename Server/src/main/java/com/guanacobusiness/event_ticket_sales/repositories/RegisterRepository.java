@@ -15,5 +15,7 @@ public interface RegisterRepository extends JpaRepository<Register, UUID> {
     Register findByTicketCodeAndTransferenceTimeIsNotNull(UUID ticketCode);
     Register findByTicketCodeAndTransferenceTimeIsNullAndValidationTimeIsNull(UUID ticketCode);
     Register findByTransactionCode(String transactionCode);
+
+    List<Register> findByTicketUserOwnerCodeAndValidationTimeIsNotNull(UUID userCode);
     void deleteByTicketCodeAndTransactionCode(UUID ticketCode, String transactionCode);
 }
