@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -197,9 +199,9 @@ public class UserController {
     
     }
 
-    //TODO: Cambiar endpoint para que obtenga el usuario del token en lugar de la url
-    @GetMapping("/history/{email}")
-    public ResponseEntity<?> getUserEventHistory(@PathVariable(name = "email") String email, HttpServletRequest request) {
+    
+    @GetMapping("/history")
+    public ResponseEntity<?> getUserEventHistory( HttpServletRequest request) {
 
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
@@ -207,7 +209,8 @@ public class UserController {
 
 
         try {
-            User user = userService.findByEmail(email);
+            //obteniendo el usuario mediante su token
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
             if (user == null) {
                 return new ResponseEntity<>("User Not Found",HttpStatus.NOT_FOUND);
