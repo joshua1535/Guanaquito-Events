@@ -9,6 +9,16 @@
             "projectName": "event_ticket_sales",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EventTicketSalesApplication<event_ticket_sales-Server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.guanacobusiness.event_ticket_sales.EventTicketSalesApplication",
+            "projectName": "event_ticket_sales-Server",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
