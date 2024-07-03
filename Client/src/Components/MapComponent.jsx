@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import wellknown from 'wellknown';
@@ -15,7 +15,7 @@ L.Icon.Default.mergeOptions({
 
 // Icono personalizado para la ubicación del usuario
 const userIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.freepik.com/512/5307/5307184.png', // Reemplaza con la URL de tu icono
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/5307/5307184.png', // Reemplaza con la URL de tu icono
   iconSize: [40, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -34,16 +34,18 @@ const placeIcon = new L.Icon({
 // Ejemplo de lugares con geometrías en formato WKT
 const places = [
   { 
-    name: 'Estadio Mágico González', 
-    lat: 13.697223, 
-    lng: -89.191432,
-    geometry: 'POLYGON((-89.192132 13.697623, -89.191732 13.697823, -89.191332 13.697423, -89.191932 13.697223, -89.192132 13.697623))'
+    name: 'Estadio Nacional Jorge "El Mágico" González', 
+    lat: 13.698463245628963, 
+    lng: -89.21537535974778,
+    geometry: 'MULTIPOLYGON (((-89.21537401817766 13.699349926947638, -89.21489203043662 13.69918233335035, -89.21465864689887 13.698857004261555, -89.21465864689887 13.69854153319999, -89.21477533866776 13.697604975991782, -89.21529284129495 13.69721556426485, -89.21576975548079 13.697284573985003, -89.2162213018908 13.697890872798375, -89.21616549278394 13.698738702663084, -89.21597269768753 13.698995022717854, -89.21537401817766 13.699349926947638)))',
+    address: '49 Av Sur, San Salvador'
   },
   { 
     name: 'Estadio Cuscatlán', 
-    lat: 13.674268, 
-    lng: -89.242654,
-    geometry: 'POLYGON((-89.243254 13.674668, -89.242854 13.674868, -89.242454 13.674468, -89.243054 13.674268, -89.243254 13.674668))'
+    lat: 13.681098944765221, 
+    lng: -89.22235803227912,
+    geometry: 'MULTIPOLYGON (((-89.22236047315357 13.68200480368482, -89.22172627875753 13.681832268139127, -89.22154870432662 13.681122406277643, -89.22181252919538 13.680279442536518, -89.22254312113964 13.680200568581727, -89.22298452043933 13.680417471893795, -89.22310628576336 13.681092828653625, -89.22299466754966 13.681723817159964, -89.22236047315357 13.68200480368482)))',
+    address: 'Calle Antigua a Huizucar, San Salvador'
   },
   // Agrega más lugares con geometrías aquí
 ];
@@ -109,7 +111,9 @@ const MapComponent = () => {
               </Popup>
             </Marker>
             {place.geometry && (
-              <Polygon positions={wellknown(place.geometry).coordinates[0].map(coord => [coord[1], coord[0]])} />
+              wellknown(place.geometry).coordinates.map((polygon, polyIdx) => (
+                <Polygon key={polyIdx} positions={polygon[0].map(coord => [coord[1], coord[0]])} />
+              ))
             )}
           </React.Fragment>
         ))}
