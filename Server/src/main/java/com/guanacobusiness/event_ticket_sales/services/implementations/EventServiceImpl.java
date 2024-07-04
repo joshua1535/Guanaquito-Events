@@ -2,7 +2,9 @@ package com.guanacobusiness.event_ticket_sales.services.implementations;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,9 @@ import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
+import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.repositories.EventRepository;
+import com.guanacobusiness.event_ticket_sales.repositories.RegisterRepository;
 import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
@@ -33,6 +37,9 @@ public class EventServiceImpl implements EventService{
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private RegisterRepository registerRepository;
 
     @Autowired
     private PageDTOMapper pageDTOMapper;
@@ -236,5 +243,30 @@ public class EventServiceImpl implements EventService{
         eventFound.setActive(!eventFound.getActive());
         eventRepository.save(eventFound);
         return true;
-    }  
+    }
+
+    @Override
+    public Set<Event> recommendEventsBasedOnAttendance(UUID ownerCode) {
+        List<Register> registers = registerRepository.findByTicketUserOwnerCodeAndValidationTimeIsNotNull(ownerCode);
+        if(registers.isEmpty() || registers == null){
+            throw new IllegalArgumentException("No registers found");
+        }
+        //buscar categorias a las que se asistio segun evento
+        Set<String> attendedCategories = registers.stream()
+        .map(register -> register.getTicket().getTier().getEvent().getCategory().getCode())
+        .collect(Collectors.toSet());
+
+        Pageable pageable = Pageable.unpaged(); //esto es 0
+        Page<Event> activeEventsPage = eventRepository.findByActiveTrue(pageable);
+        List<Event> activeEvents = activeEventsPage.getContent();
+
+        Set<Event> recommendedEvents = activeEvents.stream()
+            .filter(event -> !attendedCategories.contains(event.getCategory().getCode()))
+            .collect(Collectors.toSet());
+
+    return recommendedEvents;
+
+    }
+    
+
 }
