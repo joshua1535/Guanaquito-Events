@@ -284,10 +284,10 @@ public class EventServiceImpl implements EventService{
         List<Event> activeEvents = activeEventsPage.getContent();
 
         Set<Event> recommendedEvents = activeEvents.stream()
-            .filter(event -> !attendedCategories.contains(event.getCategory().getCode()))
+            .filter(event -> attendedCategories.contains(event.getCategory().getCode()))
             .collect(Collectors.toSet());
 
-    return recommendedEvents;
+        return recommendedEvents;
 
     }
     
