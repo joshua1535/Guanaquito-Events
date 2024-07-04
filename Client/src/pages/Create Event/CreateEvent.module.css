@@ -13,6 +13,20 @@
     @apply flex flex-row justify-center w-full h-full m-auto px-10
 }
 
+.topbuttonsContainer
+{
+    @apply flex columns-2 h-max w-full me-0 shadow-xl border-b-2 border-yellowCapas border-opacity-40 mb-5
+    
+}
+
+.title {
+    @apply text-3xl font-text text-white mb-2
+}
+
+.desc {
+    @apply font-bold text-xl font-text text-yellowCapas mb-2
+}
+
 .title1 {
     @apply font-bold text-center text-white font-text
 
