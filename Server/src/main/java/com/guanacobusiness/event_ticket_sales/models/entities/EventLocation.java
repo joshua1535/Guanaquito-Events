@@ -17,11 +17,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "event_location", schema = "public")
+@ToString(exclude = {"events"})
 public class EventLocation {
 
     @Id
