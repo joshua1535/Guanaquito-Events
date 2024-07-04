@@ -341,5 +341,12 @@ public class RegisterServiceImpl implements RegisterService {
 
         return foundRegister;
     }
-    
+
+    @Override
+    public List<Register> findByUserCodeAndValidationTimeNotNull(UUID userCode) {
+
+        List<Register> foundRegister = registerRepository.findByTicketUserOwnerCodeAndValidationTimeIsNotNull(userCode);
+        return foundRegister;
+    }
+
 }

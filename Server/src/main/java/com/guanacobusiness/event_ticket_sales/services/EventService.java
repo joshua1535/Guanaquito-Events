@@ -12,6 +12,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 
 public interface EventService {
+
     List<Event>findAllEvents();
     Page<Event>findAllEvents(int page, int size);
     List<Event> findAllActiveEvents();
