@@ -18,6 +18,8 @@ import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
+import com.guanacobusiness.event_ticket_sales.models.entities.EventLocation;
+import com.guanacobusiness.event_ticket_sales.repositories.EventLocationRepository;
 import com.guanacobusiness.event_ticket_sales.repositories.EventRepository;
 import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
@@ -36,6 +38,9 @@ public class EventServiceImpl implements EventService{
 
     @Autowired
     private PageDTOMapper pageDTOMapper;
+    
+    @Autowired
+    private EventLocationRepository eventLocationRepository;
 
     @Override
     public List<Event> findAllEvents() {
@@ -170,8 +175,14 @@ public class EventServiceImpl implements EventService{
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Event save(SaveEventDTO info, Category category) throws Exception {
+        EventLocation eventLocation = eventLocationRepository.findById(info.getEventLocationCode()).orElse(null);
+        if (eventLocation == null) {
+            throw new IllegalArgumentException("Event location not found");
+        }
+        
         System.out.println(info);
         System.out.println(category + " " + category.getCode());
+
         Event newEvent = new Event();
         newEvent.setTitle(info.getTitle());
         newEvent.setInvolvedPeople(info.getInvolvedPeople());
@@ -182,6 +193,10 @@ public class EventServiceImpl implements EventService{
         newEvent.setSponsors(info.getSponsors());
         newEvent.setActive(true);
         newEvent.setCategory(category);
+        newEvent.setEventLocation(eventLocation);
+        newEvent.setWeather(info.getWeather());
+        newEvent.setTemperature(info.getTemperature());
+        newEvent.setDemo(info.getDemo());
 
         System.out.println(newEvent);
         System.out.println(newEvent.getCategory());
@@ -191,37 +206,45 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public boolean update(UpdateEventDTO info) throws Exception {
+    public Event update(UpdateEventDTO info) throws Exception {
         Event eventFound = eventRepository.findById(UUID.fromString(info.getCode())).orElse(null);
 
         if (eventFound == null) {
-            return false;
+            throw new IllegalArgumentException("Event not found");
         }
 
-        Event updatedEvent = new Event();
+        //Event updatedEvent = new Event();
 
-        updatedEvent.setCode(eventFound.getCode());
-        updatedEvent.setTitle(info.getTitle() != null ? info.getTitle() : eventFound.getTitle());
-        updatedEvent.setInvolvedPeople(info.getInvolvedPeople() != null ? info.getInvolvedPeople() : eventFound.getInvolvedPeople());
-        updatedEvent.setImage(info.getImage() != null ? info.getImage() : eventFound.getImage());
-        updatedEvent.setDate(info.getDate() != null ? info.getDate() : eventFound.getDate());
-        updatedEvent.setTime(info.getTime() != null ? info.getTime() : eventFound.getTime());
-        updatedEvent.setDuration(info.getDuration() != null ? info.getDuration() : eventFound.getDuration());
-        updatedEvent.setSponsors(info.getSponsors() != null ? info.getSponsors() : eventFound.getSponsors());
-        updatedEvent.setActive(eventFound.getActive());
-
+        if (info.getEventLocationCode() != null) {
+            EventLocation eventLocation = eventLocationRepository.findById(null).orElse(null);
+            if (eventLocation == null) {
+                throw new IllegalArgumentException("Event location not found");
+            }
+            eventFound.setEventLocation(eventLocation);
+        }
 
         if (info.getCategoryCode() != null) {
             Category categoryFound = categoryService.findCategoryByCode(info.getCategoryCode());
             if (categoryFound == null) {
-                updatedEvent.setCategory(eventFound.getCategory());
+                throw new IllegalArgumentException("Category not found");
             }
-            updatedEvent.setCategory(categoryFound);
+            eventFound.setCategory(categoryFound);
         } 
-        else {updatedEvent.setCategory(eventFound.getCategory());}
 
-        eventRepository.save(updatedEvent);
-        return true;
+        eventFound.setTitle(info.getTitle() != null ? info.getTitle() : eventFound.getTitle());
+        eventFound.setInvolvedPeople(info.getInvolvedPeople() != null ? info.getInvolvedPeople() : eventFound.getInvolvedPeople());
+        eventFound.setImage(info.getImage() != null ? info.getImage() : eventFound.getImage());
+        eventFound.setDate(info.getDate() != null ? info.getDate() : eventFound.getDate());
+        eventFound.setTime(info.getTime() != null ? info.getTime() : eventFound.getTime());
+        eventFound.setDuration(info.getDuration() != null ? info.getDuration() : eventFound.getDuration());
+        eventFound.setSponsors(info.getSponsors() != null ? info.getSponsors() : eventFound.getSponsors());
+        //eventFound.setActive(eventFound.getActive());
+        eventFound.setWeather(info.getWeather() != null ? info.getWeather() : eventFound.getWeather());
+        eventFound.setTemperature(info.getTemperature() != null ? info.getTemperature() : eventFound.getTemperature());
+        eventFound.setDemo(info.getDemo() != null ? info.getDemo() : eventFound.getDemo());
+
+        return eventRepository.save(eventFound);
+        //return true;
     }
 
     @Override
