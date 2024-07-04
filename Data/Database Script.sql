@@ -142,3 +142,15 @@ VALUES
     ('Event Administrator'),
     ('Moderator'),
     ('Admin')
+
+--Valores por defecto de categorias en Tabla Category
+INSERT INTO public.category (code, name) 
+VALUES 
+	('CINE', 'Cine'),
+ 	('MUSC', 'Musica'),
+ 	('OBTR', 'Obras de teatro'),
+ 	('DEPO', 'Deportes'),
+ 	('CULT', 'Cultura'),
+ 	('GAST', 'Gastronomia'),
+ 	('FIES', 'Fiestas'),
+ 	('OTRO', 'Otros');
