@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AddUserToEventDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.EventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateEventDTO;
@@ -35,6 +37,7 @@ import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.services.UserService;
 import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
+import com.guanacobusiness.event_ticket_sales.utils.EventMapper;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
 
@@ -64,6 +67,9 @@ public class EventController {
     @Autowired
     private PageDTOMapper pageDTOMapper;
 
+    @Autowired
+    private EventMapper eventMapper;
+
     @GetMapping("/all")
     public ResponseEntity<?> getAllEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
   
@@ -78,7 +84,7 @@ public class EventController {
             return new ResponseEntity<>("No Events Found", HttpStatus.NOT_FOUND);
         }
 
-        PageDTO<Event> response = pageDTOMapper.map(events); 
+        PageDTO<EventDTO> response = pageDTOMapper.map(events.map(eventMapper::toDTO)); 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
     
@@ -101,7 +107,9 @@ public class EventController {
             return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(event,HttpStatus.OK);
+        EventDTO response = eventMapper.toDTO(event);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/active")
@@ -117,12 +125,11 @@ public class EventController {
             return new ResponseEntity<>("No Active Events Found",HttpStatus.NOT_FOUND);
         }
 
-        PageDTO<Event> response = pageDTOMapper.map(events);
+        PageDTO<EventDTO> response = pageDTOMapper.map(events.map(eventMapper::toDTO));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/inactive")
-
     public ResponseEntity<?> getAllInactiveEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
         
         if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
@@ -135,7 +142,7 @@ public class EventController {
             return new ResponseEntity<>("No Inactive Events Found",HttpStatus.NOT_FOUND);
         }
 
-        PageDTO<Event> response = pageDTOMapper.map(events);
+        PageDTO<EventDTO> response = pageDTOMapper.map(events.map(eventMapper::toDTO));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -147,11 +154,18 @@ public class EventController {
         }  
       
         //Page<Event> events = eventService.findAllCurrentEvents(page, size);
-        PageDTO<Event> response = eventService.findAllCurrentEvents(page, size);
-        if (response == null) {
+        PageDTO<Event> events = eventService.findAllCurrentEvents(page, size);
+        if (events == null) {
             return new ResponseEntity<>("No Current Events found",HttpStatus.NOT_FOUND);
         }
 
+        PageDTO<EventDTO> response = pageDTOMapper.map(
+            events.getContent().stream().map(eventMapper::toDTO).collect(Collectors.toList()), 
+            events.getPage(),
+            events.getPage(),
+            events.getTotal_elements(),
+            events.getTotal_pages()
+        );
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -162,11 +176,19 @@ public class EventController {
             return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
         }  
       
-        PageDTO<Event> response = eventService.findAllArchivedEvents(page, size);
+        PageDTO<Event> events = eventService.findAllArchivedEvents(page, size);
 
-        if (response == null) {
+        if (events == null) {
             return new ResponseEntity<>("No Archived Events Found",HttpStatus.NOT_FOUND);
         }
+
+        PageDTO<EventDTO> response = pageDTOMapper.map(
+            events.getContent().stream().map(eventMapper::toDTO).collect(Collectors.toList()), 
+            events.getPage(),
+            events.getPage(),
+            events.getTotal_elements(),
+            events.getTotal_pages()
+        );
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -184,11 +206,19 @@ public class EventController {
             return new ResponseEntity<>("Category Not Found",HttpStatus.NOT_FOUND);
         }
 
-        PageDTO<Event> response = eventService.findAllByCategory(code, page, size);
+        PageDTO<Event> events = eventService.findAllByCategory(code, page, size);
 
-        if (response == null) {
+        if (events == null) {
             return new ResponseEntity<>("No Events Found",HttpStatus.NOT_FOUND);
         }
+
+        PageDTO<EventDTO> response = pageDTOMapper.map(
+            events.getContent().stream().map(eventMapper::toDTO).collect(Collectors.toList()), 
+            events.getPage(),
+            events.getPage(),
+            events.getTotal_elements(),
+            events.getTotal_pages()
+        );
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -218,7 +248,9 @@ public class EventController {
             return new ResponseEntity<>("User is not asigned to events",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(events,HttpStatus.OK);
+        List<EventDTO> response = events.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @PostMapping("/user")
@@ -309,8 +341,6 @@ public class EventController {
         }
 
     }
-    
-
 
     @PostMapping("/")
     public ResponseEntity<?> saveEvent(@Valid @RequestBody SaveEventDTO info, HttpServletRequest request ) {
@@ -325,11 +355,13 @@ public class EventController {
             if (category == null) {
                 return new ResponseEntity<>("Category Not Found",HttpStatus.NOT_FOUND);
             }
-            System.out.println(info);
-            System.out.println(category);
+
             Event createdEvent = eventService.save(info, category);
-           
-            return new ResponseEntity<>(createdEvent,HttpStatus.CREATED);
+            EventDTO response = eventMapper.toDTO(createdEvent);
+
+            return new ResponseEntity<>(response,HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -343,11 +375,16 @@ public class EventController {
                 return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
             }
 
-            boolean updated = eventService.update(info);
-            if (updated) {
-                return new ResponseEntity<>("Event updated successfully",HttpStatus.OK);
-            }
-            return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
+            Event updated = eventService.update(info);
+            EventDTO response = eventMapper.toDTO(updated);
+
+            return new ResponseEntity<>(response,HttpStatus.OK);
+            // if (updated) {
+            //     return new ResponseEntity<>("Event updated successfully",HttpStatus.OK);
+            // }
+            //return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
