@@ -4,6 +4,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import wellknown from 'wellknown';
 import { Button } from '@material-tailwind/react';
+import { useUserContext } from '../Context/userContext';
+import { eventLocationService } from '../Services/eventLocationService';
 
 // Fix default icon issue with Webpack
 delete L.Icon.Default.prototype._getIconUrl;
@@ -13,63 +15,39 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Icono personalizado para la ubicación del usuario
 const userIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/5307/5307184.png', // Reemplaza con la URL de tu icono
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/5307/5307184.png',
   iconSize: [40, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
 
-// Icono personalizado para los lugares
 const placeIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/988/988557.png', // Reemplaza con la URL de tu icono
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/988/988557.png',
   iconSize: [40, 50],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
 
-// Ejemplo de lugares con geometrías en formato WKT
-const places = [
-  { 
-    name: 'Estadio Nacional Jorge "El Mágico" González', 
-    lat: 13.698463245628963, 
-    lng: -89.21537535974778,
-    geometry: 'MULTIPOLYGON (((-89.21537401817766 13.699349926947638, -89.21489203043662 13.69918233335035, -89.21465864689887 13.698857004261555, -89.21465864689887 13.69854153319999, -89.21477533866776 13.697604975991782, -89.21529284129495 13.69721556426485, -89.21576975548079 13.697284573985003, -89.2162213018908 13.697890872798375, -89.21616549278394 13.698738702663084, -89.21597269768753 13.698995022717854, -89.21537401817766 13.699349926947638)))',
-    address: '49 Av Sur, San Salvador'
-  },
-  { 
-    name: 'Estadio Cuscatlán', 
-    lat: 13.681098944765221, 
-    lng: -89.22235803227912,
-    geometry: 'MULTIPOLYGON (((-89.22236047315357 13.68200480368482, -89.22172627875753 13.681832268139127, -89.22154870432662 13.681122406277643, -89.22181252919538 13.680279442536518, -89.22254312113964 13.680200568581727, -89.22298452043933 13.680417471893795, -89.22310628576336 13.681092828653625, -89.22299466754966 13.681723817159964, -89.22236047315357 13.68200480368482)))',
-    address: 'Calle Antigua a Huizucar, San Salvador'
-  },
-  // Agrega más lugares con geometrías aquí
-];
+const defaultPosition = { lat: 13.697223, lng: -89.191432 };
 
-// Si la geolocalización no está disponible, se usa la posición predeterminada
-const defaultPosition = { lat: 13.697223, lng: -89.191432 }; // Estadio Mágico González
-
-const OpenPopupOnLoad = ({ children }) => {
-  const map = useMap();
+const MapComponent = ({ onSelectPlace }) => {
+  const [position, setPosition] = useState(defaultPosition);
+  const [places, setPlaces] = useState([]);
+  const { token } = useUserContext();
 
   useEffect(() => {
-    map.eachLayer(layer => {
-      if (layer instanceof L.Marker) {
-        layer.openPopup();
+    if (token) {
+      const getLocations = async () => {
+        const places = await eventLocationService.getAllLocations(token);
+        console.log(places);
+        setPlaces(places);
       }
-    });
-  }, [map]);
-
-  return <>{children}</>;
-};
-
-const MapComponent = () => {
-  const [position, setPosition] = useState(defaultPosition);
-  const [selectedCoordinates, setSelectedCoordinates] = useState(null);
+      getLocations();
+    }
+  }, [token]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -89,9 +67,8 @@ const MapComponent = () => {
     }
   }, []);
 
-  const handleSelectPlace = (lat, lng) => {
-    setSelectedCoordinates({ lat, lng });
-    alert(`Lugar seleccionado: Latitud ${lat}, Longitud ${lng}`);
+  const handleSelectPlace = (place) => {
+    onSelectPlace(place);
   };
 
   return (
@@ -99,14 +76,14 @@ const MapComponent = () => {
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <OpenPopupOnLoad>
         {places.map((place, idx) => (
           <React.Fragment key={idx}>
-            <Marker position={[place.lat, place.lng]} icon={placeIcon} >
+            <Marker position={[place.latitude, place.longitude]} icon={placeIcon} >
               <Popup>
                 <div className='flex flex-col justify-center mt-4 py-0 text-md font-display font-semibold'>
                   {place.name}<br />
-                  <Button color="blue" className='flex mx-auto my-4 justify-center p-2' onClick={() => handleSelectPlace(place.lat, place.lng)}>Seleccionar</Button>
+                  <Button color="blue" className='flex mx-auto my-4 justify-center p-2' onClick={() => 
+                    handleSelectPlace(place)}>Seleccionar</Button>
                 </div>
               </Popup>
             </Marker>
@@ -126,7 +103,6 @@ const MapComponent = () => {
             </div>
           </Popup>
         </Marker>
-      </OpenPopupOnLoad>
     </MapContainer>
   );
 }
