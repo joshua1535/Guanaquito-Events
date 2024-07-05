@@ -2,6 +2,7 @@ package com.guanacobusiness.event_ticket_sales.models.dtos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -43,4 +44,11 @@ public class SaveEventDTO {
 
     @NotBlank(message = "Category is required")
     private String categoryCode;
+
+    @NotNull(message = "Location is required")
+    private UUID eventLocationCode;
+
+    private String weather;
+    private Float temperature;
+    private String demo;
 }
