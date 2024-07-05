@@ -31,6 +31,7 @@ import Private from './Components/Private/Private';
 import ReceiveTicket from './pages/Receive Ticket/ReceiveTicket';
 
 
+
 function App() {
   return (
     <div className="App">
