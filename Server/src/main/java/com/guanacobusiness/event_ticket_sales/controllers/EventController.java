@@ -423,7 +423,8 @@ public class EventController {
 
         try {
             List<Event> recommendedEvents = eventService.recommendEventsBasedOnAttendance(ownerCode);
-            return new ResponseEntity<>(recommendedEvents, HttpStatus.OK);
+            List<EventDTO> response = recommendedEvents.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }catch (Exception e) {
