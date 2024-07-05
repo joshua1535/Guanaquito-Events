@@ -3,7 +3,6 @@ package com.guanacobusiness.event_ticket_sales.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -423,7 +422,7 @@ public class EventController {
         UUID ownerCode = user.getCode();
 
         try {
-            Set<Event> recommendedEvents = eventService.recommendEventsBasedOnAttendance(ownerCode);
+            List<Event> recommendedEvents = eventService.recommendEventsBasedOnAttendance(ownerCode);
             return new ResponseEntity<>(recommendedEvents, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

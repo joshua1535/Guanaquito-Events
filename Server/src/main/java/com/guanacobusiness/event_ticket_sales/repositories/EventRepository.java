@@ -24,4 +24,6 @@ public interface EventRepository extends JpaRepository<Event, UUID>{
     
     @Query("SELECT e FROM Event e WHERE e.category.name = :categoryName AND e.date > CURRENT_DATE")
     List<Event> findUpcomingEventsByCategory(@Param("categoryName") String categoryName);
+
+    Page<Event> findByDateEqualsOrDateAfterAndActiveTrueAndCategoryCode(LocalDate date, LocalDate date2, String code, Pageable pageable);
 }

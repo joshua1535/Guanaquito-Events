@@ -2,10 +2,7 @@ package com.guanacobusiness.event_ticket_sales.services.implementations;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -269,26 +266,46 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Set<Event> recommendEventsBasedOnAttendance(UUID ownerCode) {
-        List<Register> registers = registerRepository.findByTicketUserOwnerCodeAndValidationTimeIsNotNull(ownerCode);
+    public List<Event> recommendEventsBasedOnAttendance(UUID ownerCode) {
+        /*List<Register> registers = registerRepository.findByTicketUserOwnerCodeAndValidationTimeIsNotNull(ownerCode);
         if(registers.isEmpty() || registers == null){
             throw new IllegalArgumentException("No registers found");
+        }*/
+
+        //Obtener todas las categorias
+        List<Category> categoryList = categoryService.findAllCategories();
+
+        Map<String, Integer>  categoryMap = new HashMap<>();
+        Integer totalCount = 0;
+
+        //En cada categoria, verificar cuantos tickets el usuario ha comprado
+        for( Category c : categoryList) {
+            Integer count = categoryService.countCategoryByUser(c.getCode(), ownerCode);
+            categoryMap.put( c.getCode(), count);
+            totalCount += count;
         }
-        //buscar categorias a las que se asistio segun evento
-        Set<String> attendedCategories = registers.stream()
-        .map(register -> register.getTicket().getTier().getEvent().getCategory().getCode())
-        .collect(Collectors.toSet());
 
-        Pageable pageable = Pageable.unpaged(); //esto es 0
-        Page<Event> activeEventsPage = eventRepository.findByActiveTrue(pageable);
-        List<Event> activeEvents = activeEventsPage.getContent();
+        //Obtener la cantidad de eventos a recomendar por categoria
+        for( Map.Entry<String, Integer> e : categoryMap.entrySet()) {
+            double result = e.getValue() * 5.0 / totalCount;
+            categoryMap.put( e.getKey(), (int) Math.round(result));
+        }
 
-        Set<Event> recommendedEvents = activeEvents.stream()
-            .filter(event -> attendedCategories.contains(event.getCategory().getCode()))
-            .collect(Collectors.toSet());
+        List<Event> recommendedEvents = new LinkedList<>();
+
+        //Obtener n eventos de cada categoria y agregarlos a la respuesta
+        LocalDate currentDate = LocalDate.now();
+        for( Map.Entry<String, Integer> e : categoryMap.entrySet()) {
+            if(e.getValue() > 0) {
+                Pageable pageable = PageRequest.of(0, e.getValue());
+
+                //Obtener primeros n eventos disponibles de dicha categoria
+                List<Event> events = eventRepository.findByDateEqualsOrDateAfterAndActiveTrueAndCategoryCode(currentDate, currentDate, e.getKey(), pageable).getContent();
+
+                recommendedEvents.addAll( events);}
+        }
 
         return recommendedEvents;
-
     }
     
 

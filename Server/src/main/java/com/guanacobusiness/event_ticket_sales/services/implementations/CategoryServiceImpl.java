@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,5 +66,12 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(code);
         return true;
     }
-    
+
+    @Override
+    public int countCategoryByUser(String categoryCode, UUID userCode) {
+
+
+        return categoryRepository.countCategoryByOwnerCode( categoryCode, userCode);
+    }
+
 }

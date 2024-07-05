@@ -1,7 +1,6 @@
 package com.guanacobusiness.event_ticket_sales.services;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -29,5 +28,5 @@ public interface EventService {
     Event save(SaveEventDTO info, Category category) throws Exception;
     Event update(UpdateEventDTO info) throws Exception;
     boolean changeEventStatus(UUID code) throws Exception;
-    Set<Event> recommendEventsBasedOnAttendance(UUID ownerCode);
+    List<Event> recommendEventsBasedOnAttendance(UUID ownerCode);
 }
