@@ -26,7 +26,7 @@ import { eventService } from '../../Services/eventService';
 import Footer from '../../Components/Footer';
 import Header from '../../Components/Header/Header';
 
-import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -42,131 +42,83 @@ L.Icon.Default.mergeOptions({
 const EventsPage = () => {
   const categories = ["Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
   const [selectedCategory, setSelectedCategory] = useState('Todos');
-
-  const [isNavOpen, setIsNavOpen] = React.useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
-
   const [events, setEvents] = useState({
-    'Todos':[],
+    'Todos': [],
     'Cine': [],
     'Conciertos': [],
     'Obras de teatro': [],
     'Deportes': []
   });
-  const { user, token} = useUserContext();
-
-  console.log('mi token es:',token);
-
-  useEffect(() => {
-    if(token){
-      eventService.getAllCurrentEvents(token)
-          .then((data) => {
-            setEvents(prevEvents => ({...prevEvents, Todos: data.content}));          
-              console.log('Los eventos obtenidas:', events.Todos);
-          })
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          });
-      }
-  }, [token]); 
-
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-
-  useEffect(() => {
-    if(token){
-      eventService.getEventsByCategory('CI',page,size,token)
-          .then((data) => {
-            if(data===undefined)
-            {
-
-            }
-            else{
-            setEvents(prevEvents => ({...prevEvents, Cine: data.content}));          
-              console.log('Los eventos cine obtenidas:', events.Cine);
-            }
-          })
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          });
-      }
-  }, ['CI',page,size,token]); 
-
-  useEffect(() => {
-    if(token){
-      eventService.getEventsByCategory('MU',page,size,token)
-          .then((data) => {
-            if(data===undefined)
-            {
-
-            }
-            else{
-            setEvents(prevEvents => ({...prevEvents, Conciertos: data.content}));          
-              console.log('Los eventos Conciertos obtenidas:', events.Conciertos);
-            }
-          })
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          });
-      }
-  }, ['MU',page,size,token]); 
-
-  useEffect(() => {
-    if(token){
-      eventService.getEventsByCategory('OB',page,size,token,)
-          .then((data) => {
-            if(data===undefined)
-            {
-
-            }
-            else{
-            setEvents(prevEvents => ({...prevEvents, "Obras de teatro": data.content}));          
-              console.log('Los eventos teatro obtenidas:', events['Obras de teatro']);
-            }
-          })
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          });
-      }
-  }, ['OB',token]); 
-
-  useEffect(() => {
-    if(token){
-      eventService.getEventsByCategory('DE',page,size,token)
-          .then((data) => {
-            if(data===undefined)
-            {
-
-            }
-            else{
-            setEvents(prevEvents => ({...prevEvents, Deportes: data.content}));          
-              console.log('Los eventos teatro obtenidas:', events.Deportes);
-            }
-          })
-          .catch((error) => {
-              console.error('Hubo un error al obtener las eventos:', error);
-          });
-      }
-  }, ['DE',token]); 
-
+  const { user, token } = useUserContext();
   const navigate = useNavigate();
 
-  const viewBuyTicketsHandler = (code) => {
-    navigate(`/buytickets/${code}`);
-  };
+  useEffect(() => {
+    if (token) {
+      eventService.getAllCurrentEvents(token)
+        .then((data) => {
+          setEvents(prevEvents => ({ ...prevEvents, Todos: data.content }));
+        })
+        .catch((error) => {
+          console.error('Hubo un error al obtener las eventos:', error);
+        });
+    }
+  }, [token]);
 
-  React.useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => window.innerWidth >= 960 && setIsNavOpen(false)
-    );
-  }, []);
+  useEffect(() => {
+    if (token) {
+      eventService.getEventsByCategory('CI', 0, 10, token)
+        .then((data) => {
+          setEvents(prevEvents => ({ ...prevEvents, Cine: data.content }));
+        })
+        .catch((error) => {
+          console.error('Hubo un error al obtener los eventos:', error);
+        });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      eventService.getEventsByCategory('MU', 0, 10, token)
+        .then((data) => {
+          setEvents(prevEvents => ({ ...prevEvents, Conciertos: data.content }));
+        })
+        .catch((error) => {
+          console.error('Hubo un error al obtener los eventos:', error);
+        });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      eventService.getEventsByCategory('OB', 0, 10, token)
+        .then((data) => {
+          setEvents(prevEvents => ({ ...prevEvents, "Obras de teatro": data.content }));
+        })
+        .catch((error) => {
+          console.error('Hubo un error al obtener los eventos:', error);
+        });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      eventService.getEventsByCategory('DE', 0, 10, token)
+        .then((data) => {
+          setEvents(prevEvents => ({ ...prevEvents, Deportes: data.content }));
+        })
+        .catch((error) => {
+          console.error('Hubo un error al obtener los eventos:', error);
+        });
+    }
+  }, [token]);
 
   const position = [13.672551566676361, -89.2995414024554];
 
   return (
     <>
-      <Header darkMode={true}/>
+      <Header darkMode={true} />
       <div className={classes["eventsTitle"]}>
         <h1>Eventos cerca de ti</h1>
       </div>
@@ -177,27 +129,31 @@ const EventsPage = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
-            <Popup>
+            {events[selectedCategory].map(event => (
+              <Marker key={event.id} /*aqui se cambia por las coordenadas del evento tipo position={[event.lat, event.lng]} */ position={position}>
+                <Popup>
                   <div className='flex flex-col justify-center items-center'>
-                    <h1 className=''>
-                      Evento de prueba
-                    </h1>
-                    <p>Descripción del evento</p>
-                    <div className='w-20 h-20 flex items-center justify-center'>
+                    <h1 className='font-bold mt-2 text-xl'>{event.title}</h1>
+                    <p className='mt-2 text-md'>{event.date}</p>
+                    <div className='w-40 h-40 flex items-center justify-center'>
                       <img
-                        src='ruta/de/la/imagen.jpg'
+                        src={event.image}
                         alt='Imagen de evento'
                         style={{ height: '100%', width: '100%' }}
+                        className='rounded-md'
                       />
-                    </div>  
-                    <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-md mt-4 h-8 w-20'>
+                    </div>
+                    <button 
+                    onClick={() => navigate(`/buytickets/${event.code}`)}
+                    className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150 mt-2"
+                    style={{ fontFamily: "PoppinsLight" }}
+                    >
                       Ver más
                     </button>
                   </div>
                 </Popup>
-
-            </Marker>
+              </Marker>
+            ))}
           </MapContainer>
         </div>
       </div>
@@ -210,8 +166,8 @@ const EventsPage = () => {
           <ul>
             {categories.map(category => (
               <li className="mb-2 text-center" key={category}>
-                <button 
-                  className=" mt-3 hover:bg-dark-blue active:scale-90 transition-all duration-150 rounded-md py-1 px-2"
+                <button
+                  className="mt-3 hover:bg-dark-blue active:scale-90 transition-all duration-150 rounded-md py-1 px-2"
                   onClick={() => setSelectedCategory(category)}
                 >
                   {category}
@@ -225,20 +181,18 @@ const EventsPage = () => {
             {events[selectedCategory].map((event, index) => (
               <div className="p-4 rounded-lg m-2 sm:m-0" key={index}>
                 <div className="w-40 h-56 overflow-hidden relative">
-                  {/* Imagen */}
                   <img
                     src={event.image}
                     alt="Imagen de evento"
                     className="w-full h-full object-cover mb-2 rounded transform transition-all duration-300 hover:opacity-5"
                   />
-                  {/* Texto del hover */}
                   <div style={{ fontFamily: "PoppinsLight" }} className="absolute inset-0 flex flex-col items-center justify-center opacity-0 bg-black bg-opacity-70 text-Orange font-bold transition-all duration-300 hover:opacity-100">
                     <p className="text-xl">{event.title}</p>
                     <p className="text-lg">{event.date}</p>
                   </div>
                 </div>
-                <button 
-                  onClick={() => viewBuyTicketsHandler(event.code)}
+                <button
+                  onClick={() => navigate(`/buytickets/${event.code}`)}
                   className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
                   style={{ fontFamily: "PoppinsLight" }}
                 >
@@ -249,7 +203,7 @@ const EventsPage = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
