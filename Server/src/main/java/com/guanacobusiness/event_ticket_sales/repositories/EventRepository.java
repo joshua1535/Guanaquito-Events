@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 
@@ -19,4 +21,9 @@ public interface EventRepository extends JpaRepository<Event, UUID>{
     Page<Event> findByDateEqualsOrDateAfterAndActiveTrue(LocalDate date, LocalDate date2, Pageable pageable);
     Page<Event> findByDateEqualsOrDateBefore(LocalDate date,LocalDate date2, Pageable pageable);
     Page<Event> findByDateEqualsOrDateAfterAndCategoryCodeAndActiveTrue(LocalDate date, LocalDate date2,String code, Pageable pageable);
+    
+    @Query("SELECT e FROM Event e WHERE e.category.name = :categoryName AND e.date > CURRENT_DATE")
+    List<Event> findUpcomingEventsByCategory(@Param("categoryName") String categoryName);
+
+    Page<Event> findByDateEqualsOrDateAfterAndActiveTrueAndCategoryCode(LocalDate date, LocalDate date2, String code, Pageable pageable);
 }

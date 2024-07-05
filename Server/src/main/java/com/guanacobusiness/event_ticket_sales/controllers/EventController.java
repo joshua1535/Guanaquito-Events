@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -411,6 +412,22 @@ public class EventController {
             return new ResponseEntity<>("Event Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/recommendations")
+    public ResponseEntity<?> recommendEvents(){
+        //trayendo el usuario y su id desde el token
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UUID ownerCode = user.getCode();
+
+        try {
+            List<Event> recommendedEvents = eventService.recommendEventsBasedOnAttendance(ownerCode);
+            return new ResponseEntity<>(recommendedEvents, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

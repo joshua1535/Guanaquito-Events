@@ -28,4 +28,5 @@ public interface EventService {
     Event save(SaveEventDTO info, Category category) throws Exception;
     Event update(UpdateEventDTO info) throws Exception;
     boolean changeEventStatus(UUID code) throws Exception;
+    List<Event> recommendEventsBasedOnAttendance(UUID ownerCode);
 }

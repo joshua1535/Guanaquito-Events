@@ -2,8 +2,7 @@ package com.guanacobusiness.event_ticket_sales.services.implementations;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,11 @@ import com.guanacobusiness.event_ticket_sales.models.dtos.SaveEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateEventDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
+import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.EventLocation;
 import com.guanacobusiness.event_ticket_sales.repositories.EventLocationRepository;
 import com.guanacobusiness.event_ticket_sales.repositories.EventRepository;
+import com.guanacobusiness.event_ticket_sales.repositories.RegisterRepository;
 import com.guanacobusiness.event_ticket_sales.services.CategoryService;
 import com.guanacobusiness.event_ticket_sales.services.EventService;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
@@ -35,6 +36,9 @@ public class EventServiceImpl implements EventService{
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private RegisterRepository registerRepository;
 
     @Autowired
     private PageDTOMapper pageDTOMapper;
@@ -259,5 +263,50 @@ public class EventServiceImpl implements EventService{
         eventFound.setActive(!eventFound.getActive());
         eventRepository.save(eventFound);
         return true;
-    }  
+    }
+
+    @Override
+    public List<Event> recommendEventsBasedOnAttendance(UUID ownerCode) {
+        /*List<Register> registers = registerRepository.findByTicketUserOwnerCodeAndValidationTimeIsNotNull(ownerCode);
+        if(registers.isEmpty() || registers == null){
+            throw new IllegalArgumentException("No registers found");
+        }*/
+
+        //Obtener todas las categorias
+        List<Category> categoryList = categoryService.findAllCategories();
+
+        Map<String, Integer>  categoryMap = new HashMap<>();
+        Integer totalCount = 0;
+
+        //En cada categoria, verificar cuantos tickets el usuario ha comprado
+        for( Category c : categoryList) {
+            Integer count = categoryService.countCategoryByUser(c.getCode(), ownerCode);
+            categoryMap.put( c.getCode(), count);
+            totalCount += count;
+        }
+
+        //Obtener la cantidad de eventos a recomendar por categoria
+        for( Map.Entry<String, Integer> e : categoryMap.entrySet()) {
+            double result = e.getValue() * 5.0 / totalCount;
+            categoryMap.put( e.getKey(), (int) Math.round(result));
+        }
+
+        List<Event> recommendedEvents = new LinkedList<>();
+
+        //Obtener n eventos de cada categoria y agregarlos a la respuesta
+        LocalDate currentDate = LocalDate.now();
+        for( Map.Entry<String, Integer> e : categoryMap.entrySet()) {
+            if(e.getValue() > 0) {
+                Pageable pageable = PageRequest.of(0, e.getValue());
+
+                //Obtener primeros n eventos disponibles de dicha categoria
+                List<Event> events = eventRepository.findByDateEqualsOrDateAfterAndActiveTrueAndCategoryCode(currentDate, currentDate, e.getKey(), pageable).getContent();
+
+                recommendedEvents.addAll( events);}
+        }
+
+        return recommendedEvents;
+    }
+    
+
 }
