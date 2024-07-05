@@ -1,9 +1,11 @@
 package com.guanacobusiness.event_ticket_sales.controllers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.guanacobusiness.event_ticket_sales.models.entities.Register;
 import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
@@ -25,11 +27,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AddUserToEventDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.EventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
+import com.guanacobusiness.event_ticket_sales.utils.EventMapper;
 import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
@@ -66,6 +70,9 @@ public class UserController {
 
     @Autowired
     private RegisterService registerService;
+
+    @Autowired
+    private EventMapper eventMapper;
 
     @Autowired
     JWTTools jwtUtil;
@@ -222,15 +229,16 @@ public class UserController {
                 return new ResponseEntity<>("User has not been in any events yet!",HttpStatus.NOT_FOUND);
             }
 
-            Set<Event> events = new HashSet<>();
+            List<Event> events = new ArrayList<>();
 
             for ( Register r : registers) {
                 Event event = r.getTicket().getTier().getEvent();
 
                 events.add(event);
             }
+            List<EventDTO> response = events.stream().map(eventMapper::toDTO).collect(Collectors.toList());
 
-            return new ResponseEntity<>(events,HttpStatus.OK);
+            return new ResponseEntity<>(response,HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage() + " " + e.getCause());
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
