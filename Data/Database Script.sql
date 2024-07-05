@@ -93,6 +93,7 @@ CREATE TABLE public.event_location(
 	lon	numeric NOT NULL,
 	location_name varchar (200) NOT NULL,
 	address varchar(500) NOT NULL,
+	department_code VARCHAR(20) NULL,
 	constraint event_location_pk primary key (code)
 );
 
@@ -105,6 +106,14 @@ CREATE TABLE public."token" (
 	CONSTRAINT token_pk PRIMARY KEY (code),
 	CONSTRAINT token_fk FOREIGN KEY (user_code) REFERENCES public.user(code) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE public.departments(
+	code varchar(20) NOT NULL,
+	name varchar(100) NOT NULL,
+	geom geometry NOT NULL,
+	constraint deparments_pk primary key (code)
+)
+
 
 -- Declaracion de Foreign Key's
 -- Tabla UserXPermit
@@ -133,24 +142,5 @@ alter table public.ticket add constraint user_owner_code_fk foreign key (user_ow
 -- Tabla Register
 alter table public.register add constraint ticket_code_fk foreign key (ticket_code) references public.ticket(code) on delete set null on update cascade;
 
---Valores por defecto de permisos de los usuarios en Tabla Permit
-INSERT INTO permit (name)
-VALUES
-    ('Client'),
-    ('Ticket Validator'),
-    ('Stadistics'),
-    ('Event Administrator'),
-    ('Moderator'),
-    ('Admin')
-
---Valores por defecto de categorias en Tabla Category
-INSERT INTO public.category (code, name) 
-VALUES 
-	('CINE', 'Cine'),
- 	('MUSC', 'Musica'),
- 	('OBTR', 'Obras de teatro'),
- 	('DEPO', 'Deportes'),
- 	('CULT', 'Cultura'),
- 	('GAST', 'Gastronomia'),
- 	('FIES', 'Fiestas'),
- 	('OTRO', 'Otros');
+-- Tablar Event_Location
+alter table public.event_location add constraint department_code_fk foreign key (department_code) references public.departments(code) on delete set null on update cascade;
