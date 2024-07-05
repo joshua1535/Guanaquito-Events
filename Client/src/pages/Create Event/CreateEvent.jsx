@@ -87,7 +87,7 @@ export default function CreateEvent() {
           duration: parseInt(duration),
           sponsors: sponsors.join(", "),
           categoryCode: category, // Reemplaza esto con el valor del campo "Categoría"
-          //location:selectedPlace.code
+          eventLocationCode:selectedPlace.code
 
 
       }, token)
