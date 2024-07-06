@@ -391,10 +391,10 @@ export default function CreateEvent() {
                 className='text-black bg-white '
                 onChange={value => setCategory(value)}
                 >
-                    <Option value="CI" >Cine</Option>
-                    <Option value="MU"> Musica</Option>
-                    <Option value="OB">Obras de teatro</Option>
-                    <Option value="DE">Deportes</Option>
+                    <Option value="CINE" >Cine</Option>
+                    <Option value="MUSC"> Musica</Option>
+                    <Option value="OBTR">Obras de teatro</Option>
+                    <Option value="DEPO">Deportes</Option>
                 </Select>
             </div>
             <div>
