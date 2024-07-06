@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.EventAndTiersInfoDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.RecommendedTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
@@ -201,13 +202,13 @@ public class TierController {
             return new ResponseEntity<>("Invalid Code",HttpStatus.BAD_REQUEST);
         }
 
-        List<Tier> tiers = tierService.recommendTiersBasedOnCategoryAndDepartment(uuid);
+        List<RecommendedTierDTO> tiers = tierService.recommendTiersBasedOnCategoryAndDepartment(uuid);
 
         if(tiers == null || tiers.isEmpty()){
             return new ResponseEntity<>("No Tiers Found",HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(tiers,HttpStatus.OK);
+        return new ResponseEntity<>(tiers,HttpStatus.OK); 
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -16,10 +16,12 @@ import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AmountOfTicketsSoldDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.EventAndTiersInfoDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.RecommendedTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.TierInfoDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.TierMoneyCollectedDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
+import com.guanacobusiness.event_ticket_sales.models.entities.Department;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 import com.guanacobusiness.event_ticket_sales.models.entities.EventLocation;
 import com.guanacobusiness.event_ticket_sales.models.entities.Tier;
@@ -197,13 +199,11 @@ public class TierServiceImpl implements TierService{
     }
 
     @Override
-    public List<Tier> recommendTiersBasedOnCategoryAndDepartment(UUID eventCode) {
+    public List<RecommendedTierDTO> recommendTiersBasedOnCategoryAndDepartment(UUID eventCode) {
         
         Event eventFound = eventService.findEventByCode(eventCode);
 
         EventLocation eventLocation = eventFound.getEventLocation();
-
-        Department department = eventLocation.getDepartment();
 
         List<Event> sameCategoryEvents = eventRepository.findUpcomingEventsByCategory(eventFound.getCategory().getName());
 
@@ -211,7 +211,7 @@ public class TierServiceImpl implements TierService{
             event.getEventLocation().getDepartment().equals(eventLocation.getDepartment()) 
             && !event.getCode().equals(eventFound.getCode())).collect(Collectors.toList());
 
-        Map<Tier, BigDecimal> tiersBySoldAmount = new HashMap<>();
+        Map<RecommendedTierDTO, BigDecimal> tiersBySoldAmount = new HashMap<>();
 
         for(Event event : sameDepartmentEvents){
             List<TierMoneyCollectedDTO> moneyCollectedPerTier = getAmountOfMoneyCollectedPerTier(event.getCode());
@@ -219,16 +219,16 @@ public class TierServiceImpl implements TierService{
             for(TierMoneyCollectedDTO tierMoneyCollected : moneyCollectedPerTier){
                 Tier tier = findTierByCode(tierMoneyCollected.getCode());
 
-                tiersBySoldAmount.put(tier, tierMoneyCollected.getMoneyCollected());
+                tiersBySoldAmount.put(new RecommendedTierDTO(tier.getName(),tier.getPrice(),tier.getCapacity()), tierMoneyCollected.getMoneyCollected());
 
             }
         }
 
         if(tiersBySoldAmount.isEmpty()) return null;
 
-        List<Tier> recommendedTiers = tiersBySoldAmount.entrySet()
+        List<RecommendedTierDTO> recommendedTiers = tiersBySoldAmount.entrySet()
         .stream()
-        .sorted(Map.Entry.<Tier, BigDecimal>comparingByValue(Comparator.reverseOrder()))
+        .sorted(Map.Entry.<RecommendedTierDTO, BigDecimal>comparingByValue(Comparator.reverseOrder()))
         .limit(4)
         .map(Map.Entry::getKey)
         .collect(Collectors.toList());

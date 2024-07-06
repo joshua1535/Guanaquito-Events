@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AmountOfTicketsSoldDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.EventAndTiersInfoDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.RecommendedTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.TierMoneyCollectedDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
@@ -25,6 +26,6 @@ public interface TierService {
     AmountOfTicketsSoldDTO getAmountOfTicketSold(UUID eventCode);
     BigDecimal getAmountOfMoneyCollected(UUID eventCode);
     List<TierMoneyCollectedDTO> getAmountOfMoneyCollectedPerTier(UUID eventCode);
-    List<Tier> recommendTiersBasedOnCategoryAndDepartment(UUID eventCode);
+    List<RecommendedTierDTO> recommendTiersBasedOnCategoryAndDepartment(UUID eventCode);
 
 }
