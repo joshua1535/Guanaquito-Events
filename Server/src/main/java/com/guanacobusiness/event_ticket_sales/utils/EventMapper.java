@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.EventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.EventLocationDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedDepartmentDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 
 @Component
@@ -28,7 +29,11 @@ public class EventMapper {
                 event.getEventLocation().getLatitude(),
                 event.getEventLocation().getLongitude(),
                 event.getEventLocation().getName(),
-                event.getEventLocation().getAddress()
+                event.getEventLocation().getAddress(),
+                new FormatedDepartmentDTO(
+                    event.getEventLocation().getDepartment().getCode(),
+                    event.getEventLocation().getDepartment().getName()
+                )
             ),
             event.getWeather(),
             event.getTemperature(),
