@@ -15,6 +15,7 @@ import { eventService } from '../../Services/eventService';
 import SliderCards from '../../Components/SliderCards';
 import Footer from '../../Components/Footer';
 import Header from '../../Components/Header/Header';
+import { categoryService } from '../../Services/categoryservice';
 
 const listEvents = [
   {
@@ -62,6 +63,7 @@ export default function HomePage() {
   const [recentSportsEvents, setRecentSportsEvents] = useState([]);
   const [recentConcertsEvents, setRecentConcertsEvents] = useState([]);
   const [recentTheaterEvents, setRecentTheaterEvents] = useState([]);
+  const [categories, setCategories] = useState([]);
   const { user, token} = useUserContext();
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(0); // Para controlar la página actual
@@ -76,6 +78,22 @@ export default function HomePage() {
   const viewEventsHandler = () => {
     navigate("/events");
   };
+
+  useEffect(() => {
+    if (token) {
+        categoryService.getAllCategories(token)
+            .then((data) => {
+                if (data === undefined) {
+                    console.log('No se pudieron obtener las categorías');
+                } else {
+                    setCategories(data);
+                }
+            })
+            .catch((error) => {
+                console.error('Hubo un error al obtener las categorías:', error);
+            });
+    }
+}, [token]);
   
   useEffect(() => {
     const fetchEventsByCategory = async (category, setStateFunction) => {
@@ -95,11 +113,27 @@ export default function HomePage() {
           const eventData = await eventService.getCurrentEvents(page, size, token);
           setEvents(eventData.content);
   
-          await fetchEventsByCategory("CI", setRecentMoviesEvents);
-          await fetchEventsByCategory("DE", setRecentSportsEvents);
-          await fetchEventsByCategory("MU", setRecentConcertsEvents);
-          await fetchEventsByCategory("OB", setRecentTheaterEvents);
+          if (categories.length > 0) {
+            categories.forEach((category) => {
+              switch (category.name) {
+                case 'Cine':
+                  fetchEventsByCategory('CINE', setRecentMoviesEvents);
+                  break;
+                case 'Música':
+                  fetchEventsByCategory('MUSC', setRecentConcertsEvents);
+                  break;
+                case 'Deportes':
+                  fetchEventsByCategory('DEPO', setRecentSportsEvents);
+                  break;
+                case 'Obras de teatro':
+                  fetchEventsByCategory('OBTR', setRecentTheaterEvents);
+                  break;
+                default:
+                  break;
+              }
+            });
         }
+      }
       } catch (error) {
         console.error('Hubo un error al obtener los eventos:', error);
       }
