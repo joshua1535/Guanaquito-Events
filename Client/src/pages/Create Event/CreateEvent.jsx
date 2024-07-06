@@ -34,6 +34,7 @@ import { eventService } from '../../Services/eventService';
 import Footer from '../../Components/Footer';
 import MapComponent from '../../Components/MapComponent';
 import Header from '../../Components/Header/Header';
+import { categoryService } from '../../Services/categoryservice';
 
 
   const categoryOptions = [
@@ -255,8 +256,22 @@ export default function CreateEvent() {
             document.title = "Create Event";
         }, []);
 
-        
-
+    useEffect(() => {
+        if (token) {
+            categoryService.getAllCategories(token)
+                .then((data) => {
+                    if (data === undefined) {
+                        console.log('No se pudieron obtener las categorías');
+                    } else {
+                        setCategories(data);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Hubo un error al obtener las categorías:', error);
+                });
+        }
+    }, [token]);
+ 
     return (
         <div className={[classes["generalContainer"]]}>
         <Header/>
@@ -391,10 +406,14 @@ export default function CreateEvent() {
                 className='text-black bg-white '
                 onChange={value => setCategory(value)}
                 >
-                    <Option value="CI" >Cine</Option>
-                    <Option value="MU"> Musica</Option>
-                    <Option value="OB">Obras de teatro</Option>
-                    <Option value="DE">Deportes</Option>
+                <Option value="" disabled selected>
+                  Seleccione una categoría
+                </Option>
+                {categories.map((category) => (
+                  <Option key={category.code} value={category.code}>
+                    {category.name}
+                  </Option>
+                ))}
                 </Select>
             </div>
             <div>
