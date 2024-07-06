@@ -25,5 +25,6 @@ public interface TierService {
     AmountOfTicketsSoldDTO getAmountOfTicketSold(UUID eventCode);
     BigDecimal getAmountOfMoneyCollected(UUID eventCode);
     List<TierMoneyCollectedDTO> getAmountOfMoneyCollectedPerTier(UUID eventCode);
+    List<Tier> recommendTiersBasedOnCategoryAndDepartment(UUID eventCode);
 
 }

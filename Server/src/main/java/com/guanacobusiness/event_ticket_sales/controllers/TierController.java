@@ -188,6 +188,28 @@ public class TierController {
         }
     }
 
+    @GetMapping("/recommended-tiers/{eventCode}")
+    public ResponseEntity<?> recommendTiersBasedOnCategoryAndDepartment(@PathVariable(name = "eventCode") String eventCode, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
+        UUID uuid = stringToUUID.convert(eventCode);
+
+        if(uuid == null){
+            return new ResponseEntity<>("Invalid Code",HttpStatus.BAD_REQUEST);
+        }
+
+        List<Tier> tiers = tierService.recommendTiersBasedOnCategoryAndDepartment(uuid);
+
+        if(tiers == null || tiers.isEmpty()){
+            return new ResponseEntity<>("No Tiers Found",HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(tiers,HttpStatus.OK);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
