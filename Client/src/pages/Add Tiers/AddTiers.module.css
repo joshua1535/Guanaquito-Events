@@ -15,6 +15,7 @@
     @apply flex flex-row justify-center w-full h-full m-auto px-10
 }
 
+
 .title1 {
     @apply font-bold text-center text-white font-text
 
@@ -41,6 +42,34 @@
     Mobile-280:text-xl
 }
 
+.buttonchangeView{
+    @apply flex flex-row justify-center w-2/3 h-full m-auto  my-5
+    PC-640*480:w-full PC-640*480:px-0 
+    Mobile-390*844:w-full Mobile-390*844:m-0 Mobile-390*844:px-0
+    Mobile-280:w-full Mobile-280:m-0 Mobile-280:px-0   
+
+}
+
+.tierContainer {
+    @apply flex justify-center 
+}
+
+.formTierContainer {
+    @apply grid grid-cols-4 items-center justify-center h-auto my-10 gap-8
+    PC-1366*768:grid-cols-3
+    PC-1280*720:grid-cols-3
+    PC-800*600:grid-cols-2
+    PC-640*480:grid-cols-2
+    Mobile-390*844:grid-cols-1
+    Mobile-280:grid-cols-1
+}
+
+.formTier {
+    @apply p-8 rounded-lg bg-dark-blue border-dashed border-2 border-yellowCapas w-fit 
+    Mobile-280:w-60 Mobile-280:p-4
+}
+
+
 
 .formContainer {
     @apply flex items-center justify-center h-auto m-auto w-2/3
@@ -56,6 +85,14 @@
 
 .titleInputs {
     @apply font-bold text-xl text-center font-text text-yellowCapas mb-10
+}
+
+.title {
+    @apply text-2xl font-bold font-text text-white mb-2
+}
+
+.desc {
+    @apply  text-lg font-text text-yellowCapas mb-2
 }
 
 .popupContainer{
