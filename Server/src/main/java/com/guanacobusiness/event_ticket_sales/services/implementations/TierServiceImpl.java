@@ -1,7 +1,10 @@
 package com.guanacobusiness.event_ticket_sales.services.implementations;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -13,12 +16,16 @@ import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AmountOfTicketsSoldDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.EventAndTiersInfoDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.RecommendedTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.TierInfoDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.TierMoneyCollectedDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
+import com.guanacobusiness.event_ticket_sales.models.entities.Department;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
+import com.guanacobusiness.event_ticket_sales.models.entities.EventLocation;
 import com.guanacobusiness.event_ticket_sales.models.entities.Tier;
+import com.guanacobusiness.event_ticket_sales.repositories.EventRepository;
 import com.guanacobusiness.event_ticket_sales.repositories.TierRepository;
 import com.guanacobusiness.event_ticket_sales.services.TierService;
 
@@ -32,6 +39,9 @@ public class TierServiceImpl implements TierService{
 
     @Autowired 
     private EventServiceImpl eventService;
+
+    @Autowired
+    private EventRepository eventRepository;
 
     @Override
     public List<Tier> findAllTiers() {
@@ -186,5 +196,43 @@ public class TierServiceImpl implements TierService{
             .collect(Collectors.toList());
 
         return moneyCollectedByTier;
+    }
+
+    @Override
+    public List<RecommendedTierDTO> recommendTiersBasedOnCategoryAndDepartment(UUID eventCode) {
+        
+        Event eventFound = eventService.findEventByCode(eventCode);
+
+        EventLocation eventLocation = eventFound.getEventLocation();
+
+        List<Event> sameCategoryEvents = eventRepository.findUpcomingEventsByCategory(eventFound.getCategory().getName());
+
+        List<Event> sameDepartmentEvents = sameCategoryEvents.stream().filter(event -> 
+            event.getEventLocation().getDepartment().equals(eventLocation.getDepartment()) 
+            && !event.getCode().equals(eventFound.getCode())).collect(Collectors.toList());
+
+        Map<RecommendedTierDTO, BigDecimal> tiersBySoldAmount = new HashMap<>();
+
+        for(Event event : sameDepartmentEvents){
+            List<TierMoneyCollectedDTO> moneyCollectedPerTier = getAmountOfMoneyCollectedPerTier(event.getCode());
+
+            for(TierMoneyCollectedDTO tierMoneyCollected : moneyCollectedPerTier){
+                Tier tier = findTierByCode(tierMoneyCollected.getCode());
+
+                tiersBySoldAmount.put(new RecommendedTierDTO(tier.getName(),tier.getPrice(),tier.getCapacity()), tierMoneyCollected.getMoneyCollected());
+
+            }
+        }
+
+        if(tiersBySoldAmount.isEmpty()) return null;
+
+        List<RecommendedTierDTO> recommendedTiers = tiersBySoldAmount.entrySet()
+        .stream()
+        .sorted(Map.Entry.<RecommendedTierDTO, BigDecimal>comparingByValue(Comparator.reverseOrder()))
+        .limit(4)
+        .map(Map.Entry::getKey)
+        .collect(Collectors.toList());
+
+        return recommendedTiers;
     }
 }

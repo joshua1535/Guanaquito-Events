@@ -16,4 +16,5 @@ public class EventLocationDTO {
     private Double longitude;
     private String name;
     private String address;
+    private FormatedDepartmentDTO department;
 }
