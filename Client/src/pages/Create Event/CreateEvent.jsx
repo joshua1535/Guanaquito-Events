@@ -406,6 +406,7 @@ export default function CreateEvent() {
                 className='text-black bg-white '
                 onChange={value => setCategory(value)}
                 >
+
                 <Option value="" disabled selected>
                   Seleccione una categoría
                 </Option>
@@ -414,6 +415,7 @@ export default function CreateEvent() {
                     {category.name}
                   </Option>
                 ))}
+
                 </Select>
             </div>
             <div>
