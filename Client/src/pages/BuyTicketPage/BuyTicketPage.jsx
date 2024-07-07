@@ -25,7 +25,6 @@ import { ticketService } from "../../Services/ticketService";
 
 import { Toaster, toast } from "sonner";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { or } from "fp-ts/lib/Predicate";
 import Footer from '../../Components/Footer';
 import Header from "../../Components/Header/Header";
 
@@ -94,6 +93,7 @@ const BuyTicket = () => {
   const [finalTiers, setFinalTiers] = useState([]);
   const [eventCapacity, setEventCapacity] = useState(0);
   const [eventRemainingCapacity, setEventRemainingCapacity] = useState(0);
+  const [weatherForecast, setWeatherForecast] = useState(null);
 
   const handleSelectTier = (tier, quantity) => {
     setTiersToBuy((prevTiers) => {
@@ -130,7 +130,12 @@ const BuyTicket = () => {
 
   useEffect(() => {
     if (token) {
-      eventService.getEventById(code, token).then((event) => setEvent(event));
+      eventService.getEventById(code, token).then((event) => {
+        setEvent(event);
+        if (event?.eventLocation?.latitude && event?.eventLocation?.longitude) {
+          fetchWeatherForecast(event.eventLocation.latitude, event.eventLocation.longitude);
+        }
+      });
 
       tierService
         .getTiersbyEvent(code, token)
@@ -211,12 +216,45 @@ const BuyTicket = () => {
     console.log(eventRemainingCapacity);
   }, [eventCapacity, eventRemainingCapacity]);
 
+  const fetchWeatherForecast = async (lat, lon) => {
+    const response = await fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=aa8a58c437409182d945bdca355ef19d&units=metric&lang=sp`);
+    const data = await response.json();
+    setWeatherForecast(data);
+  };
+
+  const getWeatherForecastForEvent = () => {
+    if (!event || !weatherForecast) return "Espera a que el evento esté a 5 días de su realización para que te podamos dar un pronóstico más preciso :c";
+
+    const eventDateTime = new Date(`${event.date}T${event.time}`);
+    let closestForecast = null;
+    let minDiff = Infinity;
+
+    weatherForecast.list.forEach(forecast => {
+      const forecastDateTime = new Date(forecast.dt_txt);
+      const diff = Math.abs(eventDateTime - forecastDateTime);
+
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestForecast = forecast;
+      }
+    });
+
+    const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+    if (minDiff <= fiveDaysInMs) {
+      return `El clima será: ${closestForecast.weather[0].description}, con una temperatura de ${closestForecast.main.temp}°C`;
+    } else {
+      return "Espera a que el evento esté a 5 días de su realización para que te podamos dar un pronóstico más preciso :c";
+    }
+  };
+
   React.useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setIsNavOpen(false)
     );
   }, []);
+
+  console.log(code)
 
   return (
     <>
@@ -326,6 +364,12 @@ const BuyTicket = () => {
                       {eventCapacity} entradas
                     </span>
                   </p>
+                  <p className={[classes["pData"]]}>
+                    <span className={[classes["titleSpan"]]}>Pronóstico del clima: </span>
+                    <span className={[classes["contentSpan"]]}>
+                      {getWeatherForecastForEvent()}
+                    </span>
+                  </p>
                 </div>
               ) : (
                 <>
@@ -369,13 +413,6 @@ const BuyTicket = () => {
               )}
               {/* Botones de Volver y Pagar */}
               <div className={[classes["botbuttonsContainer"]]}>
-                {/*  <button 
-                        onClick={handleBackButton}
-                        className=" 
-                        PC-1280*720:w-32 C-1280*720:h-12                        
-                        PC-800*600:w-24 PC-800*600:h-10
-                        PC-640*480:w-20 PC-640*480:h-7
-                         mr-2 h-14 w-44 bg-blue-gray-900 rounded-full text-white hover:bg-gray-900 ">Volver</button> */}
                 <button
                   onClick={handleBuyTicket}
                   className=" 
