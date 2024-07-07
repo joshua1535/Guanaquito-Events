@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
 import { tierService } from '../../Services/tierService';
+import { categoryService } from '../../Services/categoryservice';
 import Footer from '../../Components/Footer';
 import Header from '../../Components/Header/Header';
 
@@ -61,7 +62,8 @@ export default function ModifyEvent() {
               setDate(data.date);
               setDuration(data.duration);
               setTime(data.time);
-                console.log('evento obtenido:', event);
+              setSelectedCategory(data.category)              
+              console.log('evento obtenido:', event);
             })
             .catch((error) => {
                 console.error('Hubo un error al obtener las eventos:', error);
@@ -266,6 +268,24 @@ export default function ModifyEvent() {
             document.title = "Create Event";
         }, []);
 
+      useEffect(() => {        
+        if (token) {
+            categoryService.getAllCategories(token)
+                .then((data) => {
+                    if (data === undefined) {
+                        console.log('No se pudieron obtener las categorías');
+                    } else {
+                        setCategories(data);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Hubo un error al obtener las categorías:', error);
+                });
+        }
+        console.log(selectedCategory.name + "FAFSDFSDF")
+        setCategory(selectedCategory.name)
+      }, [token]);
+
         
 
     return (
@@ -447,14 +467,19 @@ export default function ModifyEvent() {
                 Categoría
                 
               </label>
-                <Select
+              <Select 
+                color='yellow'
+                className='text-black bg-white '
+                placeholder="Seleccione una categoría"
                 onChange={value => setCategory(value)}
-                className='text-white'>
-                    <Option value="CI">Cine</Option>
-                    <Option value="MU">Musica</Option>
-                    <Option value="OB">Obras de teatro</Option>
-                    <Option value="DE">Deportes</Option>
-                </Select>
+                >
+                  {categories.map((category) => (
+                  <Option selected={selectedCategory.name} key={category.code} value={category.code}>
+                    {category.name}
+                  </Option>
+                ))}
+              </Select>   
+
             </div>
             <div>
               <label htmlFor="time" className={[classes["titleInputs"]]}>
