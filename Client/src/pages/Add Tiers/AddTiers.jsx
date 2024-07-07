@@ -36,58 +36,20 @@ import Header from '../../Components/Header/Header';
     const [addTier, setAddTier] = useState(false);
     const [tierCapacity, setTierCapacity] = useState('');
     const { user, token} = useUserContext();
+    const [tiers, setTiers] = useState([]);
 
-    const tiers = [
-      {
-          eventName: "Concierto de Rock",
-          tierName: "VIP",
-          price: 150,
-          capacity: 50
-      },
-      {
-          eventName: "Concierto de Rock",
-          tierName: "General",
-          price: 75,
-          capacity: 200
-      },
-      {
-          eventName: "Festival de Cine",
-          tierName: "Premium",
-          price: 100,
-          capacity: 30
-      },
-      {
-          eventName: "Festival de Cine",
-          tierName: "Estándar",
-          price: 50,
-          capacity: 100
-      },
-      {
-          eventName: "Obra de Teatro",
-          tierName: "Palco",
-          price: 120,
-          capacity: 20
-      },
-      {
-          eventName: "Obra de Teatro",
-          tierName: "Platea",
-          price: 60,
-          capacity: 150
-      },
-      {
-          eventName: "Torneo E-Sports",
-          tierName: "Asiento chuco",
-          price: 200,
-          capacity: 40
-      },
-      {
-          eventName: "Smashito",
-          tierName: "Jugador",
-          price: 250,
-          capacity: 20
-      }
-  ];
-  
+    useEffect(() => {
+      if(token){
+        tierService.getRecommendedTiers(eventCode, token)
+            .then((data) => {
+              setTiers(data);
+              console.log('Los tiers obtenidos:', data);
+            })
+            .catch((error) => {
+                console.error('Hubo un error al obtener los tiers:', error);
+            });
+        }
+    }, [token]);
     
   
   
@@ -216,12 +178,12 @@ import Header from '../../Components/Header/Header';
               
                     <form className="space-y-6 w-auto">                  
                       <h2 className={[classes["title"]]}> {location.eventName} </h2>
-                      <p className={[classes["desc"]]}>Localidad: <span className="text-white font"> {location.tierName}</span></p>
+                      <p className={[classes["desc"]]}>Localidad: <span className="text-white font"> {location.name}</span></p>
                       <p className={[classes["desc"]]}>Precio: <span className="text-white font mb-5">{location.price}</span></p>
                       <p className={[classes["desc"]]}>Capacidad: <span className="text-white" >{location.capacity}</span></p>                      
                       <div className="flex space-x-4 justify-end Mobile-280:justify-center">
                         <Button className="bg-green-400 Mobile-280:text-ButtonCarouselMobile-390*844"
-                        onClick={()=>handleAddTier(location.tierName,location.price,location.capacity)}
+                        onClick={()=>handleAddTier(location.name,location.price,location.capacity)}
                         >
                           Añadir tier
                         </Button>
@@ -229,64 +191,6 @@ import Header from '../../Components/Header/Header';
                     </form>
                 </div>
                 ))}              
-                {/*
-                  {tier.map((location,index) => (
-                    <div key={index}    className={classes["formTier"]}>
-                      <form className="space-y-6">
-                        <div className="space-y-2">
-                          <label
-                            className={classes["titleInputs"]}
-                          >
-                            Nombre de la localidad:
-                          </label>
-                          <Input
-                            type="text"
-                            name="name" 
-                            color="white"
-                            onChange={(event) => handleInputChange(location.code, event)}
-                            placeholder={location.name}
-                        />
-                        </div>
-                        <div className="space-y-2">
-                          <label
-                            className={classes["titleInputs"]}
-                          >
-                            Precio
-                          </label>
-                          <Input
-                            type="number"
-                            color="white"
-                            placeholder="Precio de la localidad"
-                            name="price"
-                            onChange={(event) => handleInputChange(location.code, event)}
-                            defaultValue={location.price}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label
-                            className={classes["titleInputs"]}
-                          >
-                            Capacidad
-                          </label>
-                          <Input
-                            type="number"
-                            color="white"
-                            placeholder="Capacidad de la localidad"
-                            name="capacity"
-                            onChange={(event) => handleInputChange(location.code, event)}
-                            defaultValue={location.capacity}
-                          />
-                        </div>
-                        <div className="flex space-x-4 justify-end Mobile-280:justify-center">
-                          <Button className="bg-yellowCapas Mobile-280:text-ButtonCarouselMobile-390*844"
-                          onClick={()=>handleupdateTierClick(location.code)}
-                          >
-                            Actualizar
-                          </Button>
-                        </div>
-                      </form>
-                    </div>
-                  ))}*/}
                 </div>
                 </div>  
 

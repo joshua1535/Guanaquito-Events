@@ -70,7 +70,7 @@ export default function CreateEvent() {
     const [disponabilityLocation, setDisponabilityLocation] = useState('');
     const [selectedPlace, setSelectedPlace] = useState(null);
     const [image, setImage] = useState("https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZXZlbnRvfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60");
-
+    const [demoVideo, setDemoVideo] = useState("");
 
     const handleContinueClick2 = () => {
       if (selectedPlace) {
@@ -78,7 +78,6 @@ export default function CreateEvent() {
           location: selectedPlace
         };
       }
-      console.log(selectedPlace.code);
       eventService.saveEvent({
           title: eventName,
           involvedPeople: participants.join(", "),
@@ -88,8 +87,8 @@ export default function CreateEvent() {
           duration: parseInt(duration),
           sponsors: sponsors.join(", "),
           categoryCode: category, // Reemplaza esto con el valor del campo "Categoría"
-          eventLocationCode:selectedPlace.code
-
+          eventLocationCode:selectedPlace.code,
+          demo: demoVideo //se agrega el video
 
       }, token)
           .then(response => {
@@ -401,22 +400,17 @@ export default function CreateEvent() {
                 Categoría
                 
               </label>
-                <Select 
+              <Select 
                 color='yellow'
                 className='text-black bg-white '
                 onChange={value => setCategory(value)}
                 >
-
-                <Option value="" disabled selected>
-                  Seleccione una categoría
-                </Option>
-                {categories.map((category) => (
+                  {categories.map((category) => (
                   <Option key={category.code} value={category.code}>
                     {category.name}
                   </Option>
                 ))}
-
-                </Select>
+              </Select>          
             </div>
             <div>
               <label htmlFor="time" className={[classes["titleInputs"]]}>
@@ -523,6 +517,20 @@ export default function CreateEvent() {
               className='text-black bg-white '
               placeholder="Ingrese URL de la foto"
               onChange={event => setImage(event.target.value)}
+            />
+          </div>
+          {/*Se agrega el video */}
+          <div className="space-y-2">
+            <label className={[classes["titleInputs"]]}>
+              Video demostrativo
+            </label>
+            <Input
+              id="demoVideo"
+              type="text"
+              color='yellow'
+              className='text-black bg-white '
+              placeholder="Ingrese URL del video"
+              onChange={event => setDemoVideo(event.target.value)}
             />
           </div>
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">

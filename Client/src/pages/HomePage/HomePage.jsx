@@ -119,7 +119,7 @@ export default function HomePage() {
                 case 'Cine':
                   fetchEventsByCategory('CINE', setRecentMoviesEvents);
                   break;
-                case 'Música':
+                case 'Musica':
                   fetchEventsByCategory('MUSC', setRecentConcertsEvents);
                   break;
                 case 'Deportes':
@@ -140,7 +140,7 @@ export default function HomePage() {
     };
   
     fetchData();
-  }, [token, page, size]);
+  }, [page, size, token, categories]);
 
 
 
@@ -234,9 +234,9 @@ export default function HomePage() {
 
         <div className={classes["rightColumn"]}>
         {/* Tarjetas de eventos más pequeñas */}
-        {recentConcertsEvents.filter((event ) => event.category.name === "Música").length > 0 ? (
+        {recentConcertsEvents.filter((event ) => event.category.name === "Musica").length > 0 ? (
           recentConcertsEvents
-            .filter((event) => event.category.name === "Música")
+            .filter((event) => event.category.name === "Musica")
             .map((event, index) => (
               <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
                 <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />
