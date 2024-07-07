@@ -141,12 +141,14 @@ const EventsPage = () => {
 
   
    
-    
-    
+
     return position === null ? null : (
       <Marker position={position} icon={userIcon}>
         <Popup>Usted está aquí</Popup>
       </Marker>
+    )
+  }
+
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
 
@@ -311,18 +313,17 @@ const EventsPage = () => {
      
             <LocationMarker  />
            
-            {events.map(event => (
+            {currentEvents.map(event => (
               <Marker eventHandlers={{ click: (e) => handleRoutingEvent(e) }}  key={event.code} position={[event.eventLocation.latitude, event.eventLocation.longitude]}>
                 <Popup>
                   <div className='flex flex-col justify-center items-center'>
-                    <h1 className='font-bold mt-2 text-xl'>{event.title}</h1>
-                    <p className='mt-2 text-md'>{event.date}</p>
-                    <div className='w-40 h-40 flex items-center justify-center'>
+                    <h1 className='font-bold text-xl'>{event.title}</h1>
+                    <p className='text-md'>{event.date}</p>
+                    <div className='w-36 h-30 flex items-center justify-center'>
                       <img
                         src={event.image}
                         alt='Imagen de evento'
-                        style={{ height: '100%', width: '100%' }}
-                        className='rounded-md'
+                        className='rounded-md w-5/6 h-full object-cover'
                       />
                     </div>
                     <button 
