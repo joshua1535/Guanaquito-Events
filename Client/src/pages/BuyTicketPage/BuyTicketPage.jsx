@@ -368,11 +368,14 @@ const BuyTicket = () => {
   return (
     <>
       <Toaster />
-      <div className="flex flex-col justify-between min-h-screen">
+      <div className="flex flex-col justify-between min-h-screen
+      Mobile-280:flex-col Mobile-280:justify-start
+      Mobile-390*844:flex-col Mobile-390*844:justify-start
+      ">
         <Header darkMode={true} />
         <div className={[classes["generalContainer"]]}>
-          <div className="flex w-3/4 h-full overflow-auto">
-            <div className="flex flex-col h-full overflow-hidden">
+          <div className="flex w-4/5 h-full overflow-auto">
+            <div className="flex flex-col h-full justify-center m-auto overflow-hidden">
               <img
                 className={[classes["imgContainer"]]}
                 src={event?.image}
@@ -422,7 +425,7 @@ const BuyTicket = () => {
                       text-blue-900 `}
                   style={{ fontFamily: "Poppins" }}
                 >
-                  DETALLES DEL EVENTO
+                  DETALLES
                 </button>
                 <button
                   onClick={() => handleButtonClick3(event?.demo)}
@@ -450,7 +453,7 @@ const BuyTicket = () => {
                       text-blue-900 `}
                   style={{ fontFamily: "Poppins" }}
                 >
-                  WEATHER
+                  CLIMA
                 </button>
               </div>
 
@@ -587,12 +590,12 @@ const BuyTicket = () => {
         <div className="sm:hidden flex flex-col items-center h-72 w-full bg-cover ">
           <div className="flex flex-col items-center  text-white rounded">
             <img
-              className=" w-full h-full object-cover mb-6 opacity-20 shadow-xl"
+              className=" w-full h-full object-cover mb-6 opacity-10 shadow-xl"
               src={event?.image}
               alt="Event"
             />
             <img
-              className=" w-5/6 h-full object-cover mb-6 -mt-32 shadow-xl"
+              className=" w-5/6 h-full object-cover mb-6 -mt-96 shadow-xl"
               src={event?.image}
               alt="Event"
             />

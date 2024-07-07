@@ -14,12 +14,12 @@
 .eventsTitle {
     font-family: 'PoppinsLight';
     @apply flex justify-center p-4 uppercase text-white
-    PC-1920*1080:text-8xl
-    PC-1600*900:text-7xl
-    PC-1366*768:text-6xl
-    PC-1280*720:text-5xl
-    PC-800*600:text-4xl
-    PC-640*480:text-3xl
+    PC-1920*1080:text-6xl
+    PC-1600*900:text-5xl
+    PC-1366*768:text-4xl
+    PC-1280*720:text-3xl
+    PC-800*600:text-2xl
+    PC-640*480:text-xl
     Mobile-390*844:text-2xl
     Mobile-280:text-xl
     Mobile-390*844:hidden

@@ -196,7 +196,8 @@ export default function HomePage() {
           recentMoviesEvents
             .filter((event) => event.category.name === "Cine")
             .map((event, index) => (
-              <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+              <Card key={index} className='m-2 mt-0 rounded-md
+              object-cover border-blue-gray-300 border-2 h-auto max-h-60 min-h-fit'>
                 <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />
                 <div className={classes["cardContent"]}>
                   <h3 className={classes["eventTitle"]}>{event.title}</h3>

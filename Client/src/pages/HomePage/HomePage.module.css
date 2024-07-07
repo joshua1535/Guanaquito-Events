@@ -11,7 +11,7 @@
 .carouselContainer{
     @apply 
     relative
-    object-center
+    object-fill
     m-auto
     shadow-xl
     PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080 PC-1920*1080:mt-24
@@ -59,6 +59,7 @@
     m-auto
     relative
     overflow-hidden
+    object-cover
     PC-1920*1080:w-CarouselItemPC-1920*1080 PC-1920*1080:h-CarouselItemPC-1920*1080
     PC-1600*900:w-CarouselItemPC-1600*900 PC-1600*900:h-CarouselItemPC-1600*900
     PC-1366*768:w-CarouselItemPC-1366*768 PC-1366*768:h-CarouselItemPC-1366*768
@@ -167,12 +168,12 @@
 }
 
 .smallCardImage{
-    @apply w-full object-cover shadow-md h-5/6
+    @apply w-full object-cover shadow-md min-h-max max-h-28
 
 }
 
 .cardContent {
-    @apply flex flex-col justify-center items-center
+    @apply flex flex-col justify-center text-center items-center object-contain min-h-fit max-h-36 mx-auto
 }
 
 .eventTitle {
