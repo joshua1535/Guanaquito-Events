@@ -91,6 +91,7 @@ const BuyTicket = () => {
   const [tiersToBuy, setTiersToBuy] = useState([]);
   const [orderId, setOrderId] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [showVideo, setShowVideo] = useState(false); // Nuevo estado para mostrar el video
   const [finalTiers, setFinalTiers] = useState([]);
   const [eventCapacity, setEventCapacity] = useState(0);
   const [eventRemainingCapacity, setEventRemainingCapacity] = useState(0);
@@ -118,10 +119,17 @@ const BuyTicket = () => {
   const navigate = useNavigate();
   const handleButtonClick = () => {
     setShowDetails(true);
+    setShowVideo(false); // Asegurarse de que el video no se muestre
   };
 
   const handleButtonClick2 = () => {
     setShowDetails(false);
+    setShowVideo(false); // Asegurarse de que el video no se muestre
+  };
+
+  const handleButtonClick3 = () => {
+    setShowVideo(true);
+    setShowDetails(false); // Asegurarse de que los detalles no se muestren
   };
 
   const handleBackButton = () => {
@@ -222,7 +230,7 @@ const BuyTicket = () => {
     <>
       <Toaster />
       <div className="flex flex-col justify-between min-h-screen">
-        <Header darkMode={true}/>
+        <Header darkMode={true} />
         <div className={[classes["generalContainer"]]}>
           <div className="flex w-3/4 h-full overflow-auto">
             <div className="flex flex-col h-full overflow-hidden">
@@ -247,19 +255,17 @@ const BuyTicket = () => {
               </Typography>
             </div>
             <div className={[classes["infoContainer"]]}>
-              {/* Zona superior con dos columnas de botones */}
-
               <div className={[classes["topbuttonsContainer"]]}>
                 <button
                   onClick={handleButtonClick2}
-                  className={`
-                        PC-800*600:text-base PC-1280*720:text-xl PC-800*600:w-1/2
-                        PC-640*480:text-xs PC-640*480:w-1/2  
-                        sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
-                          showDetails === false
-                            ? "bg-Orange text-blue-900"
-                            : "bg-dark-blue text-white hover:bg-orange-600"
-                        }`}
+                  className={`PC
+                    PC-800*600:text-base PC-1280*720:text-xl PC-800*600:w-1/2
+                    PC-640*480:text-xs PC-640*480:w-1/2  
+                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
+                      showDetails === false
+                        ? "bg-Orange text-blue-900"
+                        : "bg-dark-blue text-white hover:bg-orange-600"
+                    }`}
                   style={{ fontFamily: "Poppins" }}
                 >
                   COMPRAR
@@ -267,25 +273,38 @@ const BuyTicket = () => {
                 <button
                   onClick={handleButtonClick}
                   className={`
-                        PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
-                        PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
-                        sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
-                          showDetails === true
-                            ? "bg-Orange text-blue-900 "
-                            : "bg-dark-blue text-white hover:bg-orange-600"
-                        }
-                          text-blue-900 `}
+                    PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
+                    PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
+                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
+                      showDetails === true
+                        ? "bg-Orange text-blue-900 "
+                        : "bg-dark-blue text-white hover:bg-orange-600"
+                    }
+                      text-blue-900 `}
                   style={{ fontFamily: "Poppins" }}
                 >
                   DETALLES DEL EVENTO
                 </button>
+                <button
+                  onClick={handleButtonClick3}
+                  className={`
+                    PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
+                    PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
+                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
+                      showVideo === true
+                        ? "bg-Orange text-blue-900 "
+                        : "bg-dark-blue text-white hover:bg-orange-600"
+                    }
+                      text-blue-900 `}
+                  style={{ fontFamily: "Poppins" }}
+                >
+                  VIDEO
+                </button>
               </div>
 
-              {showDetails ? (
-                // Si showDetails es true, mostramos la información del evento
+              {showDetails && (
                 <div className="mt-4">
                   <h1 className={[classes["titleH1"]]}>{event?.title}</h1>
-
                   <p className={[classes["pData"]]}>
                     <span className={[classes["titleSpan"]]}>Fecha: </span>
                     <span className={[classes["contentSpan"]]}>
@@ -327,19 +346,32 @@ const BuyTicket = () => {
                     </span>
                   </p>
                 </div>
-              ) : (
+              )}
+
+              {showVideo && event?.demo && (
+                <div className="mt-4">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src={`https://www.youtube.com/embed/${event.demo}`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+
+              {!showDetails && !showVideo && (
                 <>
-                  <div
-                    className="grid grid-cols-2
-                          "
-                  >
+                  <div className="grid grid-cols-2">
                     {tiers.map((tier) => (
                       <div
                         className=" 
-                    PC-1280*720:ml-3 PC-1280*720:mt-3
-                    PC-800*600:ml-3 PC-800*600:mt-2  
-                    PC-640*480:ml-1 PC-640*480:mt-2
-                    flex items-center w-fit text-Orange ml-14 mt-7"
+                          PC-1280*720:ml-3 PC-1280*720:mt-3
+                          PC-800*600:ml-3 PC-800*600:mt-2  
+                          PC-640*480:ml-1 PC-640*480:mt-2
+                          flex items-center w-fit text-Orange ml-14 mt-7"
                         style={{ fontFamily: "Poppins" }}
                       >
                         <div>
@@ -367,22 +399,15 @@ const BuyTicket = () => {
                   </div>
                 </>
               )}
-              {/* Botones de Volver y Pagar */}
+
               <div className={[classes["botbuttonsContainer"]]}>
-                {/*  <button 
-                        onClick={handleBackButton}
-                        className=" 
-                        PC-1280*720:w-32 C-1280*720:h-12                        
-                        PC-800*600:w-24 PC-800*600:h-10
-                        PC-640*480:w-20 PC-640*480:h-7
-                         mr-2 h-14 w-44 bg-blue-gray-900 rounded-full text-white hover:bg-gray-900 ">Volver</button> */}
                 <button
                   onClick={handleBuyTicket}
                   className=" 
-                        PC-1280*720:w-32 C-1280*720:h-12 
-                        PC-800*600:w-24 PC-800*600:h-10 
-                        PC-640*480:w-20 PC-640*480:h-7 
-                        bg-Orange   h-14 w-44 rounded-full text-white hover:bg-orange-600"
+                    PC-1280*720:w-32 C-1280*720:h-12 
+                    PC-800*600:w-24 PC-800*600:h-10 
+                    PC-640*480:w-20 PC-640*480:h-7 
+                    bg-Orange   h-14 w-44 rounded-full text-white hover:bg-orange-600"
                 >
                   Pagar
                 </button>
@@ -390,6 +415,7 @@ const BuyTicket = () => {
             </div>
           </div>
         </div>
+
         <div className="sm:hidden flex flex-col items-center h-72 w-full bg-cover ">
           <div className="flex flex-col items-center  text-white rounded">
             <img
@@ -500,7 +526,7 @@ const BuyTicket = () => {
             </button>
           </div>
         </div>
-        <Footer additionalClasses="hidden sm:block"/>
+        <Footer additionalClasses="hidden sm:block" />
       </div>
     </>
   );
