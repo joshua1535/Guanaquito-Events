@@ -303,8 +303,8 @@ const EventsPage = () => {
       <div className={classes["eventsTitle"]}>
         <h1>Eventos cerca de ti</h1>
       </div>
-      <div className="events-map-container m-4" style={{ position: 'relative', zIndex: 0 }}>
-        <div style={{ height: '400px', width: '100%' }}>
+      <div className="border-2 border-white bg-yellowCapas p-2 m-4" style={{ position: 'relative', zIndex: 0 }}>
+        <div style={{ height: '550px', width: '100%' }}>
           <MapContainer center={[13.672551566676361, -89.2995414024554]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -360,15 +360,23 @@ const EventsPage = () => {
     </ul>
         </div>
         <div className="w-full bg-dark-blue sm:w-3/4 p-4 overflow-auto">
-          <div className="flex p-0 flex-wrap sm:space-x-4 justify-center">
+          <div className="flex justify-center">
+            <h1 className="text-yellowCapas text-3xl font-bold p-4"
+            style={{ fontFamily: "PoppinsLight" }}
+            >{selectedCategory.toUpperCase()}</h1>
+          </div>
+          <div className="flex flex-wrap justify-center h-fit-content">
             {events[selectedCategory]?.map((event, index) => (
               <div className=" p-4 rounded-lg m-2 sm:m-0" key={index}>
-                <div className="w-40 h-56 overflow-hidden relative">
+                <div className="min-w-full w-72 max-w-72 h-72 max-h-72 overflow-hidden 
+                border-4 border-white rounded-lg
+                relative">
                   {/* Imagen */}
                   <img
                     src={event.image}
                     alt="Imagen de evento"
-                    className="w-full h-full object-cover mb-2 rounded transform transition-all duration-300 hover:opacity-5"
+                    className="w-full h-full object-cover mb-2 
+                    rounded transform transition-all duration-300 hover:opacity-5"
                   />
            {/* Texto del hover */}
                   <div style={{ fontFamily: "PoppinsLight" }} className="absolute inset-0 flex flex-col items-center justify-center opacity-0 bg-black bg-opacity-70 text-Orange font-bold transition-all duration-300 hover:opacity-100">
