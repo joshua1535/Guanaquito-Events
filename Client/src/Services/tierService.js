@@ -54,4 +54,20 @@ export const tierService = {
             console.log(error);
         }
     },
+
+    getRecommendedTiers: async function(eventCode, token) {
+        try {
+            const response = await API.get(`/tier/recommended-tiers/${eventCode}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log (response.data);
+            return response.data;
+        }
+        catch(error) {
+            console.error(`Error obteniendo los tiers recomendados: `, error);
+            throw error;
+        }
+    }
 }

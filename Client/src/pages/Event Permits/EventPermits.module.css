@@ -93,14 +93,14 @@
 
 
 .imgContainer {
-    @apply flex flex-col items-center  gap-4 font-text
+    @apply flex flex-col items-center gap-4 font-text
     
 }
 
 
 .imgEvent {
     @apply h-2/3 w-2/3 rounded-md object-cover shadow-md
-    PC-1920*1080:h-CardGeneralImgPC-1920*1080 PC-1920*1080:w-CardGeneralImgPC-1920*1080 PC-1920*1080:me-52
+    PC-1920*1080:h-CardGeneralImgPC-1920*1080 PC-1920*1080:w-CardGeneralImgPC-1920*1080 PC-1920*1080:m-auto
     PC-1600*900:h-CardGeneralImgPC-1600*900 PC-1600*900:w-CardGeneralImgPC-1600*900
     PC-1366*768:h-CardGeneralImgPC-1366*768 PC-1366*768:w-CardGeneralImgPC-1366*768
     PC-1280*720:h-CardGeneralImgPC-1280*720 PC-1280*720:w-CardGeneralImgPC-1280*720
