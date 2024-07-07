@@ -53,15 +53,17 @@ const userIcon = new L.Icon({
 
 
 const EventsPage = () => {
-  const categories = ["Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const categories = ["Recomendados","Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
+  const [selectedCategory, setSelectedCategory] = useState('Recomendados');
 
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+  const [recommendedEvents, setRecommendedEvents] = useState([]);
 
   
   const [currentEvents, setCurrentEvents] = useState([]);
   const [events, setEvents] = useState({
+    'Recomendados': [],
     'Todos':[],
     'Cine': [],
     'Conciertos': [],
@@ -109,7 +111,9 @@ const EventsPage = () => {
         });
         eventService.getRecommendedEvents(token)
         .then((data) => {
+          setEvents(prevEvents => ({ ...prevEvents, Recomendados: data }));
           setRecommendedEvents(data);
+          console.log('Las recomendaciones obtenidas:', events.Recomendados);
         })
         .catch((error) => {
           console.error('Hubo un error al obtener las recomendaciones:', error);
@@ -255,41 +259,7 @@ const EventsPage = () => {
           </MapContainer>
         </div>
       </div>
-
-      <div className={classes["eventsTitleList"]}>
-        <h1>Nuestras recomendaciones para ti</h1>
-      </div>
-      <div className="flex justify-center sm:flex-row h-screen bg-dark-blue mt-1 mb-2">
-        
-        <div className="w-full bg-dark-blue sm:w-3/4 p-4 ">
-          <div className="flex p-0 flex-wrap sm:space-x-4 justify-center">
-            {currentEvents.filter(event => selectedCategory === "Todos" || event.category.code === selectedCategory).map((event, index) => (
-              <div className="p-4 rounded-lg m-2 sm:m-0" key={index}>
-                <div className="w-40 h-56 overflow-hidden relative">
-                  <img
-                    src={event.image}
-                    alt="Imagen de evento"
-                    className="w-full h-full object-cover mb-2 rounded transform transition-all duration-300 hover:opacity-5"
-                  />
-                  <div style={{ fontFamily: "PoppinsLight" }} className="absolute inset-0 flex flex-col items-center justify-center opacity-0 bg-black bg-opacity-70 text-Orange font-bold transition-all duration-300 hover:opacity-100">
-                    <p className="text-xl">{event.title}</p>
-                    <p className="text-lg">{event.date}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => navigate(`/buytickets/${event.code}`)}
-                  className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
-                  style={{ fontFamily: "PoppinsLight" }}
-                >
-                  Comprar boleto
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row h-screen bg-dark-blue">
+      <div className="flex flex-col sm:flex-row h-screen my-8 bg-dark-blue">
         <div className={classes["optionsContainer"]}>
         <ul>
         {categories.map(category => (
