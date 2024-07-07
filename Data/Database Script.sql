@@ -107,7 +107,7 @@ CREATE TABLE public."token" (
 	CONSTRAINT token_fk FOREIGN KEY (user_code) REFERENCES public.user(code) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE public.departments(
+CREATE TABLE public.department(
 	code varchar(20) NOT NULL,
 	name varchar(100) NOT NULL,
 	geom geometry NOT NULL,
@@ -143,4 +143,4 @@ alter table public.ticket add constraint user_owner_code_fk foreign key (user_ow
 alter table public.register add constraint ticket_code_fk foreign key (ticket_code) references public.ticket(code) on delete set null on update cascade;
 
 -- Tablar Event_Location
-alter table public.event_location add constraint department_code_fk foreign key (department_code) references public.departments(code) on delete set null on update cascade;
+alter table public.event_location add constraint department_code_fk foreign key (department_code) references public.department(code) on delete set null on update cascade;
