@@ -78,7 +78,6 @@ export default function CreateEvent() {
           location: selectedPlace
         };
       }
-      console.log(selectedPlace.code);
       eventService.saveEvent({
           title: eventName,
           involvedPeople: participants.join(", "),
@@ -401,22 +400,17 @@ export default function CreateEvent() {
                 Categoría
                 
               </label>
-                <Select 
+              <Select 
                 color='yellow'
                 className='text-black bg-white '
                 onChange={value => setCategory(value)}
                 >
-
-                <Option value="" disabled selected>
-                  Seleccione una categoría
-                </Option>
-                {categories.map((category) => (
+                  {categories.map((category) => (
                   <Option key={category.code} value={category.code}>
                     {category.name}
                   </Option>
                 ))}
-
-                </Select>
+              </Select>          
             </div>
             <div>
               <label htmlFor="time" className={[classes["titleInputs"]]}>
@@ -531,6 +525,7 @@ export default function CreateEvent() {
               Video demostrativo
             </label>
             <Input
+              id="demoVideo"
               type="text"
               color='yellow'
               className='text-black bg-white '
