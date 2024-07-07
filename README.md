@@ -99,7 +99,7 @@ y asegurar los controladores mediante el uso de autenticacion, "Json Web Token" 
 
  ### Patrón de diseño <a name="patrón-de-diseño"></a>
  
-####Patrón Arquitectónico de Capas
+#### Patrón Arquitectónico de Capas
 
 La arquitectura en capas es un patrón de arquitectura software usada en la gran mayoría de sistemas.
 Se centra en una distribución jerárquica de las roles y responsabilidades proporcionando una separación efectiva de las preocupaciones 
