@@ -30,21 +30,70 @@ import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
 import Footer from '../../Components/Footer';
 import Header from '../../Components/Header/Header';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Configurar iconos de Leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+const userIcon = new L.Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/5307/5307184.png',
+  iconSize: [40, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 
 const EventsPage = () => {
-  const categories = ["Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const categories = ["Recomendados","Todos", "Cine", "Conciertos", "Obras de teatro", "Deportes"];
+  const [selectedCategory, setSelectedCategory] = useState('Recomendados');
 
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+  const [recommendedEvents, setRecommendedEvents] = useState([]);
 
+  
+  const [currentEvents, setCurrentEvents] = useState([]);
   const [events, setEvents] = useState({
+    'Recomendados': [],
     'Todos':[],
     'Cine': [],
     'Conciertos': [],
     'Obras de teatro': [],
     'Deportes': []
   });
+
+    // Componente para la geolocalización automática
+    function LocationMarker() {
+      const [position, setPosition] = useState(null);
+      const map = useMapEvents({
+        locationfound(e) {
+          setPosition(e.latlng);
+          map.flyTo(e.latlng, map.getZoom());
+        },
+      });
+  
+      
+  
+      useEffect(() => {
+        map.locate();
+      }, [map]);
+  
+      return position === null ? null : (
+        <Marker position={position} icon={userIcon}>
+          <Popup>Usted está aquí</Popup>
+        </Marker>
+      );
+    }
+  
   const { user, token } = useUserContext();
 
   console.log('mi token es:', token);
@@ -54,10 +103,20 @@ const EventsPage = () => {
       eventService.getAllCurrentEvents(token)
         .then((data) => {
           setEvents(prevEvents => ({ ...prevEvents, Todos: data.content }));
+          setCurrentEvents(data.content);
           console.log('Los eventos obtenidas:', events.Todos);
         })
         .catch((error) => {
           console.error('Hubo un error al obtener las eventos:', error);
+        });
+        eventService.getRecommendedEvents(token)
+        .then((data) => {
+          setEvents(prevEvents => ({ ...prevEvents, Recomendados: data }));
+          setRecommendedEvents(data);
+          console.log('Las recomendaciones obtenidas:', events.Recomendados);
+        })
+        .catch((error) => {
+          console.error('Hubo un error al obtener las recomendaciones:', error);
         });
     }
   }, [token]);
@@ -158,8 +217,49 @@ const EventsPage = () => {
 
   return (
     <>
-      <Header darkMode={true} />
-      <div className="flex flex-col sm:flex-row h-screen bg-dark-blue">
+      <Header darkMode={true} />      
+      <div className={classes["eventsTitle"]}>
+        <h1>Eventos cerca de ti</h1>
+      </div>
+      <div className="events-map-container m-4" style={{ position: 'relative', zIndex: 0 }}>
+        <div style={{ height: '400px', width: '100%' }}>
+          <MapContainer center={[13.672551566676361, -89.2995414024554]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+     
+            <LocationMarker  />
+           
+            {currentEvents.map(event => (
+              <Marker key={event.code} position={[event.eventLocation.latitude, event.eventLocation.longitude]}>
+                <Popup>
+                  <div className='flex flex-col justify-center items-center'>
+                    <h1 className='font-bold mt-2 text-xl'>{event.title}</h1>
+                    <p className='mt-2 text-md'>{event.date}</p>
+                    <div className='w-40 h-40 flex items-center justify-center'>
+                      <img
+                        src={event.image}
+                        alt='Imagen de evento'
+                        style={{ height: '100%', width: '100%' }}
+                        className='rounded-md'
+                      />
+                    </div>
+                    <button 
+                      onClick={() => navigate(`/buytickets/${event.code}`)}
+                      className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150 mt-2"
+                      style={{ fontFamily: "PoppinsLight" }}
+                    >
+                      Ver más
+                    </button>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row h-screen my-8 bg-dark-blue">
         <div className={classes["optionsContainer"]}>
         <ul>
         {categories.map(category => (
