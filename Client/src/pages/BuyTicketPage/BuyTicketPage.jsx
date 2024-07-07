@@ -93,10 +93,16 @@ const BuyTicket = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [showBuy, setShowBuy] = useState(false);
   const [showVideo, setShowVideo] = useState(false); // Nuevo estado para mostrar el video
+  const [showWeather, setShowWeather] = useState(false);
   const [finalTiers, setFinalTiers] = useState([]);
   const [eventCapacity, setEventCapacity] = useState(0);
   const [eventRemainingCapacity, setEventRemainingCapacity] = useState(0);
-  const [demoLink, setDemoLink] = useState("");	
+  const [demoLink, setDemoLink] = useState("");
+  // Nuevo estado para almacenar el pronóstico del clima
+  const [weatherForecast, setWeatherForecast] = useState(null);
+  // Nuevo estado para almacenar la imagen del clima
+  const [climateImage, setClimateImage] = useState("");
+
 
   const handleSelectTier = (tier, quantity) => {
     setTiersToBuy((prevTiers) => {
@@ -122,26 +128,38 @@ const BuyTicket = () => {
   const handleButtonClick = () => {
     setShowDetails(true);
     setShowVideo(false); // Asegurarse de que el video no se muestre
-    setShowBuy(false); // Asegurarse de que los detalles de compra no se muestren
+    setShowBuy(false); // Asegurarse de que los detalles de compra no se 
+    setShowWeather(false); // Asegurarse de que el clima no se muestre
   };
 
   const handleButtonClick2 = () => {
     setShowDetails(false);
     setShowVideo(false); // Asegurarse de que el video no se muestre
     setShowBuy(true);
+    setShowWeather(false); // Asegurarse de que el clima no se muestre
   };
 
   const handleButtonClick3 = (demoLink) => {
     const videoId = demoLink.split('v=')[1];
     const ampersandPosition = videoId.indexOf('&');
-    const embedLink = ampersandPosition !== -1 
-      ? `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}` 
+    const embedLink = ampersandPosition !== -1
+      ? `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}`
       : `https://www.youtube.com/embed/${videoId}`;
     setDemoLink(embedLink);
     setShowVideo(true);
     setShowBuy(false); // Asegurarse de que los detalles de compra no se muestren
     setShowDetails(false); // Asegurarse de que los detalles no se muestren
+    setShowWeather(false); // Asegurarse de que el clima
   };
+
+  const handleShowWeather = () => {
+    //getWeatherForecastForEvent(); 
+    setShowWeather(true); // Asegurarse de que el clima se muestre
+    setShowDetails(false);
+    setShowVideo(false); // Asegurarse de que el video no se muestre
+    setShowBuy(false);
+  };
+
 
   const handleBackButton = () => {
     navigate(-1);
@@ -150,6 +168,13 @@ const BuyTicket = () => {
   useEffect(() => {
     if (token) {
       eventService.getEventById(code, token).then((event) => setEvent(event));
+
+      eventService.getEventById(code, token).then((event) => {
+        setEvent(event);
+        if (event?.eventLocation?.latitude && event?.eventLocation?.longitude) {
+          fetchWeatherForecast(event.eventLocation.latitude, event.eventLocation.longitude);
+        }
+      });
 
       tierService
         .getTiersbyEvent(code, token)
@@ -230,6 +255,109 @@ const BuyTicket = () => {
     console.log(eventRemainingCapacity);
   }, [eventCapacity, eventRemainingCapacity]);
 
+  const fetchWeatherForecast = async (lat, lon) => {
+    try {
+      const response = await fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${import.meta.env.VITE_OPEN_WEATHER_KEY}&units=metric&lang=sp`);
+      if (!response.ok) {
+        throw new Error('Error fetching weather data');
+      }
+      const data = await response.json();
+      if (data && data.list) {
+        setWeatherForecast(data);
+      } else {
+        throw new Error('Invalid weather data');
+      }
+    } catch (error) {
+      console.error('Failed to fetch weather forecast:', error);
+      setWeatherForecast(null); // Set to null to handle errors gracefully
+    }
+  };
+
+  const updateClimateImage = (weatherMain) => {
+    switch (weatherMain) {
+      case "Thunderstorm":
+        setClimateImage("https://static.scientificamerican.com/sciam/cache/file/144E974E-8AF8-4E08-9D4D8B2C8F5CDC14_source.jpg?w=1200");
+        break;
+      case "Drizzle":
+        setClimateImage("https://cdn.windy.app/site-storage/posts/October2023/nature-grass-snow-fog-mist-morning-41797-pxhere.com.jpg");
+        break;
+      case "Rain":
+        setClimateImage("https://cdn.britannica.com/65/123865-050-687A9E4C/Rain.jpg");
+        break;
+      case "Mist":
+        setClimateImage("https://www.metoffice.gov.uk/binaries/content/gallery/metofficegovuk/hero-images/weather/fog--mist/foggy-morning-in-a-meadow.jpg");
+        break;
+      case "Dust":
+        setClimateImage("https://images.nationalgeographic.org/image/upload/v1638886115/EducationHub/photos/dust-clouds-in-the-central-valley.jpg ");
+        break;
+      case "Fog":
+        setClimateImage("https://www.cincinnati.com/gcdn/authoring/authoring-images/2024/01/25/PCIN/72350905007-fog-1.JPG?crop=3968,2233,x0,y188");
+        break;
+      case "Clear":
+        setClimateImage("https://mrwallpaper.com/images/hd/clear-sky-with-wispy-clouds-zycncm0xf02v4a8i.jpg");
+        break;
+      case "Clouds":
+        setClimateImage("https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL0hvdy1DbG91ZHMtV29yay5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgyOH19fQ==");
+        break;
+      default:
+        setClimateImage("https://www.sunheron.com/static/17c2f00a8be8c9914d1269c00d1f7841/d5217/san-salvador-147254882.jpg");
+    }
+  };
+
+
+
+  const getWeatherForecastForEvent = () => {
+    if (!event || !weatherForecast || !weatherForecast.list) {
+      return "Espera a que el evento esté a 5 días de su realización para que te podamos dar un pronóstico más preciso :c";
+    }
+
+    const eventDateTime = new Date(`${event.date}T${event.time}`);
+    let closestForecast = null;
+    let minDiff = Infinity;
+
+    weatherForecast.list.forEach(forecast => {
+      const forecastDateTime = new Date(forecast.dt_txt);
+      const diff = Math.abs(eventDateTime - forecastDateTime);
+
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestForecast = forecast;
+      }
+    });
+
+    const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+    if (minDiff <= fiveDaysInMs) {
+      return `El clima será ${closestForecast.weather[0].description}, con una temperatura de ${closestForecast.main.temp}°C`;
+    } else {
+      return "Espera a que el evento esté a 5 días de su realización para que te podamos dar un pronóstico más preciso :c";
+    }
+  };
+
+  useEffect(() => {
+    if (weatherForecast && weatherForecast.list && event) {
+      const eventDateTime = new Date(`${event.date}T${event.time}`);
+      let closestForecast = null;
+      let minDiff = Infinity;
+  
+      weatherForecast.list.forEach(forecast => {
+        const forecastDateTime = new Date(forecast.dt_txt);
+        const diff = Math.abs(eventDateTime - forecastDateTime);
+  
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestForecast = forecast;
+        }
+      });
+  
+      const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+      if (minDiff <= fiveDaysInMs) {
+        updateClimateImage(closestForecast.weather[0].main);
+      }
+    }
+  }, [weatherForecast, event]);
+  
+
+
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -272,12 +400,11 @@ const BuyTicket = () => {
                   className={`PC
                     PC-800*600:text-base PC-1280*720:text-xl PC-800*600:w-1/2
                     PC-640*480:text-xs PC-640*480:w-1/2  
-                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
-                      showBuy === true &&
+                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${showBuy === true &&
                       showDetails === false &&
                       showVideo === false
-                        ? "bg-Orange text-blue-900"
-                        : "bg-dark-blue text-white hover:bg-orange-600"
+                      ? "bg-Orange text-blue-900"
+                      : "bg-dark-blue text-white hover:bg-orange-600"
                     }`}
                   style={{ fontFamily: "Poppins" }}
                 >
@@ -288,10 +415,9 @@ const BuyTicket = () => {
                   className={`
                     PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
                     PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
-                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
-                      showDetails === true
-                        ? "bg-Orange text-blue-900 "
-                        : "bg-dark-blue text-white hover:bg-orange-600"
+                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${showDetails === true
+                      ? "bg-Orange text-blue-900 "
+                      : "bg-dark-blue text-white hover:bg-orange-600"
                     }
                       text-blue-900 `}
                   style={{ fontFamily: "Poppins" }}
@@ -303,17 +429,46 @@ const BuyTicket = () => {
                   className={`
                     PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
                     PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
-                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
-                      showVideo === true
-                        ? "bg-Orange text-blue-900 "
-                        : "bg-dark-blue text-white hover:bg-orange-600"
+                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${showVideo === true
+                      ? "bg-Orange text-blue-900 "
+                      : "bg-dark-blue text-white hover:bg-orange-600"
                     }
                       text-blue-900 `}
                   style={{ fontFamily: "Poppins" }}
                 >
                   VIDEO
                 </button>
+                <button
+                  onClick={handleShowWeather}
+                  className={`
+                    PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
+                    PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
+                    sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${showWeather === true
+                      ? "bg-Orange text-blue-900 "
+                      : "bg-dark-blue text-white hover:bg-orange-600"
+                    }
+                      text-blue-900 `}
+                  style={{ fontFamily: "Poppins" }}
+                >
+                  WEATHER
+                </button>
               </div>
+
+              {
+                showWeather && (
+                  <div className="mt-4">
+                    <p className={[classes["pData"]]}>
+                      <span className={[classes["titleSpan"]]}>Clima esperado: </span>
+                      <span className={[classes["contentSpan"]]}>
+                        {getWeatherForecastForEvent()}
+                      </span>
+                    </p>
+                    <div style={{ width: '100%', height: '300px', overflow: 'hidden' }}>
+                      <img src={climateImage} alt="Weather condition" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  </div>
+                )
+              }
 
               {showDetails && (
                 <div className="mt-4">
@@ -375,7 +530,7 @@ const BuyTicket = () => {
                 </div>
               )}
 
-              {!showDetails && !showVideo && (
+              {!showDetails && !showVideo && !showWeather && (
                 <>
                   <div className="grid grid-cols-2">
                     {tiers.map((tier) => (
