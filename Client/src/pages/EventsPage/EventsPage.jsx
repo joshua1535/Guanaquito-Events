@@ -28,9 +28,11 @@ import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
+import { osrmService } from '../../Services/osrmService';
 import Footer from '../../Components/Footer';
 import Header from '../../Components/Header/Header';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -59,8 +61,7 @@ const EventsPage = () => {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const [recommendedEvents, setRecommendedEvents] = useState([]);
-
-  
+  const [route, setRoute] = useState(null);
   const [currentEvents, setCurrentEvents] = useState([]);
   const [events, setEvents] = useState({
     'Recomendados': [],
@@ -93,6 +94,7 @@ const EventsPage = () => {
         </Marker>
       );
     }
+
   
   const { user, token } = useUserContext();
 
@@ -121,6 +123,30 @@ const EventsPage = () => {
     }
   }, [token]);
 
+  // Componente para la geolocalización automática
+  function LocationMarker() {
+    const [position, setPosition] = useState(null);
+    const map = useMapEvents({
+      locationfound(e) {
+        setPosition(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+      },
+    });
+
+    
+
+    useEffect(() => {
+      map.locate();
+    }, [map]);
+
+  
+   
+    
+    
+    return position === null ? null : (
+      <Marker position={position} icon={userIcon}>
+        <Popup>Usted está aquí</Popup>
+      </Marker>
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
 
@@ -215,6 +241,60 @@ const EventsPage = () => {
     );
   }, []);
 
+  async function handleRoutingEvent(event)  {
+    // Logic for handling the event, e.g., routing
+    setRoute(null);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const dataEnviada = {
+            startLat: position.coords.latitude,
+            startLon: position.coords.longitude,
+            endLat: event.latlng.lat,
+            endLon: event.latlng.lng
+        
+          };
+
+          console.log('Data enviada:', dataEnviada);
+
+          osrmService.getRouteData({
+            startLat: position.coords.latitude,
+            startLon: position.coords.longitude,
+            endLat: event.latlng.lat,
+            endLon: event.latlng.lng
+        
+          }).then((data) => {
+            
+            
+            const routeData = data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+            setRoute(routeData);
+          }).catch((error) => {
+            console.error('Hubo un error al obtener la ruta:', error);
+          });
+
+          
+        },
+        (error) => {
+          console.error("Error obteniendo la ubicación: ", error);
+        }
+      );
+    } else {
+      console.error("La geolocalización no es soportada por este navegador.");
+    }
+
+    
+
+
+    /*osrmService.getRouteData({
+        
+    }).then((data) => {
+      setRoute(data);
+    }).catch((error) => {
+      console.error('Hubo un error al obtener la ruta:', error);
+    });*/
+  };
+
   return (
     <>
       <Header darkMode={true} />      
@@ -231,8 +311,8 @@ const EventsPage = () => {
      
             <LocationMarker  />
            
-            {currentEvents.map(event => (
-              <Marker key={event.code} position={[event.eventLocation.latitude, event.eventLocation.longitude]}>
+            {events.map(event => (
+              <Marker eventHandlers={{ click: (e) => handleRoutingEvent(e) }}  key={event.code} position={[event.eventLocation.latitude, event.eventLocation.longitude]}>
                 <Popup>
                   <div className='flex flex-col justify-center items-center'>
                     <h1 className='font-bold mt-2 text-xl'>{event.title}</h1>
@@ -256,6 +336,8 @@ const EventsPage = () => {
                 </Popup>
               </Marker>
             ))}
+
+            {route && <Polyline positions={route} color="blue" />}
           </MapContainer>
         </div>
       </div>
