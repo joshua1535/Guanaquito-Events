@@ -143,8 +143,8 @@ y asegurar los controladores mediante el uso de autenticacion, "Json Web Token" 
 3. Dentro de la misma carpeta ejecutar el comando ```npm run dev```.
 4. Puede acceder a la aplicación por medio de un navegador consultando la dirección [http://localhost:5173](http://localhost:5173).
 
-## Compatibilidad de licencias <a name"compatibilidad-de-licencias"></a>
-[![Scancode.png](./Documents/Scancode.png)](./)
+## Compatibilidad de licencias <a name="compatibilidad-de-licencias"></a>
+[![Scancode.png](./Documents/ScanCode.png)](./)
 
 ## Tipos de error <a name="tipos-de-error"></a>
 
