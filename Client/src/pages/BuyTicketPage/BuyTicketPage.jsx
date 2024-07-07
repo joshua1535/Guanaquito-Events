@@ -91,10 +91,12 @@ const BuyTicket = () => {
   const [tiersToBuy, setTiersToBuy] = useState([]);
   const [orderId, setOrderId] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [showBuy, setShowBuy] = useState(false);
   const [showVideo, setShowVideo] = useState(false); // Nuevo estado para mostrar el video
   const [finalTiers, setFinalTiers] = useState([]);
   const [eventCapacity, setEventCapacity] = useState(0);
   const [eventRemainingCapacity, setEventRemainingCapacity] = useState(0);
+  const [demoLink, setDemoLink] = useState("");	
 
   const handleSelectTier = (tier, quantity) => {
     setTiersToBuy((prevTiers) => {
@@ -120,15 +122,24 @@ const BuyTicket = () => {
   const handleButtonClick = () => {
     setShowDetails(true);
     setShowVideo(false); // Asegurarse de que el video no se muestre
+    setShowBuy(false); // Asegurarse de que los detalles de compra no se muestren
   };
 
   const handleButtonClick2 = () => {
     setShowDetails(false);
     setShowVideo(false); // Asegurarse de que el video no se muestre
+    setShowBuy(true);
   };
 
-  const handleButtonClick3 = () => {
+  const handleButtonClick3 = (demoLink) => {
+    const videoId = demoLink.split('v=')[1];
+    const ampersandPosition = videoId.indexOf('&');
+    const embedLink = ampersandPosition !== -1 
+      ? `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}` 
+      : `https://www.youtube.com/embed/${videoId}`;
+    setDemoLink(embedLink);
     setShowVideo(true);
+    setShowBuy(false); // Asegurarse de que los detalles de compra no se muestren
     setShowDetails(false); // Asegurarse de que los detalles no se muestren
   };
 
@@ -262,7 +273,9 @@ const BuyTicket = () => {
                     PC-800*600:text-base PC-1280*720:text-xl PC-800*600:w-1/2
                     PC-640*480:text-xs PC-640*480:w-1/2  
                     sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
-                      showDetails === false
+                      showBuy === true &&
+                      showDetails === false &&
+                      showVideo === false
                         ? "bg-Orange text-blue-900"
                         : "bg-dark-blue text-white hover:bg-orange-600"
                     }`}
@@ -286,7 +299,7 @@ const BuyTicket = () => {
                   DETALLES DEL EVENTO
                 </button>
                 <button
-                  onClick={handleButtonClick3}
+                  onClick={() => handleButtonClick3(event?.demo)}
                   className={`
                     PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
                     PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
@@ -353,7 +366,7 @@ const BuyTicket = () => {
                   <iframe
                     width="560"
                     height="315"
-                    src={`https://www.youtube.com/embed/${event.demo}`}
+                    src={demoLink}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -516,13 +529,12 @@ const BuyTicket = () => {
                 </div>
               ))}
             </div>
-
             <button
-              className="bg-Orange h-14 w-full  rounded-full text-white text-xl"
               onClick={handleBuyTicket}
-              style={{ fontFamily: "Poppins" }}
+              className=" 
+                w-32 h-12 bg-Orange rounded-full text-white hover:bg-orange-600"
             >
-              Comprar tickets
+              Pagar
             </button>
           </div>
         </div>

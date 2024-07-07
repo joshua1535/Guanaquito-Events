@@ -22,6 +22,7 @@ import {
 import {
   ChevronDownIcon,
   Bars2Icon,
+  PlayIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
@@ -66,7 +67,7 @@ const EventsPage = () => {
 
   useEffect(() => {
     if (token) {
-      eventService.getEventsByCategory('CI', page, size, token)
+      eventService.getEventsByCategory('CINE', page, size, token)
         .then((data) => {
           if (data !== undefined) {
             setEvents(prevEvents => ({ ...prevEvents, Cine: data.content }));
@@ -77,11 +78,11 @@ const EventsPage = () => {
           console.error('Hubo un error al obtener las eventos:', error);
         });
     }
-  }, ['CI', page, size, token]);
+  }, ['CINE', page, size, token]);
 
   useEffect(() => {
     if (token) {
-      eventService.getEventsByCategory('MU', page, size, token)
+      eventService.getEventsByCategory('MUSC', page, size, token)
         .then((data) => {
           if (data !== undefined) {
             setEvents(prevEvents => ({ ...prevEvents, Conciertos: data.content }));
@@ -92,11 +93,11 @@ const EventsPage = () => {
           console.error('Hubo un error al obtener las eventos:', error);
         });
     }
-  }, ['MU', page, size, token]);
+  }, ['MUSC', page, size, token]);
 
   useEffect(() => {
     if (token) {
-      eventService.getEventsByCategory('OB', page, size, token)
+      eventService.getEventsByCategory('OBTR', page, size, token)
         .then((data) => {
           if (data !== undefined) {
             setEvents(prevEvents => ({ ...prevEvents, "Obras de teatro": data.content }));
@@ -107,11 +108,11 @@ const EventsPage = () => {
           console.error('Hubo un error al obtener las eventos:', error);
         });
     }
-  }, ['OB', token]);
+  }, ['OBTR', token]);
 
   useEffect(() => {
     if (token) {
-      eventService.getEventsByCategory('DE', page, size, token)
+      eventService.getEventsByCategory('DEPO', page, size, token)
         .then((data) => {
           if (data !== undefined) {
             setEvents(prevEvents => ({ ...prevEvents, Deportes: data.content }));
@@ -122,7 +123,7 @@ const EventsPage = () => {
           console.error('Hubo un error al obtener las eventos:', error);
         });
     }
-  }, ['DE', token]);
+  }, ['DEPO', token]);
 
   const navigate = useNavigate();
 
@@ -134,7 +135,12 @@ const EventsPage = () => {
   const [currentVideo, setCurrentVideo] = useState("");
 
   const handlePlayClick = (demoLink) => {
-    setCurrentVideo(demoLink);
+    const videoId = demoLink.split('v=')[1];
+    const ampersandPosition = videoId.indexOf('&');
+    const embedLink = ampersandPosition !== -1 
+      ? `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}` 
+      : `https://www.youtube.com/embed/${videoId}`;
+    setCurrentVideo(embedLink);
     setOpenDialog(true);
   };
 
@@ -155,21 +161,24 @@ const EventsPage = () => {
       <Header darkMode={true} />
       <div className="flex flex-col sm:flex-row h-screen bg-dark-blue">
         <div className={classes["optionsContainer"]}>
-          <ul >
-            {categories.map(category => (
-              <li className="mb-2 text-center" key={category}>
-                <button
-                  className=" mt-3 hover:bg-dark-blue active:scale-90 transition-all duration-150 rounded-md py-1 px-2"
-                  onClick={() => setSelectedCategory(category)}
-                >{category}
-                </button>
-              </li>
-            ))}
-          </ul>
+        <ul>
+        {categories.map(category => (
+          <li className="mb-2 text-center" key={category}>
+            <button 
+              className={`mt-3 transition-all duration-150 rounded-md py-1 px-2 hover:bg-dark-blue active:scale-90 ${
+                selectedCategory === category ? 'bg-dark-blue' : ''
+              }`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+          </button>
+        </li>
+      ))}
+    </ul>
         </div>
         <div className="w-full bg-dark-blue sm:w-3/4 p-4 overflow-auto">
           <div className="flex p-0 flex-wrap sm:space-x-4 justify-center">
-            {events[selectedCategory].map((event, index) => (
+            {events[selectedCategory]?.map((event, index) => (
               <div className=" p-4 rounded-lg m-2 sm:m-0" key={index}>
                 <div className="w-40 h-56 overflow-hidden relative">
                   {/* Imagen */}
@@ -178,24 +187,29 @@ const EventsPage = () => {
                     alt="Imagen de evento"
                     className="w-full h-full object-cover mb-2 rounded transform transition-all duration-300 hover:opacity-5"
                   />
-
-                  {/* Texto del hover */}
+           {/* Texto del hover */}
                   <div style={{ fontFamily: "PoppinsLight" }} className="absolute inset-0 flex flex-col items-center justify-center opacity-0 bg-black bg-opacity-70 text-Orange font-bold transition-all duration-300 hover:opacity-100">
                     <p className="text-xl">{event.title}</p>
                     <p className="text-lg">{event.date}</p>
                   </div>
                 </div>
+                <div className="flex flex-col items-center mt-2">
                 <button
                   onClick={() => viewBuyTicketsHandler(event.code)}
                   className="bg-Orange text-white px-4 py-2 rounded hover:bg-orange-600 hover:text-dark-blue active:scale-90 transition-all duration-150"
                   style={{ fontFamily: "PoppinsLight" }}
                 >Comprar boleto
                 </button>
+
                 <button
                   onClick={() => handlePlayClick(event.demo)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 active:scale-90 transition-all duration-150 mt-2"
-                >Play
+                  className="flex flex-row bg-blue-500 text-white px-2 py-2 rounded hover:bg-blue-600 active:scale-90 transition-all duration-150 mt-2"
+                  style={{ fontFamily: "PoppinsLight" }}
+                >
+                  Demo
+                  <PlayIcon className="flex justify-center mx-auto h-6 w-6" />
                 </button>
+                </div>
               </div>
             ))}
           </div>
