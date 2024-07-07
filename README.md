@@ -98,24 +98,24 @@ y asegurar los controladores mediante el uso de autenticacion, "Json Web Token" 
  ## Modelos utilizados <a name="modelos-utilizados"></a>
 
  ### Patrón de diseño <a name="patrón-de-diseño"></a>
+ 
+####Patrón Arquitectónico de Capas
 
-	La arquitectura del sistema se basa en el patrón de diseño de N-capas. Este patrón se utiliza para separar la lógica de negocio, la presentación de datos y la interacción con el usuario en múltiples capas, cada una con responsabilidades específicas y bien definidas.
+La arquitectura en capas es un patrón de arquitectura software usada en la gran mayoría de sistemas.
+Se centra en una distribución jerárquica de las roles y responsabilidades proporcionando una separación efectiva de las preocupaciones 
+(cada cual se encarga de lo que le cooresponde).
 
-	La adopción del patrón de N-capas en nuestro sistema de Registro de Notas nos ha brindado varios beneficios. Por un lado, nos permite tener una separación clara de responsabilidades, lo cual facilita el mantenimiento y la evolución del sistema. La arquitectura típica de N-capas incluye las siguientes capas:
+Capa de presentación (funcionalidad relacionada con la User Interfase)
 
-	Capa de Presentación: Responsable de la interfaz de usuario y la interacción con el usuario. Aquí se gestionan los elementos visuales y la entrada/salida de datos.
+Capa de negocio (procesamiento de reglas de negocio).También denominada Lógica de Dominio, esta capa contiene la funcionalidad que implementa
+la aplicación. Involucra cálculos basados en la información dada por el usuario y datos almacenados y validaciones. Controla la ejecución de 
+la capa de acceso a datos y servicios externos. Se puede diseñar la lógica de la capa de negocios para uso directo por parte de componentes de 
+presentación o su encapsulamiento como servicio y llamada a través de una interfaz de servicios que coordina la conversación con los clientes 
+del servicio o invoca cualquier flujo o componente de negocio.
 
-	Capa de Aplicación: Contiene la lógica de negocio y las reglas del sistema. Esta capa actúa como un puente entre la presentación y los datos, procesando la información y aplicando las reglas de negocio necesarias.
-
-	Capa de Negocio: Define las reglas de negocio y procesos clave del sistema. Es responsable de asegurar que las operaciones realizadas cumplan con los requerimientos del negocio.
-
-	Capa de Datos: Se encarga de la gestión de la persistencia de datos, interactuando con la base de datos u otros sistemas de almacenamiento. Aquí se encuentran los repositorios y las operaciones CRUD (Crear, Leer, Actualizar, Eliminar).
-
-	Capa de Servicios: Provee servicios comunes que pueden ser utilizados por las otras capas, como servicios de autenticación, autorización, mensajería, etc.
-
-	Capa de Infraestructura: Maneja aspectos técnicos y de soporte, incluyendo la configuración, el acceso a recursos de red, y otros componentes que sustentan la operación del sistema.
-
-	Al utilizar esta arquitectura, se mejora la reutilización de componentes y la estructura del código. Esto nos permite realizar modificaciones y mejoras de forma más eficiente, permitiéndonos tener un sistema bien estructurado, modular y fácilmente mantenible. La separación de responsabilidades entre las diferentes capas nos brinda flexibilidad y escalabilidad, permitiendo adaptarnos a cambios futuros y proporcionando una experiencia de usuario mejorada.
+Capa de datos (funcionalidad relacionada con el accesos a datos). Es donde residen los datos y es la encargada de acceder a los mismos. Está 
+formada por uno o más gestores de bases de datos que realizan todo el almacenamiento de datos, reciben solicitudes de almacenamiento o recuperación 
+de información desde la capa de negocio.
 
  ### Diagrama Relacional  <a name="diagrama-relacional"></a>
 [![diagrama.png](./Data/diagrama.png)](./)
