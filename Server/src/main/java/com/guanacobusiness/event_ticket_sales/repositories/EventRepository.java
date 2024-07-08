@@ -1,6 +1,7 @@
 package com.guanacobusiness.event_ticket_sales.repositories;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,5 +26,16 @@ public interface EventRepository extends JpaRepository<Event, UUID>{
     @Query("SELECT e FROM Event e WHERE e.category.name = :categoryName AND e.date > CURRENT_DATE")
     List<Event> findUpcomingEventsByCategory(@Param("categoryName") String categoryName);
 
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.date >= :date " +
+            "AND e.active = true " +
+            "AND e.category.code = :categoryCode " +
+            "AND e.id NOT IN (" +
+            "  SELECT eSub.id FROM Event eSub " +
+            "  LEFT JOIN eSub.tiers tSub " +
+            "  LEFT JOIN tSub.tickets tkSub " +
+            "  WHERE tkSub.userOwner.code = :userCode" +
+            ")")
+    Page<Event> findByCurrentAndCategoryAndNotUser(@Param("date") LocalDate date, @Param("categoryCode") String categoryCode, @Param("userCode") UUID userCode, Pageable pageable );
     Page<Event> findByDateEqualsOrDateAfterAndActiveTrueAndCategoryCode(LocalDate date, LocalDate date2, String code, Pageable pageable);
 }
