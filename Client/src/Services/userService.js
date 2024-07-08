@@ -150,6 +150,21 @@ export const userService = {
             console.error(`Error eliminando el usuario ${userCode} del evento ${eventCode}: `, error);
             throw error;
         }
+    },
+
+    getHistory: async function (token) {
+        try {
+            const response = await API.get('/user/history', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            
+            return response.data;
+        } catch(error) {
+            console.error(`No se pudo obtener el historial}`, error);
+            throw error;
+        }
     }
     
          
