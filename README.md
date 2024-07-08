@@ -1,4 +1,4 @@
-# Manual Técnico de Sistema Guanaco Business
+# Manual Técnico de Sistema Guanaco Events
 
 ## Índice
  - [Manual Técnico](#Manualtécnico)
