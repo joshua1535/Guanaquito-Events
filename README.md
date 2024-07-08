@@ -1,4 +1,4 @@
-# Manual Técnico de Sistema Guanaco Events
+# Manual Técnico de Sistema Guanaquito Events
 
 ## Índice
  - [Manual Técnico](#Manualtécnico)
