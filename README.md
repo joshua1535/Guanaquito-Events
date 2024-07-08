@@ -118,7 +118,7 @@ formada por uno o más gestores de bases de datos que realizan todo el almacenam
 de información desde la capa de negocio.
 
  ### Diagrama Relacional  <a name="diagrama-relacional"></a>
-[![diagrama.png](./Data/diagrama.png)](./)
+[![diagrama.png](./Data/DiagramaDB.png)](./)
 
  ## Guia de instalación <a name="guia"></a>
 
