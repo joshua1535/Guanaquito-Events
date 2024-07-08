@@ -21,7 +21,7 @@
  <a name="Aspectosgenerales"></a>
 
  ### Objetivos del documento  <a name="objetivos"></a>
-Este manual técnico está diseñado para ofrecer una descripción exhaustiva y detallada de los diversos elementos y herramientas considerados en la creación del Sistema de Registro de Notas. Su propósito es servir tanto al equipo encargado de su desarrollo como al usuario final que empleará la aplicación.
+Este manual técnico está diseñado para ofrecer una descripción exhaustiva y detallada de los diversos elementos y herramientas considerados en la implementación del sistema creado para el manejo de eventos y sus implementaciones. Su propósito es servir tanto al equipo encargado de su desarrollo como al usuario final que empleará la aplicación.
 
  ### Descripción general <a name="desc"></a>
 
