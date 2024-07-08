@@ -160,6 +160,9 @@ Es importante destacar que todos los errores documentados han sido solucionados 
  - Link de Github Issues:
  https://github.com/joshua1535/Guanaquito-Events/issues
 
+ ## Tablero <a name="Proyect"></a>
+ - Link de Github Project:
+https://github.com/users/joshua1535/projects/2
 
  ## Licencia de código  
  <a name="Licencia"></a>
