@@ -300,7 +300,7 @@ public class EventServiceImpl implements EventService{
                 Pageable pageable = PageRequest.of(0, e.getValue());
 
                 //Obtener primeros n eventos disponibles de dicha categoria
-                List<Event> events = eventRepository.findByDateEqualsOrDateAfterAndActiveTrueAndCategoryCode(currentDate, currentDate, e.getKey(), pageable).getContent();
+                List<Event> events = eventRepository.findByCurrentAndCategoryAndNotUser( currentDate,  e.getKey(), ownerCode, pageable).getContent();
 
                 recommendedEvents.addAll( events);}
         }
