@@ -1,31 +1,12 @@
 import './EventPermits.module.css';
 import classes from './EventPermits.module.css';
-import logo from '../../assets/logo.png';
-import imgtemplate from '../../assets/loginimg.jpg';
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import {
-    Carousel,
-    Navbar,
-    Collapse,
-    Typography,
-    Button,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-    Avatar,
-    Card,
     IconButton,
-    Chip,
-    Input,
-    Select,
-    Option,
   } from "@material-tailwind/react";
   import {
-    ChevronDownIcon,
-    Bars2Icon,
     ArrowLeftIcon
   } from "@heroicons/react/24/outline";
 import { useNavigate } from 'react-router-dom';

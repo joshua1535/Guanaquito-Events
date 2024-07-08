@@ -12,6 +12,7 @@ import com.guanacobusiness.event_ticket_sales.models.entities.Category;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 
 public interface EventService {
+
     List<Event>findAllEvents();
     Page<Event>findAllEvents(int page, int size);
     List<Event> findAllActiveEvents();
@@ -25,6 +26,7 @@ public interface EventService {
     PageDTO<Event> findAllByCategory(String code, int page, int size);
     Event findEventByCode(UUID code);
     Event save(SaveEventDTO info, Category category) throws Exception;
-    boolean update(UpdateEventDTO info) throws Exception;
+    Event update(UpdateEventDTO info) throws Exception;
     boolean changeEventStatus(UUID code) throws Exception;
+    List<Event> recommendEventsBasedOnAttendance(UUID ownerCode);
 }

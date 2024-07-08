@@ -32,7 +32,9 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { useUserContext } from '../../Context/userContext';
 import { eventService } from '../../Services/eventService';
 import Footer from '../../Components/Footer';
+import MapComponent from '../../Components/MapComponent';
 import Header from '../../Components/Header/Header';
+import { categoryService } from '../../Services/categoryservice';
 
 
   const categoryOptions = [
@@ -48,6 +50,7 @@ import Header from '../../Components/Header/Header';
 
 export default function CreateEvent() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
+    const [showDetails, setShowDetails] = useState(false);
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
     const [duration, setDuration] = useState("");
     const [participant, setParticipant] = useState("");
@@ -61,10 +64,20 @@ export default function CreateEvent() {
     const [category, setCategory] = useState("");
     const [date, setDate] = useState();
     const [time, setTime] = useState();
+    const [nameLocation, setNameLocation] = useState('');
+    const [addressLocation, setAddressLocation] = useState('');
+    const [dateLocation, setDateLocation] = useState('');
+    const [disponabilityLocation, setDisponabilityLocation] = useState('');
+    const [selectedPlace, setSelectedPlace] = useState(null);
     const [image, setImage] = useState("https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZXZlbnRvfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60");
-
+    const [demoVideo, setDemoVideo] = useState("");
 
     const handleContinueClick2 = () => {
+      if (selectedPlace) {
+        const tierInfo = {
+          location: selectedPlace
+        };
+      }
       eventService.saveEvent({
           title: eventName,
           involvedPeople: participants.join(", "),
@@ -73,12 +86,16 @@ export default function CreateEvent() {
           time: time,  // Reemplaza esto con el valor del campo "Hora"
           duration: parseInt(duration),
           sponsors: sponsors.join(", "),
-          categoryCode: category // Reemplaza esto con el valor del campo "Categoría"
+          categoryCode: category, // Reemplaza esto con el valor del campo "Categoría"
+          eventLocationCode:selectedPlace.code,
+          demo: demoVideo //se agrega el video
+
       }, token)
           .then(response => {
               console.log('Evento creado con éxito:', response);
               // Guarda el código del evento en el almacenamiento local
               const eventCode = response.code;
+              
               navigate(`/admin-event/addtiers/${eventCode}`);
               // aquí puedes hacer cualquier otra cosa que necesites después de crear el evento
           })
@@ -88,7 +105,9 @@ export default function CreateEvent() {
           });
   };
   
-
+  const handleSelectPlace = (place) => {
+    setSelectedPlace(place);
+  };
 
     /*
     eventService.saveEvent({
@@ -212,6 +231,14 @@ export default function CreateEvent() {
         navigate("/admin-event/addtiers");
     };
 
+    const handleButtonClick = () => {
+      setShowDetails(true);
+    };
+  
+    const handleButtonClick2 = () => {
+      setShowDetails(false);
+    };
+
     const handleCancelClick = () => {
         navigate(-1);
     };
@@ -228,19 +255,81 @@ export default function CreateEvent() {
             document.title = "Create Event";
         }, []);
 
-        
-
+    useEffect(() => {
+        if (token) {
+            categoryService.getAllCategories(token)
+                .then((data) => {
+                    if (data === undefined) {
+                        console.log('No se pudieron obtener las categorías');
+                    } else {
+                        setCategories(data);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Hubo un error al obtener las categorías:', error);
+                });
+        }
+    }, [token]);
+ 
     return (
         <div className={[classes["generalContainer"]]}>
         <Header/>
+      {/*  <MapComponent />*/}
         <div className={[classes["bodyContainer"]]}>
             <div className={[classes["titleContainer"]]}>
                 <h1 className={[classes["title1"]]}>Crear</h1>
                 <h1 className={[classes["title2"]]}>evento</h1>
-            </div>
+            </div>           
             <div className={[classes["formContainer"]]}>
+              
       <div className={[classes["form"]]}>
-        <form className="space-y-6">
+        <div className={[classes["topbuttonsContainer"]]}>
+                  <button
+                    onClick={handleButtonClick2}
+                    className={`
+                          PC-800*600:text-base PC-1280*720:text-xl PC-800*600:w-1/2
+                          PC-640*480:text-xs PC-640*480:w-1/2  
+                          sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
+                            showDetails === false
+                              ? "bg-Orange text-blue-800 " 
+                              : "bg-dark-blue text-white hover:bg-orange-600"
+                          }`}
+                    style={{ fontFamily: "Poppins" }}
+                  >
+                    Detalles del evento
+                  </button>
+                  <button
+                    onClick={handleButtonClick}
+                    className={`
+                          PC-1280*720:text-base PC-800*600:text-sm  PC-800*600:w-1/2
+                          PC-640*480:text-sm PC-640*480:w-1/2  PC-640*480:text-center 
+                          sm:w-full sm:h-12 sm:text-2xl  sm:py-1  sm:rounded ${
+                            showDetails === true
+                              ? "bg-Orange text-blue-900 "
+                              : "bg-dark-blue text-white hover:bg-orange-600"
+                          }
+                            text-blue-900 `}
+                    style={{ fontFamily: "Poppins" }}
+                  >
+                    Ubicación
+                  </button>
+        </div>
+        {showDetails ? (          
+          <form className="space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start p-4 space-y-4 md:space-y-0 md:space-x-4">
+            <div className="w-full md:w-1/2">
+              <MapComponent onSelectPlace={handleSelectPlace} />
+            </div>
+            <div className="w-full md:w-1/2">
+              <h2 className={[classes["title"]]}> {selectedPlace ? selectedPlace.name : 'Nombre del lugar'}</h2>
+              <p className={[classes["desc"]]}>Dirección: <span className="text-white font"> {selectedPlace ? selectedPlace.address : 'Dirección del lugar'}</span></p>
+              <p className={[classes["desc"]]}>Fecha y hora: <span className="text-white font mb-5">{date} {time}</span></p>
+              <p className={[classes["desc"]]}>Disponibilidad del sitio: <span className="text-green-400">Desocupado</span></p>
+            </div>
+          </div>       
+        </form>
+          ) : (
+            <form className="space-y-6">
           <div className="space-y-2">
             <label htmlFor="eventName" className={[classes["titleInputs"]]}>
               Nombre del evento
@@ -311,16 +400,17 @@ export default function CreateEvent() {
                 Categoría
                 
               </label>
-                <Select 
+              <Select 
                 color='yellow'
                 className='text-black bg-white '
                 onChange={value => setCategory(value)}
                 >
-                    <Option value="CI" >Cine</Option>
-                    <Option value="MU"> Musica</Option>
-                    <Option value="OB">Obras de teatro</Option>
-                    <Option value="DE">Deportes</Option>
-                </Select>
+                  {categories.map((category) => (
+                  <Option key={category.code} value={category.code}>
+                    {category.name}
+                  </Option>
+                ))}
+              </Select>          
             </div>
             <div>
               <label htmlFor="time" className={[classes["titleInputs"]]}>
@@ -429,6 +519,20 @@ export default function CreateEvent() {
               onChange={event => setImage(event.target.value)}
             />
           </div>
+          {/*Se agrega el video */}
+          <div className="space-y-2">
+            <label className={[classes["titleInputs"]]}>
+              Video demostrativo
+            </label>
+            <Input
+              id="demoVideo"
+              type="text"
+              color='yellow'
+              className='text-black bg-white '
+              placeholder="Ingrese URL del video"
+              onChange={event => setDemoVideo(event.target.value)}
+            />
+          </div>
           <div className="flex space-x-4 justify-end Mobile-280:justify-center ">
             <Button onClick={ handleCancelClick2} className='bg-black Mobile-280:w-24 Mobile-280:text-ButtonCarouselMobile-390*844'>
               Cancelar
@@ -439,7 +543,10 @@ export default function CreateEvent() {
               Continuar
             </Button>
           </div>
-        </form>
+        </form>           
+          )}
+
+        
       </div>
     </div>
         </div>

@@ -36,6 +36,22 @@ export const eventService = {
             console.log(error);
         }
     },
+
+    getRecommendedEvents: async function (token) {
+        try {
+          const response = await API.get("/event/recommendations", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error al obtener las recomendaciones:', error.response ? error.response.data : error.message);
+          throw error;
+        }
+      },
+    
+    
     getAllCurrentEvents: async function (token) {
         try {
             const response = await API.get("/event/active", {

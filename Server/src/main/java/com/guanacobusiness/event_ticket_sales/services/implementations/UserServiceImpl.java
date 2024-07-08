@@ -3,6 +3,7 @@ package com.guanacobusiness.event_ticket_sales.services.implementations;
 import java.util.List;
 import java.util.UUID;
 
+import com.guanacobusiness.event_ticket_sales.models.dtos.SaveUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AuthRequestDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
-import com.guanacobusiness.event_ticket_sales.models.dtos.SaveUserDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UserFoundDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Permit;
 import com.guanacobusiness.event_ticket_sales.models.entities.Token;
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(rollbackOn = Exception.class)
     public boolean register(SaveUserDTO user) throws Exception {
-        
+
         User newUser = new User(user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getProfilePicture());
 
         /* if (newUser.getEmail().isEmpty() || newUser.getPassword().isEmpty()) {

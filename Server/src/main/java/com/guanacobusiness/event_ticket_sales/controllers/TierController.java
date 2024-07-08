@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.EventAndTiersInfoDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.RecommendedTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.SaveTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.UpdateTierDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
@@ -186,6 +187,28 @@ public class TierController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/recommended-tiers/{eventCode}")
+    public ResponseEntity<?> recommendTiersBasedOnCategoryAndDepartment(@PathVariable(name = "eventCode") String eventCode, HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
+        UUID uuid = stringToUUID.convert(eventCode);
+
+        if(uuid == null){
+            return new ResponseEntity<>("Invalid Code",HttpStatus.BAD_REQUEST);
+        }
+
+        List<RecommendedTierDTO> tiers = tierService.recommendTiersBasedOnCategoryAndDepartment(uuid);
+
+        if(tiers == null || tiers.isEmpty()){
+            return new ResponseEntity<>("No Tiers Found",HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(tiers,HttpStatus.OK); 
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

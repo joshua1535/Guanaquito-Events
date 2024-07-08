@@ -1,12 +1,21 @@
 package com.guanacobusiness.event_ticket_sales.controllers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.guanacobusiness.event_ticket_sales.models.entities.Register;
+import com.guanacobusiness.event_ticket_sales.models.entities.Ticket;
+import com.guanacobusiness.event_ticket_sales.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,15 +27,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guanacobusiness.event_ticket_sales.models.dtos.AddUserToEventDTO;
+import com.guanacobusiness.event_ticket_sales.models.dtos.EventDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.FormatedUser;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PageDTO;
 import com.guanacobusiness.event_ticket_sales.models.dtos.PasswordUpdateDTO;
 import com.guanacobusiness.event_ticket_sales.models.entities.Event;
 import com.guanacobusiness.event_ticket_sales.models.entities.User;
-import com.guanacobusiness.event_ticket_sales.services.EventService;
-import com.guanacobusiness.event_ticket_sales.services.UserService;
-import com.guanacobusiness.event_ticket_sales.services.UserXEventService;
-import com.guanacobusiness.event_ticket_sales.services.UserXPermitService;
+import com.guanacobusiness.event_ticket_sales.utils.EventMapper;
 import com.guanacobusiness.event_ticket_sales.utils.JWTTools;
 import com.guanacobusiness.event_ticket_sales.utils.PageDTOMapper;
 import com.guanacobusiness.event_ticket_sales.utils.StringToUUID;
@@ -60,6 +67,12 @@ public class UserController {
 
     @Autowired
     private UserXEventService userXEventService;
+
+    @Autowired
+    private RegisterService registerService;
+
+    @Autowired
+    private EventMapper eventMapper;
 
     @Autowired
     JWTTools jwtUtil;
@@ -191,6 +204,47 @@ public class UserController {
         }
 
     
+    }
+
+    
+    @GetMapping("/history")
+    public ResponseEntity<?> getUserEventHistory( HttpServletRequest request) {
+
+        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid Auth Type", HttpStatus.BAD_REQUEST);
+        }
+
+
+        try {
+            //obteniendo el usuario mediante su token
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            if (user == null) {
+                return new ResponseEntity<>("User Not Found",HttpStatus.NOT_FOUND);
+            }
+
+            List<Register>  registers = registerService.findByUserCodeAndValidationTimeNotNull(user.getCode());
+
+            if (registers.isEmpty() || registers == null) {
+                return new ResponseEntity<>("User has not been in any events yet!",HttpStatus.NOT_FOUND);
+            }
+
+            List<Event> events = new ArrayList<>();
+
+            for ( Register r : registers) {
+                Event event = r.getTicket().getTier().getEvent();
+
+                events.add(event);
+            }
+            List<EventDTO> response = events.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + " " + e.getCause());
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
     }
     @DeleteMapping("/event/delete")
     public ResponseEntity<?> deleteUserFromEvent(@Valid @RequestBody AddUserToEventDTO info, HttpServletRequest request){

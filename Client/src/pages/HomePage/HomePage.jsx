@@ -15,6 +15,7 @@ import { eventService } from '../../Services/eventService';
 import SliderCards from '../../Components/SliderCards';
 import Footer from '../../Components/Footer';
 import Header from '../../Components/Header/Header';
+import { categoryService } from '../../Services/categoryservice';
 
 const listEvents = [
   {
@@ -62,6 +63,7 @@ export default function HomePage() {
   const [recentSportsEvents, setRecentSportsEvents] = useState([]);
   const [recentConcertsEvents, setRecentConcertsEvents] = useState([]);
   const [recentTheaterEvents, setRecentTheaterEvents] = useState([]);
+  const [categories, setCategories] = useState([]);
   const { user, token} = useUserContext();
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(0); // Para controlar la página actual
@@ -76,6 +78,22 @@ export default function HomePage() {
   const viewEventsHandler = () => {
     navigate("/events");
   };
+
+  useEffect(() => {
+    if (token) {
+        categoryService.getAllCategories(token)
+            .then((data) => {
+                if (data === undefined) {
+                    console.log('No se pudieron obtener las categorías');
+                } else {
+                    setCategories(data);
+                }
+            })
+            .catch((error) => {
+                console.error('Hubo un error al obtener las categorías:', error);
+            });
+    }
+}, [token]);
   
   useEffect(() => {
     const fetchEventsByCategory = async (category, setStateFunction) => {
@@ -95,18 +113,34 @@ export default function HomePage() {
           const eventData = await eventService.getCurrentEvents(page, size, token);
           setEvents(eventData.content);
   
-          await fetchEventsByCategory("CI", setRecentMoviesEvents);
-          await fetchEventsByCategory("DE", setRecentSportsEvents);
-          await fetchEventsByCategory("MU", setRecentConcertsEvents);
-          await fetchEventsByCategory("OB", setRecentTheaterEvents);
+          if (categories.length > 0) {
+            categories.forEach((category) => {
+              switch (category.name) {
+                case 'Cine':
+                  fetchEventsByCategory('CINE', setRecentMoviesEvents);
+                  break;
+                case 'Musica':
+                  fetchEventsByCategory('MUSC', setRecentConcertsEvents);
+                  break;
+                case 'Deportes':
+                  fetchEventsByCategory('DEPO', setRecentSportsEvents);
+                  break;
+                case 'Obras de teatro':
+                  fetchEventsByCategory('OBTR', setRecentTheaterEvents);
+                  break;
+                default:
+                  break;
+              }
+            });
         }
+      }
       } catch (error) {
         console.error('Hubo un error al obtener los eventos:', error);
       }
     };
   
     fetchData();
-  }, [token, page, size]);
+  }, [page, size, token, categories]);
 
 
 
@@ -162,7 +196,8 @@ export default function HomePage() {
           recentMoviesEvents
             .filter((event) => event.category.name === "Cine")
             .map((event, index) => (
-              <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
+              <Card key={index} className='m-2 mt-0 rounded-md
+              object-cover border-blue-gray-300 border-2 h-auto max-h-60 min-h-fit'>
                 <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />
                 <div className={classes["cardContent"]}>
                   <h3 className={classes["eventTitle"]}>{event.title}</h3>
@@ -200,9 +235,9 @@ export default function HomePage() {
 
         <div className={classes["rightColumn"]}>
         {/* Tarjetas de eventos más pequeñas */}
-        {recentConcertsEvents.filter((event ) => event.category.name === "Música").length > 0 ? (
+        {recentConcertsEvents.filter((event ) => event.category.name === "Musica").length > 0 ? (
           recentConcertsEvents
-            .filter((event) => event.category.name === "Música")
+            .filter((event) => event.category.name === "Musica")
             .map((event, index) => (
               <Card key={index} className='m-2 mt-0 rounded-md border-blue-gray-300 border-2 h-auto'> 
                 <img src={event.image} alt={event.title} className={classes["smallCardImage"]} />

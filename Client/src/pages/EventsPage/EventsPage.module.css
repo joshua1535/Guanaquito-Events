@@ -11,7 +11,37 @@
 }
 
 
+.eventsTitle {
+    font-family: 'PoppinsLight';
+    @apply flex justify-center p-4 uppercase text-white
+    PC-1920*1080:text-6xl
+    PC-1600*900:text-5xl
+    PC-1366*768:text-4xl
+    PC-1280*720:text-3xl
+    PC-800*600:text-2xl
+    PC-640*480:text-xl
+    Mobile-390*844:text-2xl
+    Mobile-280:text-xl
+    Mobile-390*844:hidden
+    Mobile-280:hidden
+    bg-dark-blue
+}
 
+.eventsTitleList {
+    font-family: 'PoppinsLight';
+    @apply flex justify-center p-4 uppercase text-white
+    PC-1920*1080:text-6xl
+    PC-1600*900:text-5xl
+    PC-1366*768:text-4xl
+    PC-1280*720:text-3xl
+    PC-800*600:text-2xl
+    PC-640*480:text-xl
+    Mobile-390*844:text-lg
+    Mobile-280:text-lg 
+    Mobile-390*844:hidden
+    Mobile-280:hidden
+    bg-dark-blue
+}
 
 .optionsContainer {
     display: flex;   
@@ -33,3 +63,16 @@
     @apply flex sm:grid h-max 
 }
 
+.video-responsive {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.video-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
